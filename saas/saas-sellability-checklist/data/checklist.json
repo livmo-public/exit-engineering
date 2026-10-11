@@ -1,0 +1,2660 @@
+{
+  "name": "SaaS Sellability Checklist",
+  "version": "1.0.0",
+  "stage_driver": "ARR",
+  "stages": [
+    {
+      "n": 1,
+      "label": "Stage 1",
+      "arr_range": "Under $500K ARR",
+      "landing_page_label": "Under $500K",
+      "valuation_method": "SDE multiple",
+      "revenue_multiple": "Under $2M band: 1.54x / 2.76x / 13.28x (25th / median / 75th)",
+      "ebitda_multiple": "Under $2M band: 4.7x / 7.4x / 14.6x",
+      "buyer_types": [
+        "Individual buyers",
+        "Micro-PE and marketplaces (Acquire.com, Flippa)",
+        "Acqui-hires"
+      ],
+      "deal_structure": "Mostly cash at close under $1M; seller financing or earn-out common above that",
+      "top_concerns": [
+        "Owner does everything",
+        "No clean financials",
+        "Churn unknown"
+      ],
+      "if_you_want_to_sell": "At this size buyers pay a multiple of SDE and most deals close on marketplaces. A $300K ARR product with 30% SDE margin sells for 2x to 4x SDE, or $180K to $360K. The checklist items that move the price most are clean books, documented churn, and a product that runs without you.",
+      "cta": "Book a 30-minute exit assessment"
+    },
+    {
+      "n": 2,
+      "label": "Stage 2",
+      "arr_range": "$500K to $2M ARR",
+      "landing_page_label": "$500K to $2M",
+      "valuation_method": "SDE multiple, moving to EBITDA",
+      "revenue_multiple": "Under $2M band: 1.54x / 2.76x / 13.28x",
+      "ebitda_multiple": "Under $2M band: 4.7x / 7.4x / 14.6x",
+      "buyer_types": [
+        "Individual investors",
+        "Search funds",
+        "Small strategics",
+        "Micro-PE"
+      ],
+      "deal_structure": "60% to 80% cash at close; seller note or earn-out for the balance",
+      "top_concerns": [
+        "Founder-led sales",
+        "Revenue reconciliation gaps",
+        "Single-person engineering"
+      ],
+      "if_you_want_to_sell": "Buyers here pay 2.8x revenue at the median, or 4x to 8x SDE. A $1.2M ARR business with 35% SDE margin and 80%+ GRR sells for $1.7M to $3.4M. Growth above 30% and NRR above 100% push you to the top of the range.",
+      "cta": "Book a 30-minute exit assessment"
+    },
+    {
+      "n": 3,
+      "label": "Stage 3",
+      "arr_range": "$2M to $5M ARR",
+      "landing_page_label": "$2M to $5M",
+      "valuation_method": "EBITDA or revenue multiple",
+      "revenue_multiple": "$2M to $5M band: 1.63x / 3.26x / 7.32x",
+      "ebitda_multiple": "$2M to $5M band: 5.3x / 9.7x / 29.5x",
+      "buyer_types": [
+        "Search funds",
+        "PE bolt-ons",
+        "Strategic acquirers",
+        "Family offices"
+      ],
+      "deal_structure": "70% to 90% cash at close; rollover equity offered by PE",
+      "top_concerns": [
+        "No second-in-command",
+        "Concentration",
+        "Security and compliance gaps"
+      ],
+      "if_you_want_to_sell": "This is the first stage where PE and strategics compete for the deal. The median revenue multiple is 3.3x; top-quartile deals reach 7x. A $3.5M ARR company with 25% growth, 90% GRR and a GM in place can expect $10M to $15M. Without the GM, buyers add an earn-out.",
+      "cta": "Book a 30-minute exit assessment"
+    },
+    {
+      "n": 4,
+      "label": "Stage 4",
+      "arr_range": "$5M to $20M ARR",
+      "landing_page_label": "$5M to $20M",
+      "valuation_method": "EBITDA multiple or revenue multiple with Rule of 40",
+      "revenue_multiple": "$5M to $20M band: 1.52x / 2.9x / 6.86x; top quartile above 9x",
+      "ebitda_multiple": "$5M to $20M band: 8.7x / 16.9x / 28.3x",
+      "buyer_types": [
+        "PE platforms",
+        "Strategic acquirers",
+        "Growth equity"
+      ],
+      "deal_structure": "Cash at close with 10% to 30% rollover for PE; escrow of 5% to 10%",
+      "top_concerns": [
+        "Leadership gaps",
+        "Forecast accuracy",
+        "SOC 2",
+        "Customer success depth"
+      ],
+      "if_you_want_to_sell": "Buyers run a full process with QoE and legal diligence. The median EBITDA multiple is 16.9x; revenue multiples run 2.9x at the median and above 9x for top-quartile growth and retention. An $8M ARR company that meets the Rule of 40 with 95% GRR can expect $25M to $50M.",
+      "cta": "Book a 30-minute exit assessment"
+    },
+    {
+      "n": 5,
+      "label": "Stage 5",
+      "arr_range": "$20M+ ARR",
+      "landing_page_label": "$20M+",
+      "valuation_method": "EBITDA multiple or revenue multiple with Rule of 40",
+      "revenue_multiple": "No BVR band above $20M; use the $5M to $20M band as a floor and public comparables as a ceiling",
+      "ebitda_multiple": "$5M to $20M band as a floor: 8.7x / 16.9x / 28.3x",
+      "buyer_types": [
+        "Institutional PE",
+        "Public strategics",
+        "Large PE-backed platforms"
+      ],
+      "deal_structure": "Cash at close; management rollover; representations and warranties insurance",
+      "top_concerns": [
+        "Audit quality",
+        "Leadership depth",
+        "Comparables",
+        "Integration risk"
+      ],
+      "if_you_want_to_sell": "Buyers at this size run a banker-led auction. Price depends on growth, NRR and the comparables in your category more than on any checklist item. The items here are the ones that keep the price intact through diligence.",
+      "cta": "Book a 30-minute exit assessment"
+    }
+  ],
+  "categories": [
+    "Financial quality",
+    "Revenue quality",
+    "Unit economics",
+    "Customers",
+    "Owner and team",
+    "Product and technology",
+    "Market",
+    "Legal and IP"
+  ],
+  "scoring_rule": {
+    "sellable_share": 0.8,
+    "close_share": 0.5,
+    "overrides": "At stages 1 to 3, annual GRR under 70% or a 2 to 3 year ARR CAGR under 20% (or any flat or down year) makes the business difficult to sell, whatever the total."
+  },
+  "detailed": {
+    "note": "Items as shown in the per-stage editions. Stages 4 and 5 use 4 compound foundations items.",
+    "items": [
+      {
+        "id": "F1",
+        "category": "Financial quality",
+        "item": "Books are kept and closed at the standard your size requires",
+        "points": 1,
+        "benchmarks": {
+          "1": "Cash basis is fine; books closed every quarter",
+          "2": "Accrual basis; closed every quarter, monthly is better",
+          "3": "Accrual basis; monthly close within 30 days"
+        },
+        "why_buyers_care": "Buyers model future cash flow from closed, consistent books. Cash-basis books work under $500K; above that, accrual is what buyers expect.",
+        "concern_if_missing": "Books that are not closed on a schedule cause restated numbers in diligence and a price cut.",
+        "what_to_strengthen": "Close the books on a fixed schedule; move to accrual by $500K ARR and shorten the close as you grow.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F2",
+        "category": "Financial quality",
+        "item": "Chart of accounts separates recurring revenue, services, and COGS (hosting, support, third-party tools)",
+        "points": 1,
+        "benchmarks": {
+          "1": "Recurring, services, and COGS on separate lines for 12+ months",
+          "2": "Recurring, services, and COGS on separate lines for 12+ months",
+          "3": "Recurring, services, and COGS on separate lines for 12+ months"
+        },
+        "why_buyers_care": "Buyers rebuild gross margin and recurring revenue percentage from your P&L. Mixed categories block that.",
+        "concern_if_missing": "A buyer who cannot verify gross margin applies a lower multiple or asks for a Quality of Earnings at your cost.",
+        "what_to_strengthen": "Build a SaaS chart of accounts with separate lines for subscription, services, and each COGS type.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "F3",
+        "category": "Financial quality",
+        "item": "Year-end financials prepared by a CPA, at the review level your size requires",
+        "points": 1,
+        "benchmarks": {
+          "1": "CPA-prepared",
+          "2": "CPA-prepared",
+          "3": "CPA-reviewed",
+          "4": "CPA-reviewed; audit recommended",
+          "5": "Audited"
+        },
+        "why_buyers_care": "Third-party financials cut diligence time and remove the first reason a buyer discounts your numbers.",
+        "concern_if_missing": "Owner-prepared or unreviewed statements extend diligence by 4 to 8 weeks and invite a price adjustment.",
+        "what_to_strengthen": "Engage a SaaS-experienced CPA; step up to review or audit as you grow.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F4",
+        "category": "Financial quality",
+        "item": "Revenue is recognized over the contract term, with annual prepayments spread across 12 months",
+        "points": 1,
+        "benchmarks": {
+          "1": "Monthly recognition; deferred revenue on the balance sheet",
+          "2": "Monthly recognition; deferred revenue on the balance sheet",
+          "3": "Monthly recognition; deferred revenue on the balance sheet"
+        },
+        "why_buyers_care": "Buyers test revenue recognition first. Upfront booking of annual deals overstates revenue and understates deferred revenue.",
+        "concern_if_missing": "Restated revenue in diligence lowers ARR, which lowers the price directly.",
+        "what_to_strengthen": "Recognize subscription revenue monthly and carry prepaid amounts as deferred revenue.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "F5",
+        "category": "Financial quality",
+        "item": "ARR, churn, and customer counts in your billing or CRM system reconcile to the P&L",
+        "points": 2,
+        "benchmarks": {
+          "2": "Within 5%",
+          "3": "Within 2%",
+          "4": "Within 2%",
+          "5": "Within 1%"
+        },
+        "why_buyers_care": "Buyers compare your metrics pack to your financials. A gap in either direction signals weak controls.",
+        "concern_if_missing": "A reconciliation gap above 2% triggers a Quality of Earnings review and delays the deal.",
+        "what_to_strengthen": "Reconcile billing system ARR to recognized revenue every quarter and document the differences.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "F6",
+        "category": "Financial quality",
+        "item": "Owner salary and personal expenses are tagged as add-backs with receipts",
+        "points": 1,
+        "benchmarks": {
+          "1": "Add-back schedule maintained monthly",
+          "2": "Add-back schedule maintained monthly",
+          "3": "Add-back schedule maintained monthly"
+        },
+        "why_buyers_care": "At this size buyers price on Seller's Discretionary Earnings. Every add-back needs proof.",
+        "concern_if_missing": "Unsupported add-backs are removed from SDE, which cuts the price by the multiple times the add-back.",
+        "what_to_strengthen": "Keep a running add-back schedule with the support document for each line.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F7",
+        "category": "Financial quality",
+        "item": "All tax filings are current and every dollar of revenue runs through the books",
+        "points": 1,
+        "benchmarks": {
+          "1": "All filings current; no off-book revenue",
+          "2": "All filings current; no off-book revenue",
+          "3": "All filings current; no off-book revenue",
+          "4": "All filings current; no off-book revenue",
+          "5": "All filings current; no off-book revenue"
+        },
+        "why_buyers_care": "Buyers inherit tax exposure in a stock deal and discount it in an asset deal.",
+        "concern_if_missing": "Late filings or off-book cash make the deal an asset sale with a holdback.",
+        "what_to_strengthen": "Bring payroll, sales tax, and income tax filings current; close any off-book channel.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "F8",
+        "category": "Financial quality",
+        "item": "No cash-flow crisis in the past 24 months and at least 3 months of operating cash on hand",
+        "points": 1,
+        "benchmarks": {
+          "1": "3 months of cash",
+          "2": "3 months of cash",
+          "3": "6 months of cash",
+          "4": "6 months of cash",
+          "5": "6 months of cash"
+        },
+        "why_buyers_care": "Buyers read cash history as a test of management. A crisis in the trailing period raises the risk premium.",
+        "concern_if_missing": "A recent cash squeeze pushes buyers toward earn-outs instead of cash at close.",
+        "what_to_strengthen": "Hold a cash reserve and track runway monthly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "F9",
+        "category": "Financial quality",
+        "item": "A live financial dashboard tracks ARR, churn, cash, and margin by month",
+        "points": 1,
+        "benchmarks": {
+          "3": "Monthly dashboard with 24 months of history",
+          "4": "Monthly dashboard with 24 months of history",
+          "5": "Monthly dashboard with 24 months of history"
+        },
+        "why_buyers_care": "A dashboard that updates without you proves the business reports on itself.",
+        "concern_if_missing": "Metrics assembled by hand for the deal look unreliable and take longer to verify.",
+        "what_to_strengthen": "Connect billing and accounting to one dashboard and review it monthly with your team.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F10",
+        "category": "Financial quality",
+        "item": "A 12-month budget exists and last year's actuals landed within 10% of plan",
+        "points": 1,
+        "benchmarks": {
+          "3": "Within 15% of plan",
+          "4": "Within 10% of plan",
+          "5": "Within 10% of plan"
+        },
+        "why_buyers_care": "Buyers pay for a forecast they can trust. A track record of hitting plan supports forward multiples.",
+        "concern_if_missing": "No budget or a large miss causes buyers to value the business on trailing numbers only.",
+        "what_to_strengthen": "Build an annual budget, compare monthly, and document variances.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "F11",
+        "category": "Financial quality",
+        "item": "A Quality of Earnings report or QoE-style package is ready before you go to market",
+        "points": 1,
+        "benchmarks": {
+          "4": "Sell-side QoE completed within the last 12 months",
+          "5": "Sell-side QoE completed within the last 12 months"
+        },
+        "why_buyers_care": "Institutional buyers commission a QoE. A sell-side QoE finds problems before they do and shortens diligence.",
+        "concern_if_missing": "Buyer-side QoE findings become price reductions with no time for you to fix them.",
+        "what_to_strengthen": "Commission a sell-side QoE 6 to 12 months before a sale.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F12",
+        "category": "Financial quality",
+        "item": "Consistent historical financials cover the required number of years",
+        "points": 1,
+        "benchmarks": {
+          "2": "2 years",
+          "3": "3 years",
+          "4": "3 years",
+          "5": "5 years"
+        },
+        "why_buyers_care": "Buyers want to see growth across multiple years, in one format, with no gaps.",
+        "concern_if_missing": "Fewer than 2 years of clean history limits you to buyers who price on current ARR only.",
+        "what_to_strengthen": "Restate earlier years into the current chart of accounts if needed.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "FX1",
+        "category": "Financial quality",
+        "item": "Financial foundations are in place: accrual books, monthly close within 15 days, SaaS chart of accounts, monthly revenue recognition, deferred revenue tracked",
+        "points": 1,
+        "benchmarks": {
+          "4": "All 5 foundations in place",
+          "5": "All 5 foundations in place"
+        },
+        "why_buyers_care": "At this size buyers assume these foundations exist. A missing one is a red flag, not a to-do.",
+        "concern_if_missing": "A foundational gap at this size causes buyers to question every other number.",
+        "what_to_strengthen": "Audit the basics with your CPA before you start a process.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "R1",
+        "category": "Revenue quality",
+        "item": "Recurring revenue is the required share of total revenue",
+        "points": 1,
+        "benchmarks": {
+          "1": "70%+",
+          "2": "70%+",
+          "3": "80%+",
+          "4": "90%+",
+          "5": "90%+"
+        },
+        "why_buyers_care": "Recurring revenue is what buyers pay the SaaS multiple on. Services and one-time fees get a lower multiple or none.",
+        "concern_if_missing": "Below 70% recurring, buyers value you as a services business.",
+        "what_to_strengthen": "Productize services into subscriptions and separate one-time revenue in your reporting.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "R2",
+        "category": "Revenue quality",
+        "item": "ARR growth, as a 2 to 3 year CAGR, meets the benchmark, and every year in that period grew",
+        "points": 2,
+        "benchmarks": {
+          "1": "40%+",
+          "2": "30%+",
+          "3": "20%+",
+          "4": "20%+",
+          "5": "15%+"
+        },
+        "why_buyers_care": "Growth is the largest single driver of the multiple. Buyers read a multi-year CAGR with steady years as proof of product-market fit; one strong year does not count.",
+        "concern_if_missing": "Growth below 10% moves you from a growth multiple to a profit multiple.",
+        "what_to_strengthen": "Track ARR growth monthly by cohort and segment; fix retention before you add acquisition spend.",
+        "warning": "If your 2 to 3 year ARR CAGR is under 20%, or any year in that period was flat or down, buyers read it as a product-market fit problem. The business will be difficult to sell at this stage.",
+        "warning_stages": [
+          1,
+          2,
+          3
+        ],
+        "source": "G, M"
+      },
+      {
+        "id": "R3",
+        "category": "Revenue quality",
+        "item": "Gross revenue retention (annual) meets the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "80%+",
+          "2": "80%+",
+          "3": "85%+",
+          "4": "90%+",
+          "5": "90%+"
+        },
+        "why_buyers_care": "GRR shows how much revenue stays without any upsell. Buyers treat it as the core risk number.",
+        "concern_if_missing": "GRR under 80% tells a buyer the product does not hold customers; expansion will not mask it.",
+        "what_to_strengthen": "Track churn reasons, strengthen onboarding, and intervene on at-risk accounts.",
+        "warning": "If your annual GRR is under 70%, the business will struggle to sell. Most buyers at this stage pass before they look at anything else.",
+        "warning_stages": [
+          1,
+          2,
+          3
+        ],
+        "source": "G, M"
+      },
+      {
+        "id": "R4",
+        "category": "Revenue quality",
+        "item": "Net revenue retention (annual) meets the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "95%+",
+          "2": "95%+",
+          "3": "100%+",
+          "4": "105%+",
+          "5": "110%+"
+        },
+        "why_buyers_care": "NRR above 100% means your customer base grows without new sales. It is the strongest proof of product value.",
+        "concern_if_missing": "NRR under 90% means the revenue base shrinks; buyers price in continuous replacement cost.",
+        "what_to_strengthen": "Add usage tiers or seat expansion and give customer success an expansion target.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "R5",
+        "category": "Revenue quality",
+        "item": "Monthly logo churn is at or below the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "1": "Under 5%",
+          "2": "Under 5%",
+          "3": "Under 3%",
+          "4": "Under 2%",
+          "5": "Under 1.5%"
+        },
+        "why_buyers_care": "Logo churn sets the customer lifetime, which sets LTV and the acquisition budget a buyer can justify.",
+        "concern_if_missing": "Monthly churn above 5% means you lose half your customers each year.",
+        "what_to_strengthen": "Segment churn by plan and acquisition channel, then cut the channels that bring churn-prone customers.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R6",
+        "category": "Revenue quality",
+        "item": "Pricing has at least 2 tiers or a usage path that lets customers spend more",
+        "points": 1,
+        "benchmarks": {
+          "1": "2+ tiers or usage-based pricing live",
+          "2": "2+ tiers or usage-based pricing live",
+          "3": "2+ tiers or usage-based pricing live"
+        },
+        "why_buyers_care": "Expansion revenue depends on a pricing model that allows it. Flat pricing caps NRR at 100%.",
+        "concern_if_missing": "Single-tier pricing removes the expansion story from the buyer's model.",
+        "what_to_strengthen": "Add a tier, a seat count, or a usage meter that scales with customer value.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R7",
+        "category": "Revenue quality",
+        "item": "Annual or multi-year contracts cover the required share of ARR",
+        "points": 1,
+        "benchmarks": {
+          "2": "30%+ of ARR",
+          "3": "50%+ of ARR",
+          "4": "60%+ of ARR",
+          "5": "70%+ of ARR"
+        },
+        "why_buyers_care": "Contract term is the contractual floor under your revenue. Buyers model month-to-month revenue as at risk.",
+        "concern_if_missing": "Month-to-month revenue lowers the revenue a buyer treats as committed.",
+        "what_to_strengthen": "Offer a discount for annual prepay and renewals with auto-renew terms.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R8",
+        "category": "Revenue quality",
+        "item": "Cohort retention is tracked by month of acquisition",
+        "points": 1,
+        "benchmarks": {
+          "2": "24 months of cohort data",
+          "3": "24 months of cohort data",
+          "4": "24 months of cohort data",
+          "5": "24 months of cohort data"
+        },
+        "why_buyers_care": "Cohorts show whether retention improves or decays as the product matures. A blended churn number hides this.",
+        "concern_if_missing": "No cohort data makes a buyer assume the worst cohort is the trend.",
+        "what_to_strengthen": "Build a monthly cohort table from billing data and keep 24 months of history.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R9",
+        "category": "Revenue quality",
+        "item": "Expansion ARR provides the required share of ARR growth",
+        "points": 1,
+        "benchmarks": {
+          "3": "20%+ of growth",
+          "4": "30%+ of growth",
+          "5": "40%+ of growth"
+        },
+        "why_buyers_care": "Growth from existing customers is cheaper and more predictable than growth from new logos.",
+        "concern_if_missing": "Growth that comes only from new logos stops when marketing spend stops.",
+        "what_to_strengthen": "Give account management an expansion quota and track upsell by cohort.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "M"
+      },
+      {
+        "id": "R10",
+        "category": "Revenue quality",
+        "item": "Failed-payment recovery is automated",
+        "points": 1,
+        "benchmarks": {
+          "1": "Dunning live; involuntary churn under 1% monthly",
+          "2": "Dunning live; involuntary churn under 1% monthly",
+          "3": "Dunning live; involuntary churn under 1% monthly"
+        },
+        "why_buyers_care": "Involuntary churn is the cheapest churn to fix. Buyers see unfixed dunning as neglect.",
+        "concern_if_missing": "Unrecovered failed payments inflate churn and lower both GRR and NRR.",
+        "what_to_strengthen": "Turn on dunning in your billing system and retry failed cards for 21 days.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "U1",
+        "category": "Unit economics",
+        "item": "Gross margin meets the benchmark with hosting, support, and onboarding in COGS",
+        "points": 1,
+        "benchmarks": {
+          "1": "70%+",
+          "2": "70%+",
+          "3": "75%+",
+          "4": "75%+",
+          "5": "80%+"
+        },
+        "why_buyers_care": "Gross margin sets how much of each new dollar becomes profit. Buyers test it against the 70 to 80% SaaS norm.",
+        "concern_if_missing": "Gross margin under 60% means the buyer values you as a services business.",
+        "what_to_strengthen": "Move support and onboarding into COGS, then cut hosting cost and automate onboarding.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "U2",
+        "category": "Unit economics",
+        "item": "LTV to CAC ratio is tracked and meets the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "Tracked; 2x+",
+          "2": "3x+",
+          "3": "3x+",
+          "4": "3x+",
+          "5": "4x+"
+        },
+        "why_buyers_care": "LTV:CAC tells a buyer whether growth spend pays back. It is the efficiency number behind the growth number.",
+        "concern_if_missing": "A ratio under 2x means the buyer must cut marketing to make the business profitable.",
+        "what_to_strengthen": "Compute LTV on gross profit, include commissions and onboarding in CAC, and review by channel.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "U3",
+        "category": "Unit economics",
+        "item": "CAC payback period is at or under the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "1": "Under 18 months",
+          "2": "Under 18 months",
+          "3": "Under 12 months",
+          "4": "Under 12 months",
+          "5": "Under 12 months"
+        },
+        "why_buyers_care": "Payback sets how much cash growth consumes. Buyers with a growth plan need payback they can fund.",
+        "concern_if_missing": "Payback over 24 months means growth needs outside capital.",
+        "what_to_strengthen": "Raise prices, improve conversion, and shorten time to first value.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "M"
+      },
+      {
+        "id": "U4",
+        "category": "Unit economics",
+        "item": "Profitability meets the benchmark for your size and valuation method",
+        "points": 2,
+        "benchmarks": {
+          "1": "Profitable, or 12-month path to profit",
+          "2": "SDE margin 30%+",
+          "3": "EBITDA margin 10%+ or Rule of 40 met",
+          "4": "Rule of 40 met",
+          "5": "Rule of 40 met"
+        },
+        "why_buyers_care": "Below $2M buyers pay on SDE. Above $5M they pay on EBITDA or on growth under the Rule of 40.",
+        "concern_if_missing": "Negative profit with growth under 20% leaves no valuation method that supports a premium.",
+        "what_to_strengthen": "Audit spend by department and set a margin target that fits your growth rate.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "U5",
+        "category": "Unit economics",
+        "item": "ARR per employee meets the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "2": "$150K+",
+          "3": "$200K+",
+          "4": "$300K+",
+          "5": "$400K+"
+        },
+        "why_buyers_care": "ARR per employee is the fastest read on operating leverage. Low numbers signal a services-heavy model.",
+        "concern_if_missing": "Under $200K per employee tells a buyer the margin will not expand with scale.",
+        "what_to_strengthen": "Automate support and onboarding and hold headcount growth below ARR growth.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "M"
+      },
+      {
+        "id": "U6",
+        "category": "Unit economics",
+        "item": "Sales and marketing spend is tracked by channel with cost per customer",
+        "points": 1,
+        "benchmarks": {
+          "2": "CAC by channel for 12+ months",
+          "3": "CAC by channel for 12+ months",
+          "4": "CAC by channel for 12+ months",
+          "5": "CAC by channel for 12+ months"
+        },
+        "why_buyers_care": "Buyers want to know which channels work so they can add capital to them.",
+        "concern_if_missing": "Blended CAC without channel detail blocks the buyer's growth model.",
+        "what_to_strengthen": "Tag every new customer with its source and compute CAC per channel quarterly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "C1",
+        "category": "Customers",
+        "item": "Customer concentration is below the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "No customer over 20%",
+          "2": "No customer over 15%",
+          "3": "Top 5 under 40%",
+          "4": "Top 5 under 30%",
+          "5": "Top 10 under 30%"
+        },
+        "why_buyers_care": "One lost customer should not change the price. Buyers discount concentrated revenue or ask for an earn-out on it.",
+        "concern_if_missing": "Top 5 customers above 50% of revenue is a high-risk flag in every buyer's model.",
+        "what_to_strengthen": "Diversify go-to-market and lock large accounts into multi-year contracts.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G, M"
+      },
+      {
+        "id": "C2",
+        "category": "Customers",
+        "item": "One system holds every customer with MRR, start date, plan, and contract",
+        "points": 1,
+        "benchmarks": {
+          "1": "Customer register exported monthly",
+          "2": "Customer register exported monthly",
+          "3": "Customer register exported monthly"
+        },
+        "why_buyers_care": "The customer list is the first diligence request. It must tie to billing and to the P&L.",
+        "concern_if_missing": "A customer list assembled by hand for the deal takes weeks and rarely ties out.",
+        "what_to_strengthen": "Keep the billing system or CRM as the single source and export it monthly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "C3",
+        "category": "Customers",
+        "item": "Largest customers are on written contracts that allow assignment on a change of control",
+        "points": 1,
+        "benchmarks": {
+          "2": "Top 10 customers",
+          "3": "Top 20 customers",
+          "4": "All customers over 1% of ARR",
+          "5": "All customers over 1% of ARR"
+        },
+        "why_buyers_care": "A buyer needs the contracts to transfer. Consent clauses give customers a chance to renegotiate at close.",
+        "concern_if_missing": "Contracts that block assignment delay closing and give key customers leverage.",
+        "what_to_strengthen": "Standardize terms and amend the largest contracts before you go to market.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C4",
+        "category": "Customers",
+        "item": "Customer satisfaction is measured at least once a year (NPS or survey)",
+        "points": 1,
+        "benchmarks": {
+          "2": "Annual survey",
+          "3": "Annual survey; NPS 30+",
+          "4": "Quarterly survey; NPS 40+",
+          "5": "Quarterly survey; NPS 40+"
+        },
+        "why_buyers_care": "Satisfaction data predicts retention before churn shows up in the numbers.",
+        "concern_if_missing": "No satisfaction data leaves the buyer to assume churn will rise after the owner leaves.",
+        "what_to_strengthen": "Run an annual NPS survey and track the score by segment.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C5",
+        "category": "Customers",
+        "item": "Support runs on a documented process with a named owner who is not the founder",
+        "points": 1,
+        "benchmarks": {
+          "2": "Support owner named",
+          "3": "Support owner; response time tracked",
+          "4": "Support team; SLA published",
+          "5": "Support team; SLA published"
+        },
+        "why_buyers_care": "Support is where founder dependence shows up first. Buyers test whether customers rely on you personally.",
+        "concern_if_missing": "Founder-run support means customer relationships leave with the founder.",
+        "what_to_strengthen": "Appoint a support owner, document the process, and track response time.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C6",
+        "category": "Customers",
+        "item": "Onboarding is productized, with self-serve steps where possible",
+        "points": 1,
+        "benchmarks": {
+          "1": "Documented onboarding; under 5 founder hours per customer",
+          "2": "Documented onboarding; under 5 founder hours per customer",
+          "3": "Documented onboarding; under 5 founder hours per customer"
+        },
+        "why_buyers_care": "Onboarding cost sits in gross margin, and onboarding quality sets early churn.",
+        "concern_if_missing": "Hands-on onboarding by the founder lowers margin and does not scale for a buyer.",
+        "what_to_strengthen": "Write the onboarding checklist and automate the first 3 steps.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C7",
+        "category": "Customers",
+        "item": "A customer success function owns renewals and expansion",
+        "points": 1,
+        "benchmarks": {
+          "4": "CS lead with renewal and expansion targets",
+          "5": "CS lead with renewal and expansion targets"
+        },
+        "why_buyers_care": "At this size buyers expect a team that drives NRR, not an inbox.",
+        "concern_if_missing": "No CS function caps NRR and makes the growth plan depend on new logos.",
+        "what_to_strengthen": "Hire or assign a CS lead with a renewal and expansion quota.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "O1",
+        "category": "Owner and team",
+        "item": "The founder can leave for the benchmark period with no drop in revenue or service",
+        "points": 2,
+        "benchmarks": {
+          "1": "2 weeks",
+          "2": "1 month",
+          "3": "1 month",
+          "4": "3 months",
+          "5": "3 months"
+        },
+        "why_buyers_care": "If the business cannot run without you, a buyer is buying a job. Transferability sets the multiple.",
+        "concern_if_missing": "High owner dependence moves buyers to an earn-out and a long transition period.",
+        "what_to_strengthen": "Take a planned absence, log what breaks, and fix each item.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O2",
+        "category": "Owner and team",
+        "item": "At least 2 people can deploy to production and fix a critical bug",
+        "points": 1,
+        "benchmarks": {
+          "1": "2+ people with production access and runbook",
+          "2": "2+ people with production access and runbook",
+          "3": "2+ people with production access and runbook"
+        },
+        "why_buyers_care": "A single engineer who holds the system is a key-person risk buyers price in.",
+        "concern_if_missing": "One-person technical knowledge becomes a retention condition in the deal.",
+        "what_to_strengthen": "Cross-train a second engineer and document the deployment runbook.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O3",
+        "category": "Owner and team",
+        "item": "Sales closes without the founder at the required level",
+        "points": 1,
+        "benchmarks": {
+          "2": "A second person closes deals",
+          "3": "A sales lead owns the pipeline",
+          "4": "Sales leader and team; founder in under 10% of deals",
+          "5": "Sales leader and team; founder in under 10% of deals"
+        },
+        "why_buyers_care": "If every deal needs the founder, revenue growth is tied to the founder's hours.",
+        "concern_if_missing": "Founder-led sales is the most common reason buyers cut the price of a $2M to $10M SaaS.",
+        "what_to_strengthen": "Hire a seller, write the sales process, and move the founder out of first calls.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O4",
+        "category": "Owner and team",
+        "item": "Every role has a written description and the core processes have SOPs in cloud storage",
+        "points": 1,
+        "benchmarks": {
+          "1": "Role descriptions and SOPs for all recurring processes",
+          "2": "Role descriptions and SOPs for all recurring processes",
+          "3": "Role descriptions and SOPs for all recurring processes"
+        },
+        "why_buyers_care": "Documentation is how a buyer takes over operations without you.",
+        "concern_if_missing": "No documentation extends the transition period and the earn-out.",
+        "what_to_strengthen": "Write one SOP per recurring process and store them where the team works.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "O5",
+        "category": "Owner and team",
+        "item": "A second-in-command or general manager runs day-to-day operations",
+        "points": 1,
+        "benchmarks": {
+          "3": "GM or COO in place 6+ months",
+          "4": "GM or COO in place 12+ months",
+          "5": "GM or COO in place 12+ months"
+        },
+        "why_buyers_care": "Buyers need a leader who stays. The founder usually leaves within 12 months of a sale.",
+        "concern_if_missing": "No number two means the buyer has to hire one and prices that risk in.",
+        "what_to_strengthen": "Promote or hire a GM and hand over operations 12 months before a sale.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O6",
+        "category": "Owner and team",
+        "item": "A leadership team covers product, engineering, sales, and finance",
+        "points": 1,
+        "benchmarks": {
+          "4": "4 functional leaders with 12+ months tenure",
+          "5": "4 functional leaders with 12+ months tenure"
+        },
+        "why_buyers_care": "At this size buyers evaluate the team as much as the numbers.",
+        "concern_if_missing": "Gaps in the leadership team lower the multiple and extend the founder's required stay.",
+        "what_to_strengthen": "Fill each function with a leader who has SaaS experience.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "O7",
+        "category": "Owner and team",
+        "item": "Key employees have employment agreements and a retention or equity plan",
+        "points": 1,
+        "benchmarks": {
+          "2": "Agreements signed",
+          "3": "Agreements and retention plan",
+          "4": "Agreements, retention plan, and option pool",
+          "5": "Agreements, retention plan, and option pool"
+        },
+        "why_buyers_care": "Buyers want the people who built the product to stay through the transition.",
+        "concern_if_missing": "Unretained key staff become a closing condition or a holdback.",
+        "what_to_strengthen": "Put key people on agreements with a retention bonus that vests after close.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O8",
+        "category": "Owner and team",
+        "item": "An org chart shows every role and reporting line",
+        "points": 1,
+        "benchmarks": {
+          "2": "Org chart current within 90 days",
+          "3": "Org chart current within 90 days",
+          "4": "Org chart current within 90 days",
+          "5": "Org chart current within 90 days"
+        },
+        "why_buyers_care": "The org chart is the buyer's map of who does what and where the founder sits.",
+        "concern_if_missing": "No org chart signals that the founder holds the structure in their head.",
+        "what_to_strengthen": "Draw the chart, include contractors, and update it quarterly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "O9",
+        "category": "Owner and team",
+        "item": "Hiring and onboarding follow a documented process",
+        "points": 1,
+        "benchmarks": {
+          "3": "Hiring and onboarding process documented",
+          "4": "Hiring and onboarding process documented",
+          "5": "Hiring and onboarding process documented"
+        },
+        "why_buyers_care": "A buyer who plans to grow needs to hire without you.",
+        "concern_if_missing": "Ad-hoc hiring means the growth plan depends on the founder's network.",
+        "what_to_strengthen": "Document the hiring steps and the 30-day onboarding plan for each role type.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "OX1",
+        "category": "Owner and team",
+        "item": "Operational foundations are in place: role descriptions, SOPs, 2+ people on production, productized onboarding",
+        "points": 1,
+        "benchmarks": {
+          "4": "All 4 foundations in place",
+          "5": "All 4 foundations in place"
+        },
+        "why_buyers_care": "At this size buyers assume these foundations exist. A missing one is a red flag, not a to-do.",
+        "concern_if_missing": "A foundational gap at this size causes buyers to question how the company scaled.",
+        "what_to_strengthen": "Audit the basics with your GM before you start a process.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "P1",
+        "category": "Product and technology",
+        "item": "The product is cloud-hosted and multi-tenant, with no on-premise installs",
+        "points": 1,
+        "benchmarks": {
+          "1": "100% cloud-hosted",
+          "2": "100% cloud-hosted",
+          "3": "100% cloud-hosted"
+        },
+        "why_buyers_care": "Delivery model sets margin and scalability. Buyers pay the SaaS multiple for cloud-native products.",
+        "concern_if_missing": "On-prem or single-tenant installs move you toward a software license multiple.",
+        "what_to_strengthen": "Migrate remaining installs to the cloud platform and sunset the legacy option.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "P2",
+        "category": "Product and technology",
+        "item": "Code is in version control with a repeatable deployment and automated tests",
+        "points": 1,
+        "benchmarks": {
+          "1": "Version control and deploy script",
+          "2": "CI/CD in place",
+          "3": "CI/CD and test coverage on critical paths"
+        },
+        "why_buyers_care": "Technical diligence starts with the repo. Buyers look for process, not perfection.",
+        "concern_if_missing": "No tests or manual deploys raise the technical risk score and the integration cost.",
+        "what_to_strengthen": "Set up CI/CD and cover the critical paths with automated tests.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P3",
+        "category": "Product and technology",
+        "item": "Architecture and operations are documented well enough for a new engineer to deploy within a week",
+        "points": 1,
+        "benchmarks": {
+          "2": "Architecture doc and runbooks current",
+          "3": "Architecture doc and runbooks current",
+          "4": "Architecture doc and runbooks current",
+          "5": "Architecture doc and runbooks current"
+        },
+        "why_buyers_care": "Documentation is how the buyer's team takes over the codebase.",
+        "concern_if_missing": "Undocumented systems extend the founder's required stay.",
+        "what_to_strengthen": "Write the architecture overview, the runbooks, and the environment setup guide.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P4",
+        "category": "Product and technology",
+        "item": "Third-party dependencies and open-source licenses are inventoried",
+        "points": 1,
+        "benchmarks": {
+          "2": "License inventory current; no unresolved copyleft",
+          "3": "License inventory current; no unresolved copyleft",
+          "4": "License inventory current; no unresolved copyleft",
+          "5": "License inventory current; no unresolved copyleft"
+        },
+        "why_buyers_care": "Buyers scan for copyleft licenses and unlicensed components. A finding can block a stock deal.",
+        "concern_if_missing": "An unknown GPL dependency in the core product is a closing condition.",
+        "what_to_strengthen": "Run a license scan and resolve any copyleft or unlicensed component.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P5",
+        "category": "Product and technology",
+        "item": "Security meets the benchmark for your size",
+        "points": 1,
+        "benchmarks": {
+          "1": "MFA, tested backups, access control",
+          "2": "MFA, tested backups, access control",
+          "3": "Security policy and annual penetration test",
+          "4": "SOC 2 Type II",
+          "5": "SOC 2 Type II"
+        },
+        "why_buyers_care": "Security findings in diligence become price reductions or indemnities.",
+        "concern_if_missing": "No security controls at any size is a deal risk; no SOC 2 above $5M blocks many buyers.",
+        "what_to_strengthen": "Start with MFA, backups, and access control; add a penetration test and SOC 2 as you grow.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P6",
+        "category": "Product and technology",
+        "item": "Uptime is tracked and meets the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "2": "99.5%+",
+          "3": "99.9%+",
+          "4": "99.9%+",
+          "5": "99.95%+"
+        },
+        "why_buyers_care": "Reliability is a retention driver and a contractual obligation in enterprise deals.",
+        "concern_if_missing": "No uptime record means the buyer cannot verify the SLA you sell.",
+        "what_to_strengthen": "Add monitoring and publish uptime to customers.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P7",
+        "category": "Product and technology",
+        "item": "A written 12-month product roadmap exists",
+        "points": 1,
+        "benchmarks": {
+          "2": "Roadmap updated within 6 months",
+          "3": "Roadmap updated within 6 months",
+          "4": "Roadmap updated within 6 months",
+          "5": "Roadmap updated within 6 months"
+        },
+        "why_buyers_care": "The roadmap is the buyer's view of where growth comes from after close.",
+        "concern_if_missing": "No roadmap means the buyer values the product as it is today.",
+        "what_to_strengthen": "Write a 12-month roadmap tied to retention and expansion goals.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P8",
+        "category": "Product and technology",
+        "item": "Differentiation is evidenced with win/loss data or documented reasons customers chose you",
+        "points": 1,
+        "benchmarks": {
+          "2": "3 documented reasons",
+          "3": "Win/loss tracked for 12 months",
+          "4": "Win rate tracked; 3+ case studies",
+          "5": "Win rate tracked; 3+ case studies"
+        },
+        "why_buyers_care": "Buyers pay a premium for a product that is hard to replace. Claims need evidence.",
+        "concern_if_missing": "Differentiation without evidence reads as marketing, not as a moat.",
+        "what_to_strengthen": "Track win/loss reasons in the CRM and collect 5 customer quotes on why they switched.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "P9",
+        "category": "Product and technology",
+        "item": "Integrations or an API create switching costs",
+        "points": 1,
+        "benchmarks": {
+          "3": "3+ live integrations or a public API",
+          "4": "3+ live integrations or a public API",
+          "5": "3+ live integrations or a public API"
+        },
+        "why_buyers_care": "Switching costs protect retention and pricing. Buyers model them as a retention floor.",
+        "concern_if_missing": "A product with no integrations is easier to replace at renewal.",
+        "what_to_strengthen": "Build the 3 integrations your customers ask for most and publish an API.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "PX1",
+        "category": "Product and technology",
+        "item": "Technical foundations are in place: cloud-hosted, CI/CD, automated tests, 2+ engineers on production",
+        "points": 1,
+        "benchmarks": {
+          "4": "All 4 foundations in place",
+          "5": "All 4 foundations in place"
+        },
+        "why_buyers_care": "At this size buyers assume these foundations exist. A missing one is a red flag, not a to-do.",
+        "concern_if_missing": "A foundational gap at this size raises the technical risk score for the whole platform.",
+        "what_to_strengthen": "Run an internal technical audit before you start a process.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "M1",
+        "category": "Market",
+        "item": "The ideal customer profile is written down with segment, size, and average contract value",
+        "points": 1,
+        "benchmarks": {
+          "1": "ICP documented; 70%+ of new customers match",
+          "2": "ICP documented; 70%+ of new customers match",
+          "3": "ICP documented; 70%+ of new customers match",
+          "4": "ICP documented; 70%+ of new customers match",
+          "5": "ICP documented; 70%+ of new customers match"
+        },
+        "why_buyers_care": "A clear ICP lets a buyer judge the market and the growth plan. It also explains your churn.",
+        "concern_if_missing": "No ICP means the buyer cannot size the opportunity or trust the CAC.",
+        "what_to_strengthen": "Write a 1-page ICP and check that 70%+ of new customers match it.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "M2",
+        "category": "Market",
+        "item": "A bottom-up TAM and SAM exist with sources",
+        "points": 1,
+        "benchmarks": {
+          "3": "TAM $100M+",
+          "4": "TAM $200M+",
+          "5": "TAM $500M+"
+        },
+        "why_buyers_care": "Buyers pay for headroom. A small or vague TAM caps the multiple even with strong metrics.",
+        "concern_if_missing": "Top-down TAM from a market report is discounted; bottom-up numbers are trusted.",
+        "what_to_strengthen": "Build TAM from ICP count times ACV and cite the sources.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "M3",
+        "category": "Market",
+        "item": "Market growth is cited from a third-party source",
+        "points": 1,
+        "benchmarks": {
+          "3": "10%+ market growth with a cited source",
+          "4": "10%+ market growth with a cited source",
+          "5": "10%+ market growth with a cited source"
+        },
+        "why_buyers_care": "A growing market gives the buyer tailwind for the growth plan.",
+        "concern_if_missing": "Founder estimates of market growth are not used in buyer models.",
+        "what_to_strengthen": "Cite a Gartner, Forrester, or PitchBook growth rate for your segment.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "M4",
+        "category": "Market",
+        "item": "Named competitors and your position against them are documented, with win rate",
+        "points": 1,
+        "benchmarks": {
+          "3": "Competitor map and 12 months of win rate",
+          "4": "Competitor map and 12 months of win rate",
+          "5": "Competitor map and 12 months of win rate"
+        },
+        "why_buyers_care": "Buyers want to know who you beat and why. Win rate is the proof.",
+        "concern_if_missing": "No competitive data means the buyer runs their own analysis and prices the unknown.",
+        "what_to_strengthen": "Keep a competitor map and track win rate against each named competitor.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "M5",
+        "category": "Market",
+        "item": "Recent acquisitions in your category are tracked",
+        "points": 1,
+        "benchmarks": {
+          "4": "10 comparable deals tracked",
+          "5": "10 comparable deals tracked"
+        },
+        "why_buyers_care": "Buyer activity in your category sets the comparable multiples.",
+        "concern_if_missing": "No comparables leaves the buyer to anchor on a generic SaaS multiple.",
+        "what_to_strengthen": "Keep a list of the last 10 deals in your category with price and multiple where public.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, L"
+      },
+      {
+        "id": "L1",
+        "category": "Legal and IP",
+        "item": "The company is a corporation or LLC with a clean cap table and current founder agreements",
+        "points": 1,
+        "benchmarks": {
+          "1": "Cap table and founder agreements current",
+          "2": "Cap table and founder agreements current",
+          "3": "Cap table and founder agreements current"
+        },
+        "why_buyers_care": "Buyers buy a legal entity. Ownership must be clear before a letter of intent.",
+        "concern_if_missing": "Unclear ownership or a missing founder agreement stops the deal at diligence.",
+        "what_to_strengthen": "Confirm the cap table with counsel and sign any missing founder or shareholder agreement.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L2",
+        "category": "Legal and IP",
+        "item": "Every employee and contractor who wrote code has signed an IP assignment",
+        "points": 1,
+        "benchmarks": {
+          "1": "100% of contributors signed",
+          "2": "100% of contributors signed",
+          "3": "100% of contributors signed",
+          "4": "100% of contributors signed",
+          "5": "100% of contributors signed"
+        },
+        "why_buyers_care": "Without IP assignment the company does not own its own product.",
+        "concern_if_missing": "One missing assignment from an early contractor is a closing condition and a holdback.",
+        "what_to_strengthen": "Audit contributors and collect signed assignments from each one.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "L3",
+        "category": "Legal and IP",
+        "item": "Terms of service, privacy policy, and data processing terms are current",
+        "points": 1,
+        "benchmarks": {
+          "1": "Terms updated within 24 months",
+          "2": "Terms updated within 24 months",
+          "3": "Terms updated within 24 months"
+        },
+        "why_buyers_care": "Customer terms set what the buyer inherits, including liability and data rights.",
+        "concern_if_missing": "Outdated terms raise privacy liability and may block enterprise customers from transferring.",
+        "what_to_strengthen": "Update terms with counsel and have every customer accept the current version.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L4",
+        "category": "Legal and IP",
+        "item": "Trademarks are registered and all domains are owned by the company",
+        "points": 1,
+        "benchmarks": {
+          "2": "Mark registered; domains in company account",
+          "3": "Mark registered; domains in company account",
+          "4": "Mark registered; domains in company account",
+          "5": "Mark registered; domains in company account"
+        },
+        "why_buyers_care": "Brand assets must transfer with the company.",
+        "concern_if_missing": "A domain in the founder's personal account becomes a transfer item at close.",
+        "what_to_strengthen": "Register the mark and move domains into a company-owned account.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L5",
+        "category": "Legal and IP",
+        "item": "No open litigation, claims, or regulatory issues",
+        "points": 1,
+        "benchmarks": {
+          "1": "No open matters",
+          "2": "No open matters",
+          "3": "No open matters",
+          "4": "No open matters",
+          "5": "No open matters"
+        },
+        "why_buyers_care": "Buyers price open claims at the worst case and ask for an indemnity.",
+        "concern_if_missing": "Any open claim becomes an escrow at close.",
+        "what_to_strengthen": "Settle or document every open matter before you go to market.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L6",
+        "category": "Legal and IP",
+        "item": "Vendor and partner contracts are assignable on a change of control",
+        "points": 1,
+        "benchmarks": {
+          "3": "Top 10 vendor contracts assignable",
+          "4": "Top 10 vendor contracts assignable",
+          "5": "Top 10 vendor contracts assignable"
+        },
+        "why_buyers_care": "Critical vendors who can terminate at close give them leverage over your deal.",
+        "concern_if_missing": "A non-assignable hosting or data contract is a closing condition.",
+        "what_to_strengthen": "Review the top 10 vendor contracts and amend the change-of-control clauses.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "L7",
+        "category": "Legal and IP",
+        "item": "Compliance obligations for your vertical are met (GDPR, HIPAA, PCI, or others that apply)",
+        "points": 1,
+        "benchmarks": {
+          "3": "Compliance map current; no open gaps",
+          "4": "Compliance map current; no open gaps",
+          "5": "Compliance map current; no open gaps"
+        },
+        "why_buyers_care": "Regulatory gaps are indemnity items. Enterprise buyers verify them before the LOI.",
+        "concern_if_missing": "A compliance gap in a regulated vertical removes strategic buyers from the process.",
+        "what_to_strengthen": "Map the regulations that apply and close each gap with counsel.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "L8",
+        "category": "Legal and IP",
+        "item": "A data inventory shows where customer data lives and who can access it",
+        "points": 1,
+        "benchmarks": {
+          "3": "Data inventory current within 12 months",
+          "4": "Data inventory current within 12 months",
+          "5": "Data inventory current within 12 months"
+        },
+        "why_buyers_care": "Data diligence asks this question first. The answer sets the privacy risk.",
+        "concern_if_missing": "Unknown data locations extend diligence and raise the privacy indemnity.",
+        "what_to_strengthen": "Document every system that holds customer data and the access list for each.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "LX1",
+        "category": "Legal and IP",
+        "item": "Legal foundations are in place: clean cap table, current customer terms, no open claims",
+        "points": 1,
+        "benchmarks": {
+          "4": "All 3 foundations in place",
+          "5": "All 3 foundations in place"
+        },
+        "why_buyers_care": "At this size buyers assume these foundations exist. A missing one is a red flag, not a to-do.",
+        "concern_if_missing": "A foundational legal gap at this size delays the LOI.",
+        "what_to_strengthen": "Have counsel run a pre-sale legal audit.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      }
+    ],
+    "scoring": {
+      "1": {
+        "items": 32,
+        "max_points": 39,
+        "sellable_at": 31,
+        "close_at": 20
+      },
+      "2": {
+        "items": 50,
+        "max_points": 58,
+        "sellable_at": 46,
+        "close_at": 29
+      },
+      "3": {
+        "items": 62,
+        "max_points": 70,
+        "sellable_at": 56,
+        "close_at": 35
+      },
+      "4": {
+        "items": 56,
+        "max_points": 64,
+        "sellable_at": 51,
+        "close_at": 32
+      },
+      "5": {
+        "items": 56,
+        "max_points": 64,
+        "sellable_at": 51,
+        "close_at": 32
+      }
+    }
+  },
+  "master": {
+    "note": "Items as shown in the master checklist. Foundations expanded into their underlying items at stages 4 and 5.",
+    "items": [
+      {
+        "id": "F1",
+        "category": "Financial quality",
+        "item": "Books are kept and closed at the standard your size requires",
+        "points": 1,
+        "benchmarks": {
+          "1": "Cash basis is fine; books closed every quarter",
+          "2": "Accrual basis; closed every quarter, monthly is better",
+          "3": "Accrual basis; monthly close within 30 days",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Buyers model future cash flow from closed, consistent books. Cash-basis books work under $500K; above that, accrual is what buyers expect.",
+        "concern_if_missing": "Books that are not closed on a schedule cause restated numbers in diligence and a price cut.",
+        "what_to_strengthen": "Close the books on a fixed schedule; move to accrual by $500K ARR and shorten the close as you grow.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F2",
+        "category": "Financial quality",
+        "item": "Chart of accounts separates recurring revenue, services, and COGS (hosting, support, third-party tools)",
+        "points": 1,
+        "benchmarks": {
+          "1": "Recurring, services, and COGS on separate lines for 12+ months",
+          "2": "Recurring, services, and COGS on separate lines for 12+ months",
+          "3": "Recurring, services, and COGS on separate lines for 12+ months",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Buyers rebuild gross margin and recurring revenue percentage from your P&L. Mixed categories block that.",
+        "concern_if_missing": "A buyer who cannot verify gross margin applies a lower multiple or asks for a Quality of Earnings at your cost.",
+        "what_to_strengthen": "Build a SaaS chart of accounts with separate lines for subscription, services, and each COGS type.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "F3",
+        "category": "Financial quality",
+        "item": "Year-end financials prepared by a CPA, at the review level your size requires",
+        "points": 1,
+        "benchmarks": {
+          "1": "CPA-prepared",
+          "2": "CPA-prepared",
+          "3": "CPA-reviewed",
+          "4": "CPA-reviewed; audit recommended",
+          "5": "Audited"
+        },
+        "why_buyers_care": "Third-party financials cut diligence time and remove the first reason a buyer discounts your numbers.",
+        "concern_if_missing": "Owner-prepared or unreviewed statements extend diligence by 4 to 8 weeks and invite a price adjustment.",
+        "what_to_strengthen": "Engage a SaaS-experienced CPA; step up to review or audit as you grow.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F4",
+        "category": "Financial quality",
+        "item": "Revenue is recognized over the contract term, with annual prepayments spread across 12 months",
+        "points": 1,
+        "benchmarks": {
+          "1": "Monthly recognition; deferred revenue on the balance sheet",
+          "2": "Monthly recognition; deferred revenue on the balance sheet",
+          "3": "Monthly recognition; deferred revenue on the balance sheet",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Buyers test revenue recognition first. Upfront booking of annual deals overstates revenue and understates deferred revenue.",
+        "concern_if_missing": "Restated revenue in diligence lowers ARR, which lowers the price directly.",
+        "what_to_strengthen": "Recognize subscription revenue monthly and carry prepaid amounts as deferred revenue.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "F5",
+        "category": "Financial quality",
+        "item": "ARR, churn, and customer counts in your billing or CRM system reconcile to the P&L",
+        "points": 2,
+        "benchmarks": {
+          "2": "Within 5%",
+          "3": "Within 2%",
+          "4": "Within 2%",
+          "5": "Within 1%"
+        },
+        "why_buyers_care": "Buyers compare your metrics pack to your financials. A gap in either direction signals weak controls.",
+        "concern_if_missing": "A reconciliation gap above 2% triggers a Quality of Earnings review and delays the deal.",
+        "what_to_strengthen": "Reconcile billing system ARR to recognized revenue every quarter and document the differences.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "F6",
+        "category": "Financial quality",
+        "item": "Owner salary and personal expenses are tagged as add-backs with receipts",
+        "points": 1,
+        "benchmarks": {
+          "1": "Add-back schedule maintained monthly",
+          "2": "Add-back schedule maintained monthly",
+          "3": "Add-back schedule maintained monthly"
+        },
+        "why_buyers_care": "At this size buyers price on Seller's Discretionary Earnings. Every add-back needs proof.",
+        "concern_if_missing": "Unsupported add-backs are removed from SDE, which cuts the price by the multiple times the add-back.",
+        "what_to_strengthen": "Keep a running add-back schedule with the support document for each line.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F7",
+        "category": "Financial quality",
+        "item": "All tax filings are current and every dollar of revenue runs through the books",
+        "points": 1,
+        "benchmarks": {
+          "1": "All filings current; no off-book revenue",
+          "2": "All filings current; no off-book revenue",
+          "3": "All filings current; no off-book revenue",
+          "4": "All filings current; no off-book revenue",
+          "5": "All filings current; no off-book revenue"
+        },
+        "why_buyers_care": "Buyers inherit tax exposure in a stock deal and discount it in an asset deal.",
+        "concern_if_missing": "Late filings or off-book cash make the deal an asset sale with a holdback.",
+        "what_to_strengthen": "Bring payroll, sales tax, and income tax filings current; close any off-book channel.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "F8",
+        "category": "Financial quality",
+        "item": "No cash-flow crisis in the past 24 months and at least 3 months of operating cash on hand",
+        "points": 1,
+        "benchmarks": {
+          "1": "3 months of cash",
+          "2": "3 months of cash",
+          "3": "6 months of cash",
+          "4": "6 months of cash",
+          "5": "6 months of cash"
+        },
+        "why_buyers_care": "Buyers read cash history as a test of management. A crisis in the trailing period raises the risk premium.",
+        "concern_if_missing": "A recent cash squeeze pushes buyers toward earn-outs instead of cash at close.",
+        "what_to_strengthen": "Hold a cash reserve and track runway monthly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "F9",
+        "category": "Financial quality",
+        "item": "A live financial dashboard tracks ARR, churn, cash, and margin by month",
+        "points": 1,
+        "benchmarks": {
+          "3": "Monthly dashboard with 24 months of history",
+          "4": "Monthly dashboard with 24 months of history",
+          "5": "Monthly dashboard with 24 months of history"
+        },
+        "why_buyers_care": "A dashboard that updates without you proves the business reports on itself.",
+        "concern_if_missing": "Metrics assembled by hand for the deal look unreliable and take longer to verify.",
+        "what_to_strengthen": "Connect billing and accounting to one dashboard and review it monthly with your team.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F10",
+        "category": "Financial quality",
+        "item": "A 12-month budget exists and last year's actuals landed within 10% of plan",
+        "points": 1,
+        "benchmarks": {
+          "3": "Within 15% of plan",
+          "4": "Within 10% of plan",
+          "5": "Within 10% of plan"
+        },
+        "why_buyers_care": "Buyers pay for a forecast they can trust. A track record of hitting plan supports forward multiples.",
+        "concern_if_missing": "No budget or a large miss causes buyers to value the business on trailing numbers only.",
+        "what_to_strengthen": "Build an annual budget, compare monthly, and document variances.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "F11",
+        "category": "Financial quality",
+        "item": "A Quality of Earnings report or QoE-style package is ready before you go to market",
+        "points": 1,
+        "benchmarks": {
+          "4": "Sell-side QoE completed within the last 12 months",
+          "5": "Sell-side QoE completed within the last 12 months"
+        },
+        "why_buyers_care": "Institutional buyers commission a QoE. A sell-side QoE finds problems before they do and shortens diligence.",
+        "concern_if_missing": "Buyer-side QoE findings become price reductions with no time for you to fix them.",
+        "what_to_strengthen": "Commission a sell-side QoE 6 to 12 months before a sale.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "F12",
+        "category": "Financial quality",
+        "item": "Consistent historical financials cover the required number of years",
+        "points": 1,
+        "benchmarks": {
+          "2": "2 years",
+          "3": "3 years",
+          "4": "3 years",
+          "5": "5 years"
+        },
+        "why_buyers_care": "Buyers want to see growth across multiple years, in one format, with no gaps.",
+        "concern_if_missing": "Fewer than 2 years of clean history limits you to buyers who price on current ARR only.",
+        "what_to_strengthen": "Restate earlier years into the current chart of accounts if needed.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "R1",
+        "category": "Revenue quality",
+        "item": "Recurring revenue is the required share of total revenue",
+        "points": 1,
+        "benchmarks": {
+          "1": "70%+",
+          "2": "70%+",
+          "3": "80%+",
+          "4": "90%+",
+          "5": "90%+"
+        },
+        "why_buyers_care": "Recurring revenue is what buyers pay the SaaS multiple on. Services and one-time fees get a lower multiple or none.",
+        "concern_if_missing": "Below 70% recurring, buyers value you as a services business.",
+        "what_to_strengthen": "Productize services into subscriptions and separate one-time revenue in your reporting.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "R2",
+        "category": "Revenue quality",
+        "item": "ARR growth, as a 2 to 3 year CAGR, meets the benchmark, and every year in that period grew",
+        "points": 2,
+        "benchmarks": {
+          "1": "40%+",
+          "2": "30%+",
+          "3": "20%+",
+          "4": "20%+",
+          "5": "15%+"
+        },
+        "why_buyers_care": "Growth is the largest single driver of the multiple. Buyers read a multi-year CAGR with steady years as proof of product-market fit; one strong year does not count.",
+        "concern_if_missing": "Growth below 10% moves you from a growth multiple to a profit multiple.",
+        "what_to_strengthen": "Track ARR growth monthly by cohort and segment; fix retention before you add acquisition spend.",
+        "warning": "If your 2 to 3 year ARR CAGR is under 20%, or any year in that period was flat or down, buyers read it as a product-market fit problem. The business will be difficult to sell at this stage.",
+        "warning_stages": [
+          1,
+          2,
+          3
+        ],
+        "source": "G, M"
+      },
+      {
+        "id": "R3",
+        "category": "Revenue quality",
+        "item": "Gross revenue retention (annual) meets the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "80%+",
+          "2": "80%+",
+          "3": "85%+",
+          "4": "90%+",
+          "5": "90%+"
+        },
+        "why_buyers_care": "GRR shows how much revenue stays without any upsell. Buyers treat it as the core risk number.",
+        "concern_if_missing": "GRR under 80% tells a buyer the product does not hold customers; expansion will not mask it.",
+        "what_to_strengthen": "Track churn reasons, strengthen onboarding, and intervene on at-risk accounts.",
+        "warning": "If your annual GRR is under 70%, the business will struggle to sell. Most buyers at this stage pass before they look at anything else.",
+        "warning_stages": [
+          1,
+          2,
+          3
+        ],
+        "source": "G, M"
+      },
+      {
+        "id": "R4",
+        "category": "Revenue quality",
+        "item": "Net revenue retention (annual) meets the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "95%+",
+          "2": "95%+",
+          "3": "100%+",
+          "4": "105%+",
+          "5": "110%+"
+        },
+        "why_buyers_care": "NRR above 100% means your customer base grows without new sales. It is the strongest proof of product value.",
+        "concern_if_missing": "NRR under 90% means the revenue base shrinks; buyers price in continuous replacement cost.",
+        "what_to_strengthen": "Add usage tiers or seat expansion and give customer success an expansion target.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "R5",
+        "category": "Revenue quality",
+        "item": "Monthly logo churn is at or below the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "1": "Under 5%",
+          "2": "Under 5%",
+          "3": "Under 3%",
+          "4": "Under 2%",
+          "5": "Under 1.5%"
+        },
+        "why_buyers_care": "Logo churn sets the customer lifetime, which sets LTV and the acquisition budget a buyer can justify.",
+        "concern_if_missing": "Monthly churn above 5% means you lose half your customers each year.",
+        "what_to_strengthen": "Segment churn by plan and acquisition channel, then cut the channels that bring churn-prone customers.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R6",
+        "category": "Revenue quality",
+        "item": "Pricing has at least 2 tiers or a usage path that lets customers spend more",
+        "points": 1,
+        "benchmarks": {
+          "1": "2+ tiers or usage-based pricing live",
+          "2": "2+ tiers or usage-based pricing live",
+          "3": "2+ tiers or usage-based pricing live"
+        },
+        "why_buyers_care": "Expansion revenue depends on a pricing model that allows it. Flat pricing caps NRR at 100%.",
+        "concern_if_missing": "Single-tier pricing removes the expansion story from the buyer's model.",
+        "what_to_strengthen": "Add a tier, a seat count, or a usage meter that scales with customer value.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R7",
+        "category": "Revenue quality",
+        "item": "Annual or multi-year contracts cover the required share of ARR",
+        "points": 1,
+        "benchmarks": {
+          "2": "30%+ of ARR",
+          "3": "50%+ of ARR",
+          "4": "60%+ of ARR",
+          "5": "70%+ of ARR"
+        },
+        "why_buyers_care": "Contract term is the contractual floor under your revenue. Buyers model month-to-month revenue as at risk.",
+        "concern_if_missing": "Month-to-month revenue lowers the revenue a buyer treats as committed.",
+        "what_to_strengthen": "Offer a discount for annual prepay and renewals with auto-renew terms.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R8",
+        "category": "Revenue quality",
+        "item": "Cohort retention is tracked by month of acquisition",
+        "points": 1,
+        "benchmarks": {
+          "2": "24 months of cohort data",
+          "3": "24 months of cohort data",
+          "4": "24 months of cohort data",
+          "5": "24 months of cohort data"
+        },
+        "why_buyers_care": "Cohorts show whether retention improves or decays as the product matures. A blended churn number hides this.",
+        "concern_if_missing": "No cohort data makes a buyer assume the worst cohort is the trend.",
+        "what_to_strengthen": "Build a monthly cohort table from billing data and keep 24 months of history.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "R9",
+        "category": "Revenue quality",
+        "item": "Expansion ARR provides the required share of ARR growth",
+        "points": 1,
+        "benchmarks": {
+          "3": "20%+ of growth",
+          "4": "30%+ of growth",
+          "5": "40%+ of growth"
+        },
+        "why_buyers_care": "Growth from existing customers is cheaper and more predictable than growth from new logos.",
+        "concern_if_missing": "Growth that comes only from new logos stops when marketing spend stops.",
+        "what_to_strengthen": "Give account management an expansion quota and track upsell by cohort.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "M"
+      },
+      {
+        "id": "R10",
+        "category": "Revenue quality",
+        "item": "Failed-payment recovery is automated",
+        "points": 1,
+        "benchmarks": {
+          "1": "Dunning live; involuntary churn under 1% monthly",
+          "2": "Dunning live; involuntary churn under 1% monthly",
+          "3": "Dunning live; involuntary churn under 1% monthly"
+        },
+        "why_buyers_care": "Involuntary churn is the cheapest churn to fix. Buyers see unfixed dunning as neglect.",
+        "concern_if_missing": "Unrecovered failed payments inflate churn and lower both GRR and NRR.",
+        "what_to_strengthen": "Turn on dunning in your billing system and retry failed cards for 21 days.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "U1",
+        "category": "Unit economics",
+        "item": "Gross margin meets the benchmark with hosting, support, and onboarding in COGS",
+        "points": 1,
+        "benchmarks": {
+          "1": "70%+",
+          "2": "70%+",
+          "3": "75%+",
+          "4": "75%+",
+          "5": "80%+"
+        },
+        "why_buyers_care": "Gross margin sets how much of each new dollar becomes profit. Buyers test it against the 70 to 80% SaaS norm.",
+        "concern_if_missing": "Gross margin under 60% means the buyer values you as a services business.",
+        "what_to_strengthen": "Move support and onboarding into COGS, then cut hosting cost and automate onboarding.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "U2",
+        "category": "Unit economics",
+        "item": "LTV to CAC ratio is tracked and meets the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "Tracked; 2x+",
+          "2": "3x+",
+          "3": "3x+",
+          "4": "3x+",
+          "5": "4x+"
+        },
+        "why_buyers_care": "LTV:CAC tells a buyer whether growth spend pays back. It is the efficiency number behind the growth number.",
+        "concern_if_missing": "A ratio under 2x means the buyer must cut marketing to make the business profitable.",
+        "what_to_strengthen": "Compute LTV on gross profit, include commissions and onboarding in CAC, and review by channel.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "U3",
+        "category": "Unit economics",
+        "item": "CAC payback period is at or under the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "1": "Under 18 months",
+          "2": "Under 18 months",
+          "3": "Under 12 months",
+          "4": "Under 12 months",
+          "5": "Under 12 months"
+        },
+        "why_buyers_care": "Payback sets how much cash growth consumes. Buyers with a growth plan need payback they can fund.",
+        "concern_if_missing": "Payback over 24 months means growth needs outside capital.",
+        "what_to_strengthen": "Raise prices, improve conversion, and shorten time to first value.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "M"
+      },
+      {
+        "id": "U4",
+        "category": "Unit economics",
+        "item": "Profitability meets the benchmark for your size and valuation method",
+        "points": 2,
+        "benchmarks": {
+          "1": "Profitable, or 12-month path to profit",
+          "2": "SDE margin 30%+",
+          "3": "EBITDA margin 10%+ or Rule of 40 met",
+          "4": "Rule of 40 met",
+          "5": "Rule of 40 met"
+        },
+        "why_buyers_care": "Below $2M buyers pay on SDE. Above $5M they pay on EBITDA or on growth under the Rule of 40.",
+        "concern_if_missing": "Negative profit with growth under 20% leaves no valuation method that supports a premium.",
+        "what_to_strengthen": "Audit spend by department and set a margin target that fits your growth rate.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "U5",
+        "category": "Unit economics",
+        "item": "ARR per employee meets the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "2": "$150K+",
+          "3": "$200K+",
+          "4": "$300K+",
+          "5": "$400K+"
+        },
+        "why_buyers_care": "ARR per employee is the fastest read on operating leverage. Low numbers signal a services-heavy model.",
+        "concern_if_missing": "Under $200K per employee tells a buyer the margin will not expand with scale.",
+        "what_to_strengthen": "Automate support and onboarding and hold headcount growth below ARR growth.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "M"
+      },
+      {
+        "id": "U6",
+        "category": "Unit economics",
+        "item": "Sales and marketing spend is tracked by channel with cost per customer",
+        "points": 1,
+        "benchmarks": {
+          "2": "CAC by channel for 12+ months",
+          "3": "CAC by channel for 12+ months",
+          "4": "CAC by channel for 12+ months",
+          "5": "CAC by channel for 12+ months"
+        },
+        "why_buyers_care": "Buyers want to know which channels work so they can add capital to them.",
+        "concern_if_missing": "Blended CAC without channel detail blocks the buyer's growth model.",
+        "what_to_strengthen": "Tag every new customer with its source and compute CAC per channel quarterly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "C1",
+        "category": "Customers",
+        "item": "Customer concentration is below the benchmark",
+        "points": 2,
+        "benchmarks": {
+          "1": "No customer over 20%",
+          "2": "No customer over 15%",
+          "3": "Top 5 under 40%",
+          "4": "Top 5 under 30%",
+          "5": "Top 10 under 30%"
+        },
+        "why_buyers_care": "One lost customer should not change the price. Buyers discount concentrated revenue or ask for an earn-out on it.",
+        "concern_if_missing": "Top 5 customers above 50% of revenue is a high-risk flag in every buyer's model.",
+        "what_to_strengthen": "Diversify go-to-market and lock large accounts into multi-year contracts.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G, M"
+      },
+      {
+        "id": "C2",
+        "category": "Customers",
+        "item": "One system holds every customer with MRR, start date, plan, and contract",
+        "points": 1,
+        "benchmarks": {
+          "1": "Customer register exported monthly",
+          "2": "Customer register exported monthly",
+          "3": "Customer register exported monthly",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "The customer list is the first diligence request. It must tie to billing and to the P&L.",
+        "concern_if_missing": "A customer list assembled by hand for the deal takes weeks and rarely ties out.",
+        "what_to_strengthen": "Keep the billing system or CRM as the single source and export it monthly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "C3",
+        "category": "Customers",
+        "item": "Largest customers are on written contracts that allow assignment on a change of control",
+        "points": 1,
+        "benchmarks": {
+          "2": "Top 10 customers",
+          "3": "Top 20 customers",
+          "4": "All customers over 1% of ARR",
+          "5": "All customers over 1% of ARR"
+        },
+        "why_buyers_care": "A buyer needs the contracts to transfer. Consent clauses give customers a chance to renegotiate at close.",
+        "concern_if_missing": "Contracts that block assignment delay closing and give key customers leverage.",
+        "what_to_strengthen": "Standardize terms and amend the largest contracts before you go to market.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C4",
+        "category": "Customers",
+        "item": "Customer satisfaction is measured at least once a year (NPS or survey)",
+        "points": 1,
+        "benchmarks": {
+          "2": "Annual survey",
+          "3": "Annual survey; NPS 30+",
+          "4": "Quarterly survey; NPS 40+",
+          "5": "Quarterly survey; NPS 40+"
+        },
+        "why_buyers_care": "Satisfaction data predicts retention before churn shows up in the numbers.",
+        "concern_if_missing": "No satisfaction data leaves the buyer to assume churn will rise after the owner leaves.",
+        "what_to_strengthen": "Run an annual NPS survey and track the score by segment.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C5",
+        "category": "Customers",
+        "item": "Support runs on a documented process with a named owner who is not the founder",
+        "points": 1,
+        "benchmarks": {
+          "2": "Support owner named",
+          "3": "Support owner; response time tracked",
+          "4": "Support team; SLA published",
+          "5": "Support team; SLA published"
+        },
+        "why_buyers_care": "Support is where founder dependence shows up first. Buyers test whether customers rely on you personally.",
+        "concern_if_missing": "Founder-run support means customer relationships leave with the founder.",
+        "what_to_strengthen": "Appoint a support owner, document the process, and track response time.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C6",
+        "category": "Customers",
+        "item": "Onboarding is productized, with self-serve steps where possible",
+        "points": 1,
+        "benchmarks": {
+          "1": "Documented onboarding; under 5 founder hours per customer",
+          "2": "Documented onboarding; under 5 founder hours per customer",
+          "3": "Documented onboarding; under 5 founder hours per customer",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Onboarding cost sits in gross margin, and onboarding quality sets early churn.",
+        "concern_if_missing": "Hands-on onboarding by the founder lowers margin and does not scale for a buyer.",
+        "what_to_strengthen": "Write the onboarding checklist and automate the first 3 steps.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "C7",
+        "category": "Customers",
+        "item": "A customer success function owns renewals and expansion",
+        "points": 1,
+        "benchmarks": {
+          "4": "CS lead with renewal and expansion targets",
+          "5": "CS lead with renewal and expansion targets"
+        },
+        "why_buyers_care": "At this size buyers expect a team that drives NRR, not an inbox.",
+        "concern_if_missing": "No CS function caps NRR and makes the growth plan depend on new logos.",
+        "what_to_strengthen": "Hire or assign a CS lead with a renewal and expansion quota.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "O1",
+        "category": "Owner and team",
+        "item": "The founder can leave for the benchmark period with no drop in revenue or service",
+        "points": 2,
+        "benchmarks": {
+          "1": "2 weeks",
+          "2": "1 month",
+          "3": "1 month",
+          "4": "3 months",
+          "5": "3 months"
+        },
+        "why_buyers_care": "If the business cannot run without you, a buyer is buying a job. Transferability sets the multiple.",
+        "concern_if_missing": "High owner dependence moves buyers to an earn-out and a long transition period.",
+        "what_to_strengthen": "Take a planned absence, log what breaks, and fix each item.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O2",
+        "category": "Owner and team",
+        "item": "At least 2 people can deploy to production and fix a critical bug",
+        "points": 1,
+        "benchmarks": {
+          "1": "2+ people with production access and runbook",
+          "2": "2+ people with production access and runbook",
+          "3": "2+ people with production access and runbook",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "A single engineer who holds the system is a key-person risk buyers price in.",
+        "concern_if_missing": "One-person technical knowledge becomes a retention condition in the deal.",
+        "what_to_strengthen": "Cross-train a second engineer and document the deployment runbook.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O3",
+        "category": "Owner and team",
+        "item": "Sales closes without the founder at the required level",
+        "points": 1,
+        "benchmarks": {
+          "2": "A second person closes deals",
+          "3": "A sales lead owns the pipeline",
+          "4": "Sales leader and team; founder in under 10% of deals",
+          "5": "Sales leader and team; founder in under 10% of deals"
+        },
+        "why_buyers_care": "If every deal needs the founder, revenue growth is tied to the founder's hours.",
+        "concern_if_missing": "Founder-led sales is the most common reason buyers cut the price of a $2M to $10M SaaS.",
+        "what_to_strengthen": "Hire a seller, write the sales process, and move the founder out of first calls.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O4",
+        "category": "Owner and team",
+        "item": "Every role has a written description and the core processes have SOPs in cloud storage",
+        "points": 1,
+        "benchmarks": {
+          "1": "Role descriptions and SOPs for all recurring processes",
+          "2": "Role descriptions and SOPs for all recurring processes",
+          "3": "Role descriptions and SOPs for all recurring processes",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Documentation is how a buyer takes over operations without you.",
+        "concern_if_missing": "No documentation extends the transition period and the earn-out.",
+        "what_to_strengthen": "Write one SOP per recurring process and store them where the team works.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "O5",
+        "category": "Owner and team",
+        "item": "A second-in-command or general manager runs day-to-day operations",
+        "points": 1,
+        "benchmarks": {
+          "3": "GM or COO in place 6+ months",
+          "4": "GM or COO in place 12+ months",
+          "5": "GM or COO in place 12+ months"
+        },
+        "why_buyers_care": "Buyers need a leader who stays. The founder usually leaves within 12 months of a sale.",
+        "concern_if_missing": "No number two means the buyer has to hire one and prices that risk in.",
+        "what_to_strengthen": "Promote or hire a GM and hand over operations 12 months before a sale.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O6",
+        "category": "Owner and team",
+        "item": "A leadership team covers product, engineering, sales, and finance",
+        "points": 1,
+        "benchmarks": {
+          "4": "4 functional leaders with 12+ months tenure",
+          "5": "4 functional leaders with 12+ months tenure"
+        },
+        "why_buyers_care": "At this size buyers evaluate the team as much as the numbers.",
+        "concern_if_missing": "Gaps in the leadership team lower the multiple and extend the founder's required stay.",
+        "what_to_strengthen": "Fill each function with a leader who has SaaS experience.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "O7",
+        "category": "Owner and team",
+        "item": "Key employees have employment agreements and a retention or equity plan",
+        "points": 1,
+        "benchmarks": {
+          "2": "Agreements signed",
+          "3": "Agreements and retention plan",
+          "4": "Agreements, retention plan, and option pool",
+          "5": "Agreements, retention plan, and option pool"
+        },
+        "why_buyers_care": "Buyers want the people who built the product to stay through the transition.",
+        "concern_if_missing": "Unretained key staff become a closing condition or a holdback.",
+        "what_to_strengthen": "Put key people on agreements with a retention bonus that vests after close.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "O8",
+        "category": "Owner and team",
+        "item": "An org chart shows every role and reporting line",
+        "points": 1,
+        "benchmarks": {
+          "2": "Org chart current within 90 days",
+          "3": "Org chart current within 90 days",
+          "4": "Org chart current within 90 days",
+          "5": "Org chart current within 90 days"
+        },
+        "why_buyers_care": "The org chart is the buyer's map of who does what and where the founder sits.",
+        "concern_if_missing": "No org chart signals that the founder holds the structure in their head.",
+        "what_to_strengthen": "Draw the chart, include contractors, and update it quarterly.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "O9",
+        "category": "Owner and team",
+        "item": "Hiring and onboarding follow a documented process",
+        "points": 1,
+        "benchmarks": {
+          "3": "Hiring and onboarding process documented",
+          "4": "Hiring and onboarding process documented",
+          "5": "Hiring and onboarding process documented"
+        },
+        "why_buyers_care": "A buyer who plans to grow needs to hire without you.",
+        "concern_if_missing": "Ad-hoc hiring means the growth plan depends on the founder's network.",
+        "what_to_strengthen": "Document the hiring steps and the 30-day onboarding plan for each role type.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "P1",
+        "category": "Product and technology",
+        "item": "The product is cloud-hosted and multi-tenant, with no on-premise installs",
+        "points": 1,
+        "benchmarks": {
+          "1": "100% cloud-hosted",
+          "2": "100% cloud-hosted",
+          "3": "100% cloud-hosted",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Delivery model sets margin and scalability. Buyers pay the SaaS multiple for cloud-native products.",
+        "concern_if_missing": "On-prem or single-tenant installs move you toward a software license multiple.",
+        "what_to_strengthen": "Migrate remaining installs to the cloud platform and sunset the legacy option.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "P2",
+        "category": "Product and technology",
+        "item": "Code is in version control with a repeatable deployment and automated tests",
+        "points": 1,
+        "benchmarks": {
+          "1": "Version control and deploy script",
+          "2": "CI/CD in place",
+          "3": "CI/CD and test coverage on critical paths",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Technical diligence starts with the repo. Buyers look for process, not perfection.",
+        "concern_if_missing": "No tests or manual deploys raise the technical risk score and the integration cost.",
+        "what_to_strengthen": "Set up CI/CD and cover the critical paths with automated tests.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P3",
+        "category": "Product and technology",
+        "item": "Architecture and operations are documented well enough for a new engineer to deploy within a week",
+        "points": 1,
+        "benchmarks": {
+          "2": "Architecture doc and runbooks current",
+          "3": "Architecture doc and runbooks current",
+          "4": "Architecture doc and runbooks current",
+          "5": "Architecture doc and runbooks current"
+        },
+        "why_buyers_care": "Documentation is how the buyer's team takes over the codebase.",
+        "concern_if_missing": "Undocumented systems extend the founder's required stay.",
+        "what_to_strengthen": "Write the architecture overview, the runbooks, and the environment setup guide.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P4",
+        "category": "Product and technology",
+        "item": "Third-party dependencies and open-source licenses are inventoried",
+        "points": 1,
+        "benchmarks": {
+          "2": "License inventory current; no unresolved copyleft",
+          "3": "License inventory current; no unresolved copyleft",
+          "4": "License inventory current; no unresolved copyleft",
+          "5": "License inventory current; no unresolved copyleft"
+        },
+        "why_buyers_care": "Buyers scan for copyleft licenses and unlicensed components. A finding can block a stock deal.",
+        "concern_if_missing": "An unknown GPL dependency in the core product is a closing condition.",
+        "what_to_strengthen": "Run a license scan and resolve any copyleft or unlicensed component.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P5",
+        "category": "Product and technology",
+        "item": "Security meets the benchmark for your size",
+        "points": 1,
+        "benchmarks": {
+          "1": "MFA, tested backups, access control",
+          "2": "MFA, tested backups, access control",
+          "3": "Security policy and annual penetration test",
+          "4": "SOC 2 Type II",
+          "5": "SOC 2 Type II"
+        },
+        "why_buyers_care": "Security findings in diligence become price reductions or indemnities.",
+        "concern_if_missing": "No security controls at any size is a deal risk; no SOC 2 above $5M blocks many buyers.",
+        "what_to_strengthen": "Start with MFA, backups, and access control; add a penetration test and SOC 2 as you grow.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P6",
+        "category": "Product and technology",
+        "item": "Uptime is tracked and meets the benchmark",
+        "points": 1,
+        "benchmarks": {
+          "2": "99.5%+",
+          "3": "99.9%+",
+          "4": "99.9%+",
+          "5": "99.95%+"
+        },
+        "why_buyers_care": "Reliability is a retention driver and a contractual obligation in enterprise deals.",
+        "concern_if_missing": "No uptime record means the buyer cannot verify the SLA you sell.",
+        "what_to_strengthen": "Add monitoring and publish uptime to customers.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P7",
+        "category": "Product and technology",
+        "item": "A written 12-month product roadmap exists",
+        "points": 1,
+        "benchmarks": {
+          "2": "Roadmap updated within 6 months",
+          "3": "Roadmap updated within 6 months",
+          "4": "Roadmap updated within 6 months",
+          "5": "Roadmap updated within 6 months"
+        },
+        "why_buyers_care": "The roadmap is the buyer's view of where growth comes from after close.",
+        "concern_if_missing": "No roadmap means the buyer values the product as it is today.",
+        "what_to_strengthen": "Write a 12-month roadmap tied to retention and expansion goals.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "P8",
+        "category": "Product and technology",
+        "item": "Differentiation is evidenced with win/loss data or documented reasons customers chose you",
+        "points": 1,
+        "benchmarks": {
+          "2": "3 documented reasons",
+          "3": "Win/loss tracked for 12 months",
+          "4": "Win rate tracked; 3+ case studies",
+          "5": "Win rate tracked; 3+ case studies"
+        },
+        "why_buyers_care": "Buyers pay a premium for a product that is hard to replace. Claims need evidence.",
+        "concern_if_missing": "Differentiation without evidence reads as marketing, not as a moat.",
+        "what_to_strengthen": "Track win/loss reasons in the CRM and collect 5 customer quotes on why they switched.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "P9",
+        "category": "Product and technology",
+        "item": "Integrations or an API create switching costs",
+        "points": 1,
+        "benchmarks": {
+          "3": "3+ live integrations or a public API",
+          "4": "3+ live integrations or a public API",
+          "5": "3+ live integrations or a public API"
+        },
+        "why_buyers_care": "Switching costs protect retention and pricing. Buyers model them as a retention floor.",
+        "concern_if_missing": "A product with no integrations is easier to replace at renewal.",
+        "what_to_strengthen": "Build the 3 integrations your customers ask for most and publish an API.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "M1",
+        "category": "Market",
+        "item": "The ideal customer profile is written down with segment, size, and average contract value",
+        "points": 1,
+        "benchmarks": {
+          "1": "ICP documented; 70%+ of new customers match",
+          "2": "ICP documented; 70%+ of new customers match",
+          "3": "ICP documented; 70%+ of new customers match",
+          "4": "ICP documented; 70%+ of new customers match",
+          "5": "ICP documented; 70%+ of new customers match"
+        },
+        "why_buyers_care": "A clear ICP lets a buyer judge the market and the growth plan. It also explains your churn.",
+        "concern_if_missing": "No ICP means the buyer cannot size the opportunity or trust the CAC.",
+        "what_to_strengthen": "Write a 1-page ICP and check that 70%+ of new customers match it.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "M2",
+        "category": "Market",
+        "item": "A bottom-up TAM and SAM exist with sources",
+        "points": 1,
+        "benchmarks": {
+          "3": "TAM $100M+",
+          "4": "TAM $200M+",
+          "5": "TAM $500M+"
+        },
+        "why_buyers_care": "Buyers pay for headroom. A small or vague TAM caps the multiple even with strong metrics.",
+        "concern_if_missing": "Top-down TAM from a market report is discounted; bottom-up numbers are trusted.",
+        "what_to_strengthen": "Build TAM from ICP count times ACV and cite the sources.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "M3",
+        "category": "Market",
+        "item": "Market growth is cited from a third-party source",
+        "points": 1,
+        "benchmarks": {
+          "3": "10%+ market growth with a cited source",
+          "4": "10%+ market growth with a cited source",
+          "5": "10%+ market growth with a cited source"
+        },
+        "why_buyers_care": "A growing market gives the buyer tailwind for the growth plan.",
+        "concern_if_missing": "Founder estimates of market growth are not used in buyer models.",
+        "what_to_strengthen": "Cite a Gartner, Forrester, or PitchBook growth rate for your segment.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "M4",
+        "category": "Market",
+        "item": "Named competitors and your position against them are documented, with win rate",
+        "points": 1,
+        "benchmarks": {
+          "3": "Competitor map and 12 months of win rate",
+          "4": "Competitor map and 12 months of win rate",
+          "5": "Competitor map and 12 months of win rate"
+        },
+        "why_buyers_care": "Buyers want to know who you beat and why. Win rate is the proof.",
+        "concern_if_missing": "No competitive data means the buyer runs their own analysis and prices the unknown.",
+        "what_to_strengthen": "Keep a competitor map and track win rate against each named competitor.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, M"
+      },
+      {
+        "id": "M5",
+        "category": "Market",
+        "item": "Recent acquisitions in your category are tracked",
+        "points": 1,
+        "benchmarks": {
+          "4": "10 comparable deals tracked",
+          "5": "10 comparable deals tracked"
+        },
+        "why_buyers_care": "Buyer activity in your category sets the comparable multiples.",
+        "concern_if_missing": "No comparables leaves the buyer to anchor on a generic SaaS multiple.",
+        "what_to_strengthen": "Keep a list of the last 10 deals in your category with price and multiple where public.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G, L"
+      },
+      {
+        "id": "L1",
+        "category": "Legal and IP",
+        "item": "The company is a corporation or LLC with a clean cap table and current founder agreements",
+        "points": 1,
+        "benchmarks": {
+          "1": "Cap table and founder agreements current",
+          "2": "Cap table and founder agreements current",
+          "3": "Cap table and founder agreements current",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Buyers buy a legal entity. Ownership must be clear before a letter of intent.",
+        "concern_if_missing": "Unclear ownership or a missing founder agreement stops the deal at diligence.",
+        "what_to_strengthen": "Confirm the cap table with counsel and sign any missing founder or shareholder agreement.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L2",
+        "category": "Legal and IP",
+        "item": "Every employee and contractor who wrote code has signed an IP assignment",
+        "points": 1,
+        "benchmarks": {
+          "1": "100% of contributors signed",
+          "2": "100% of contributors signed",
+          "3": "100% of contributors signed",
+          "4": "100% of contributors signed",
+          "5": "100% of contributors signed"
+        },
+        "why_buyers_care": "Without IP assignment the company does not own its own product.",
+        "concern_if_missing": "One missing assignment from an early contractor is a closing condition and a holdback.",
+        "what_to_strengthen": "Audit contributors and collect signed assignments from each one.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "L3",
+        "category": "Legal and IP",
+        "item": "Terms of service, privacy policy, and data processing terms are current",
+        "points": 1,
+        "benchmarks": {
+          "1": "Terms updated within 24 months",
+          "2": "Terms updated within 24 months",
+          "3": "Terms updated within 24 months",
+          "4": "In place",
+          "5": "In place"
+        },
+        "why_buyers_care": "Customer terms set what the buyer inherits, including liability and data rights.",
+        "concern_if_missing": "Outdated terms raise privacy liability and may block enterprise customers from transferring.",
+        "what_to_strengthen": "Update terms with counsel and have every customer accept the current version.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L4",
+        "category": "Legal and IP",
+        "item": "Trademarks are registered and all domains are owned by the company",
+        "points": 1,
+        "benchmarks": {
+          "2": "Mark registered; domains in company account",
+          "3": "Mark registered; domains in company account",
+          "4": "Mark registered; domains in company account",
+          "5": "Mark registered; domains in company account"
+        },
+        "why_buyers_care": "Brand assets must transfer with the company.",
+        "concern_if_missing": "A domain in the founder's personal account becomes a transfer item at close.",
+        "what_to_strengthen": "Register the mark and move domains into a company-owned account.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L5",
+        "category": "Legal and IP",
+        "item": "No open litigation, claims, or regulatory issues",
+        "points": 1,
+        "benchmarks": {
+          "1": "No open matters",
+          "2": "No open matters",
+          "3": "No open matters",
+          "4": "No open matters",
+          "5": "No open matters"
+        },
+        "why_buyers_care": "Buyers price open claims at the worst case and ask for an indemnity.",
+        "concern_if_missing": "Any open claim becomes an escrow at close.",
+        "what_to_strengthen": "Settle or document every open matter before you go to market.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C"
+      },
+      {
+        "id": "L6",
+        "category": "Legal and IP",
+        "item": "Vendor and partner contracts are assignable on a change of control",
+        "points": 1,
+        "benchmarks": {
+          "3": "Top 10 vendor contracts assignable",
+          "4": "Top 10 vendor contracts assignable",
+          "5": "Top 10 vendor contracts assignable"
+        },
+        "why_buyers_care": "Critical vendors who can terminate at close give them leverage over your deal.",
+        "concern_if_missing": "A non-assignable hosting or data contract is a closing condition.",
+        "what_to_strengthen": "Review the top 10 vendor contracts and amend the change-of-control clauses.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "C, G"
+      },
+      {
+        "id": "L7",
+        "category": "Legal and IP",
+        "item": "Compliance obligations for your vertical are met (GDPR, HIPAA, PCI, or others that apply)",
+        "points": 1,
+        "benchmarks": {
+          "3": "Compliance map current; no open gaps",
+          "4": "Compliance map current; no open gaps",
+          "5": "Compliance map current; no open gaps"
+        },
+        "why_buyers_care": "Regulatory gaps are indemnity items. Enterprise buyers verify them before the LOI.",
+        "concern_if_missing": "A compliance gap in a regulated vertical removes strategic buyers from the process.",
+        "what_to_strengthen": "Map the regulations that apply and close each gap with counsel.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      },
+      {
+        "id": "L8",
+        "category": "Legal and IP",
+        "item": "A data inventory shows where customer data lives and who can access it",
+        "points": 1,
+        "benchmarks": {
+          "3": "Data inventory current within 12 months",
+          "4": "Data inventory current within 12 months",
+          "5": "Data inventory current within 12 months"
+        },
+        "why_buyers_care": "Data diligence asks this question first. The answer sets the privacy risk.",
+        "concern_if_missing": "Unknown data locations extend diligence and raise the privacy indemnity.",
+        "what_to_strengthen": "Document every system that holds customer data and the access list for each.",
+        "warning": null,
+        "warning_stages": [],
+        "source": "G"
+      }
+    ],
+    "scoring": {
+      "1": {
+        "items": 32,
+        "max_points": 39,
+        "sellable_at": 31,
+        "close_at": 20
+      },
+      "2": {
+        "items": 50,
+        "max_points": 58,
+        "sellable_at": 46,
+        "close_at": 29
+      },
+      "3": {
+        "items": 62,
+        "max_points": 70,
+        "sellable_at": 56,
+        "close_at": 35
+      },
+      "4": {
+        "items": 63,
+        "max_points": 71,
+        "sellable_at": 57,
+        "close_at": 36
+      },
+      "5": {
+        "items": 63,
+        "max_points": 71,
+        "sellable_at": 57,
+        "close_at": 36
+      }
+    }
+  },
+  "links": {
+    "calculator": "https://saasvaluation.livmo.com",
+    "book_a_call": "https://calendly.com/khaledazar/exit-builder"
+  }
+}
