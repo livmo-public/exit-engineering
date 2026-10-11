@@ -6,17 +6,17 @@ Read your SaaS the way a buyer reads it. Pick the edition for your ARR, tick wha
 
 | Your ARR | File |
 |---|---|
-| Under $500K | `detailed/saas-sellability-checklist-stage1.pdf` |
-| $500K to $2M | `detailed/saas-sellability-checklist-stage2.pdf` |
-| $2M to $5M | `detailed/saas-sellability-checklist-stage3.pdf` |
-| $5M to $20M | `detailed/saas-sellability-checklist-stage4.pdf` |
-| $20M+ | `detailed/saas-sellability-checklist-stage5.pdf` |
+| Under $500K | [saas-sellability-checklist-1-under-500k-arr.pdf](detailed/saas-sellability-checklist-1-under-500k-arr.pdf) |
+| $500K to $2M | [saas-sellability-checklist-2-500k-to-2m-arr.pdf](detailed/saas-sellability-checklist-2-500k-to-2m-arr.pdf) |
+| $2M to $5M | [saas-sellability-checklist-3-2m-to-5m-arr.pdf](detailed/saas-sellability-checklist-3-2m-to-5m-arr.pdf) |
+| $5M to $20M | [saas-sellability-checklist-4-5m-to-20m-arr.pdf](detailed/saas-sellability-checklist-4-5m-to-20m-arr.pdf) |
+| $20M+ | [saas-sellability-checklist-5-20m-plus-arr.pdf](detailed/saas-sellability-checklist-5-20m-plus-arr.pdf) |
 
 Each edition explains, for every item, why buyers care and what to strengthen.
 
 ## Master checklist
 
-`master/saas-sellability-master-checklist.pdf` shows all five stages side by side on one page. Zoom into your column.
+[saas-sellability-master-checklist.pdf](master/saas-sellability-master-checklist.pdf) shows all five stages side by side on one page. Zoom into your column.
 
 ## How the score works
 
