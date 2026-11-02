@@ -355,7 +355,10 @@ def build(state: dict, canonical_dir: Path, data_dir: Path, out_path: Path) -> C
 # ---- chat summary --------------------------------------------------------------------
 
 def _gaps(plan: Plan) -> list[dict]:
-    """Missing files by the number of tabs they stop, then open critical and high findings."""
+    """Missing files by the number of tabs they stop, then open critical and high findings.
+
+    Returns the full list; chat_summary caps it for output.
+    """
     state, files = plan.book.state, []
     for f in plan.files:
         if _uploaded(state, f["id"]):
@@ -372,7 +375,7 @@ def _gaps(plan: Plan) -> list[dict]:
                      for f in _sorted_findings(state)
                      if f.get("severity") in progress.BLOCKING_SEVERITIES
                      and responses.get(f["id"], {}).get("type") != "fix"]
-    return (files + open_findings)[:MAX_GAPS]
+    return files + open_findings
 
 
 def chat_summary(state: dict, canonical_dir: Path, data_dir: Path) -> dict:
@@ -395,7 +398,7 @@ def chat_summary(state: dict, canonical_dir: Path, data_dir: Path) -> dict:
         "adjusted_ebitda": {label: metrics.adjusted_ebitda(pl, adjustments, book.label_months[label],
                                                            label) for label in labels},
         "basis": book.basis or "all rows",
-        "gaps": gaps,
+        "gaps": gaps[:MAX_GAPS],
         "next_step": NEXT_STEP_GAPS if has_gaps else NEXT_STEP_READY,
     }
 

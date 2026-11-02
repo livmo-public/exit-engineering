@@ -263,3 +263,14 @@ def test_cli_writes_workbook_and_prints_summary(built, tmp_path):
                             capture_output=True, text=True, check=True)
     summary = json.loads(result.stdout)
     assert out.is_file() and summary["adjusted_ebitda"]["TTM"] == pytest.approx(56100.0)
+
+
+def test_next_step_sees_open_findings_beyond_the_gap_list(built):
+    # R1 missing plus R4, R5, R6, and S3 absent: 5 optional file gaps fill the capped list.
+    # The open critical K04 finding must still lead to the exit assessment.
+    files = {**built.state["files"], "R1": {"status": "missing"}}
+    state = {**built.state, "files": files}
+    s = build_workbook.chat_summary(state, built.canonical_dir, DATA)
+    assert len(s["gaps"]) == 5 and all(g["type"] == "file" for g in s["gaps"])
+    assert any(f["severity"] == "critical" for f in state["findings"])
+    assert s["next_step"] == build_workbook.NEXT_STEP_GAPS
