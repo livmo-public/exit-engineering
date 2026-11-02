@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "stage": 5,
+  "intake": {
+    "business_type": "saas",
+    "revenue_range": "1m_to_5m",
+    "accounting_system": "qbo",
+    "billing_system": "stripe",
+    "accounting_basis": "accrual",
+    "fiscal_year_end_month": 12,
+    "latest_closed_month": "2026-09",
+    "sale_timeline": "3_to_12_months",
+    "buyer_financing": "sba",
+    "price_may_reach_3m": "no",
+    "advisor_name": ""
+  },
+  "disclaimer_acknowledged": true,
+  "modules": [
+    "core",
+    "saas"
+  ],
+  "modules_confirmed": true,
+  "file_list_shown": true,
+  "files": {
+    "C5": {
+      "status": "uploaded"
+    },
+    "R1": {
+      "status": "uploaded"
+    },
+    "R3": {
+      "status": "uploaded"
+    },
+    "R2": {
+      "status": "missing",
+      "reason": "never_kept"
+    },
+    "R4": {
+      "status": "missing",
+      "reason": "never_kept"
+    },
+    "R5": {
+      "status": "missing",
+      "reason": "never_kept"
+    },
+    "R6": {
+      "status": "missing",
+      "reason": "unknown"
+    },
+    "S2": {
+      "status": "missing",
+      "reason": "unknown"
+    },
+    "S3": {
+      "status": "missing",
+      "reason": "never_kept"
+    },
+    "S4": {
+      "status": "missing",
+      "reason": "never_kept"
+    },
+    "S5": {
+      "status": "not_applicable"
+    },
+    "S6": {
+      "status": "not_applicable"
+    },
+    "C1": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/pl.csv"
+    },
+    "C2": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/bs.csv"
+    },
+    "C3": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/gl.csv"
+    },
+    "C4": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/bank.csv"
+    },
+    "C6": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/sales.csv"
+    },
+    "C7": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/vendor.csv"
+    },
+    "C8": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/aging.csv"
+    },
+    "C9": {
+      "status": "uploaded",
+      "source_system": "qbo",
+      "canonical_path": "examples/sample-saas-co/tax.csv"
+    },
+    "S1": {
+      "status": "uploaded",
+      "source_system": "stripe",
+      "canonical_path": "examples/sample-saas-co/subs.csv"
+    }
+  },
+  "account_map": {
+    "Subscription revenue - monthly plans": {
+      "account_type": "revenue"
+    },
+    "Subscription revenue - annual plans": {
+      "account_type": "revenue"
+    },
+    "Hosting and infrastructure": {
+      "account_type": "cogs"
+    },
+    "Customer support payroll": {
+      "account_type": "cogs"
+    },
+    "Salaries and wages": {
+      "account_type": "opex"
+    },
+    "Payroll taxes and benefits": {
+      "account_type": "opex"
+    },
+    "Contractors": {
+      "account_type": "opex"
+    },
+    "Software and tools": {
+      "account_type": "opex"
+    },
+    "Advertising and marketing": {
+      "account_type": "opex"
+    },
+    "Rent": {
+      "account_type": "opex"
+    },
+    "Professional fees": {
+      "account_type": "opex"
+    },
+    "Legal fees": {
+      "account_type": "opex"
+    },
+    "Insurance": {
+      "account_type": "opex"
+    },
+    "Travel": {
+      "account_type": "opex"
+    },
+    "Depreciation expense": {
+      "account_type": "depreciation"
+    },
+    "Interest expense": {
+      "account_type": "interest"
+    },
+    "Operating Checking": {
+      "account_type": "asset",
+      "subtype": "cash"
+    },
+    "Accounts Receivable": {
+      "account_type": "asset",
+      "subtype": "ar"
+    },
+    "Computer Equipment": {
+      "account_type": "asset",
+      "subtype": "other_asset"
+    },
+    "Accumulated Depreciation": {
+      "account_type": "asset",
+      "subtype": "other_asset"
+    },
+    "Accounts Payable": {
+      "account_type": "liability",
+      "subtype": "ap"
+    },
+    "Accrued Expenses": {
+      "account_type": "liability",
+      "subtype": "accrued"
+    },
+    "Bank Loan": {
+      "account_type": "liability",
+      "subtype": "debt"
+    },
+    "Suspense": {
+      "account_type": "liability",
+      "subtype": "other_liability"
+    },
+    "Owner's Capital": {
+      "account_type": "equity",
+      "subtype": "equity"
+    },
+    "Retained Earnings": {
+      "account_type": "equity",
+      "subtype": "equity"
+    },
+    "Owner Distributions": {
+      "account_type": "equity",
+      "subtype": "equity"
+    },
+    "Net Income": {
+      "account_type": "equity",
+      "subtype": "equity"
+    }
+  },
+  "account_map_confirmed": true,
+  "findings": [
+    {
+      "id": "K01-1",
+      "check_id": "K01",
+      "name": "No deferred revenue on annual billing",
+      "category": "hygiene",
+      "severity": "critical",
+      "method": "computed",
+      "status": "fail",
+      "detail": "12 customer(s) pay a year or more at once. The balance sheet has no deferred revenue account.",
+      "owner_message": "You bill some customers for a year or more at once, but your balance sheet shows no deferred revenue.",
+      "fix": "Book deferred revenue and recognize it ratably. Restate the affected months.",
+      "evidence": [
+        "Annual billing: Sample Customer 01",
+        "Annual billing: Sample Customer 04",
+        "Annual billing: Sample Customer 06",
+        "Annual billing: Sample Customer 07",
+        "Annual billing: Sample Customer 09",
+        "Annual billing: Sample Customer 12",
+        "Annual billing: Sample Customer 19",
+        "Annual billing: Sample Customer 21",
+        "Annual billing: Sample Customer 23",
+        "Annual billing: Sample Customer 26",
+        "Annual billing: Sample Customer 28",
+        "Annual billing: Sample Customer 35"
+      ]
+    },
+    {
+      "id": "K03-1",
+      "check_id": "K03",
+      "name": "Deferred revenue does not match subscriptions",
+      "category": "hygiene",
+      "severity": "high",
+      "method": "computed",
+      "status": "fail",
+      "detail": "12 of 12 month(s) differ by more than 5%.",
+      "owner_message": "The deferred revenue on your balance sheet differs from the amount your subscription data supports by more than 5%.",
+      "fix": "Build a deferred revenue roll-forward and tie it monthly.",
+      "evidence": [
+        "2025-10: balance sheet 0.00, subscriptions 79,000.00 (100.0%)",
+        "2025-11: balance sheet 0.00, subscriptions 61,000.00 (100.0%)",
+        "2025-12: balance sheet 0.00, subscriptions 90,666.67 (100.0%)",
+        "2026-01: balance sheet 0.00, subscriptions 116,333.33 (100.0%)",
+        "2026-02: balance sheet 0.00, subscriptions 118,000.00 (100.0%)",
+        "2026-03: balance sheet 0.00, subscriptions 207,666.67 (100.0%)",
+        "2026-04: balance sheet 0.00, subscriptions 183,333.33 (100.0%)",
+        "2026-05: balance sheet 0.00, subscriptions 189,000.00 (100.0%)",
+        "2026-06: balance sheet 0.00, subscriptions 164,666.67 (100.0%)",
+        "2026-07: balance sheet 0.00, subscriptions 140,333.33 (100.0%)",
+        "2026-08: balance sheet 0.00, subscriptions 116,000.00 (100.0%)",
+        "2026-09: balance sheet 0.00, subscriptions 115,666.67 (100.0%)"
+      ]
+    },
+    {
+      "id": "K08-1",
+      "check_id": "K08",
+      "name": "Suspense or uncategorized balance",
+      "category": "hygiene",
+      "severity": "medium",
+      "method": "computed",
+      "status": "fail",
+      "detail": "2 unsorted-item balance(s) found.",
+      "owner_message": "An account for unsorted items still holds a balance. A buyer reads this as a sign of loose books.",
+      "fix": "Reclassify each item to its correct account.",
+      "evidence": [
+        "Balance sheet 2026-09: Suspense 3,150.00",
+        "Ledger, last 12 months: Suspense net -3,150.00"
+      ]
+    },
+    {
+      "id": "K12-1",
+      "check_id": "K12",
+      "name": "No related-party schedule",
+      "category": "hygiene",
+      "severity": "medium",
+      "method": "owner_question",
+      "status": "fail",
+      "detail": "The owner's answer confirms the condition.",
+      "owner_message": "You deal with a related party and have no schedule of those deals. A buyer will ask for one.",
+      "fix": "Build the schedule with terms at market rates.",
+      "evidence": [
+        "Owner statement, no document: We rent our office from a company the owner controls. We keep no schedule of the rent terms."
+      ]
+    }
+  ],
+  "responses": {
+    "K01-1": {
+      "type": "explain",
+      "text": "We book each annual invoice as revenue when we send it. We have not set up deferred revenue."
+    },
+    "K03-1": {
+      "type": "accept"
+    },
+    "K08-1": {
+      "type": "fix"
+    }
+  },
+  "adjustments": [
+    {
+      "id": "A1",
+      "name": "Owner salary above replacement cost",
+      "source_file": "R1",
+      "amounts": {
+        "FY2025": 36000.0,
+        "TTM": 36000.0
+      },
+      "evidence": "Payroll summary 2025",
+      "decision": "approved",
+      "owner_stated": true
+    },
+    {
+      "id": "A2",
+      "name": "Rent to owner entity above market",
+      "source_file": "R6",
+      "amounts": {
+        "FY2025": 15000.0,
+        "TTM": 15000.0
+      },
+      "evidence": null,
+      "decision": "edited",
+      "owner_stated": true
+    },
+    {
+      "id": "A3",
+      "name": "One-time legal fee for a contract dispute",
+      "source_file": "R3",
+      "amounts": {
+        "2025-11": 12500.0
+      },
+      "evidence": "Law firm invoice",
+      "decision": "approved",
+      "owner_stated": true
+    },
+    {
+      "id": "A4",
+      "name": "Personal travel booked to the company",
+      "source_file": "R3",
+      "amounts": {
+        "FY2025": 4800.0,
+        "TTM": 6200.0
+      },
+      "evidence": null,
+      "decision": "rejected",
+      "owner_stated": true
+    }
+  ],
+  "company": "Sample SaaS Co."
+}

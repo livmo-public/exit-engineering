@@ -523,6 +523,30 @@ def run(state: dict, canonical_dir: Path, data_dir: Path) -> list[dict]:
     return findings
 
 
+def owner_findings(state: dict, answers: dict[str, str], data_dir: Path) -> list[dict]:
+    """One failing finding per owner_question check whose condition the owner's answer confirms.
+
+    answers maps a check id to the owner's statement. The model passes only the answers that
+    confirm the condition. Fields come from the catalog; the statement is the evidence.
+    """
+    if not isinstance(answers, dict):
+        raise RunChecksError("owner answers must be a JSON object of check id to statement")
+    records = _catalog(data_dir, "checks.json")
+    modules = progress.active_modules(state.get("intake", {}))
+    by_id = {c["id"]: c for c in records}
+    ctx = build_context(state, {}, records)
+    out = []
+    for check_id, statement in answers.items():
+        check = by_id.get(check_id)
+        if not check or check["method"] != "owner_question" or check["module"] not in modules:
+            raise RunChecksError(f"{check_id} is not an active owner question")
+        if not str(statement).strip():
+            raise RunChecksError(f"{check_id}: the owner statement is empty")
+        out.append(_finding(ctx, check_id, "The owner's answer confirms the condition.",
+                            [f"Owner statement, no document: {str(statement).strip()}"]))
+    return out
+
+
 def _threshold(by_year: dict[str, float], year: str) -> float:
     """The threshold for the year; else the nearest earlier year; else the earliest year."""
     if year in by_year:
@@ -586,11 +610,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--state", required=True, type=Path, help="progress.json to read and update")
     parser.add_argument("--canonical", required=True, type=Path, help="folder of canonical CSVs")
     parser.add_argument("--data", type=Path, default=DEFAULT_DATA_DIR, help="folder of catalog JSON")
+    parser.add_argument("--answers", type=Path,
+                        help="JSON file of owner statements by owner-question check id; "
+                             "replaces the owner-question findings in the state")
     args = parser.parse_args(argv)
     try:
         state = progress.load(args.state)
         findings = run(state, args.canonical, args.data)
-        kept = [f for f in state["findings"] if f.get("method") != "computed"]
+        replaced = ["computed"]
+        if args.answers:
+            with open(args.answers, encoding="utf-8") as handle:
+                findings += owner_findings(state, json.load(handle), args.data)
+            replaced.append("owner_question")
+        kept = [f for f in state["findings"] if f.get("method") not in replaced]
         progress.save({**state, "findings": kept + findings}, args.state)
     except (RunChecksError, canonical.CanonicalError, ValueError, OSError) as err:
         print(f"run_checks: {err}", file=sys.stderr)

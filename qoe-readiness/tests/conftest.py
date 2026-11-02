@@ -167,3 +167,35 @@ def built_product(tmp_path_factory):
 def built_without_c3(tmp_path_factory):
     # The ledger (C3) is missing; the bank (C4) and the owner-stated adjustments are present.
     return _build(tmp_path_factory.mktemp("no_c3"), CANONICAL_FIXTURES, WORKBOOK_INTAKE, ("C3",))
+
+
+# ---- sample company fixtures (Task 8) ------------------------------------------
+
+@pytest.fixture(scope="module")
+def sample_built(tmp_path_factory):
+    """The generated sample company, its workbook, cell map, and the Python figure for every key."""
+    from types import SimpleNamespace
+
+    import build_workbook
+    import helpers
+    import make_sample
+    import progress
+    data = ROOT / "skill" / "data"
+    out = make_sample.make_sample(tmp_path_factory.mktemp("sample"))
+    state = progress.load(out / "progress.json")
+    path = out / make_sample.WORKBOOK_NAME
+    cell_map = build_workbook.build(state, out, data, path)
+    return SimpleNamespace(path=path, dir=out, state=state, cell_map=cell_map,
+                           python_values=helpers.python_values(state, out, data, cell_map))
+
+
+@pytest.fixture(scope="module")
+def sample_recalc(sample_built):
+    """The formulas-library recalculation of the sample workbook, with its run time in seconds."""
+    import time
+    from types import SimpleNamespace
+
+    import helpers
+    started = time.perf_counter()
+    values = helpers.recalculate(sample_built.path)
+    return SimpleNamespace(values=values, seconds=time.perf_counter() - started)

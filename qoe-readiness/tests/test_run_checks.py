@@ -624,3 +624,50 @@ def test_callers_cannot_change_cached_catalog_or_later_results(tmp_path, data_di
     assert second["K02"]["params"]["spike_multiple"] == 1.5
     assert second["K02"]["name"] != "changed"
     assert run_checks._catalog(data_dir, "checks.json")[0]["name"] != "changed"
+
+
+# ---- owner answers (Task 8) --------------------------------------------------
+
+K12_STATEMENT = "We rent our office from a company we own. We keep no schedule."
+
+
+def test_owner_findings_turn_a_confirming_answer_into_a_finding(data_dir):
+    state = {**progress.new_state(), "intake": BASE_INTAKE}
+    [found] = run_checks.owner_findings(state, {"K12": K12_STATEMENT}, data_dir)
+    record = next(c for c in json.loads((data_dir / "checks.json").read_text(encoding="utf-8"))
+                  if c["id"] == "K12")
+    assert (found["id"], found["check_id"], found["method"], found["status"]) == \
+        ("K12-1", "K12", "owner_question", "fail")
+    assert (found["name"], found["severity"], found["owner_message"], found["fix"]) == \
+        (record["name"], record["severity"], record["owner_message"], record["fix"])
+    assert any(K12_STATEMENT in line for line in found["evidence"])
+
+
+def test_owner_findings_reject_ids_that_are_not_active_owner_questions(data_dir):
+    state = {**progress.new_state(), "intake": {**BASE_INTAKE, "business_type": "services"}}
+    for bad in ("K04", "K17", "K99"):
+        with pytest.raises(run_checks.RunChecksError, match=bad):
+            run_checks.owner_findings(state, {bad: "yes"}, data_dir)
+
+
+def test_owner_findings_need_a_statement(data_dir):
+    state = {**progress.new_state(), "intake": BASE_INTAKE}
+    with pytest.raises(run_checks.RunChecksError, match="K12"):
+        run_checks.owner_findings(state, {"K12": "  "}, data_dir)
+    assert run_checks.owner_findings(state, {}, data_dir) == []
+
+
+def test_cli_answers_replace_owner_question_findings_and_keep_the_rest(tmp_path, data_dir, scripts_dir):
+    state, out = write_world(tmp_path, basis="cash")
+    state_path, answers = tmp_path / "progress.json", tmp_path / "answers.json"
+    progress.save({**state, "findings": [
+        {"id": "K13-1", "check_id": "K13", "method": "owner_question", "severity": "medium"},
+        {"id": "K02-1", "check_id": "K02", "method": "model_review", "severity": "medium"}]}, state_path)
+    answers.write_text(json.dumps({"K12": K12_STATEMENT}), encoding="utf-8")
+    command = [sys.executable, str(scripts_dir / "run_checks.py"), "--state", str(state_path),
+               "--canonical", str(out), "--data", str(data_dir)]
+    subprocess.run(command + ["--answers", str(answers)], capture_output=True, text=True, check=True)
+    saved = {f["id"] for f in progress.load(state_path)["findings"]}
+    assert "K12-1" in saved and "K02-1" in saved and "K13-1" not in saved
+    subprocess.run(command, capture_output=True, text=True, check=True)
+    assert "K12-1" in {f["id"] for f in progress.load(state_path)["findings"]}
