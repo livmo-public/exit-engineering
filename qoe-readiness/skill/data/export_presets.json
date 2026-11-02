@@ -1,0 +1,512 @@
+{
+  "qbo": {
+    "pl_by_month": {
+      "kind": "pl",
+      "layout": "pivot",
+      "report_name": "Profit and Loss",
+      "menu_path": "Reports > Standard reports > Business overview > Profit and Loss",
+      "settings": [
+        "Report period: first day of the first month to last day of the latest closed month",
+        "Display columns by: Months",
+        "Accounting method: Accrual or Cash, one export per basis",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "account": ""
+      },
+      "total_column": "Total",
+      "period_header_example": "Jan 2025",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/report-management/run-reports-quickbooks-online/L7aILHhbl_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. The first column has a blank header."
+    },
+    "bs_by_month": {
+      "kind": "bs",
+      "layout": "pivot",
+      "report_name": "Balance Sheet",
+      "menu_path": "Reports > Standard reports > Business overview > Balance Sheet",
+      "settings": [
+        "Report period: first day of the first month to last day of the latest closed month",
+        "Display columns by: Months",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "account": ""
+      },
+      "total_column": "Total",
+      "period_header_example": "Jan 31, 2025",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/report-management/run-reports-quickbooks-online/L7aILHhbl_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. The first column has a blank header."
+    },
+    "general_ledger": {
+      "kind": "gl",
+      "layout": "grouped",
+      "report_name": "General Ledger",
+      "menu_path": "Reports > Standard reports > For my accountant > General Ledger",
+      "settings": [
+        "Report period: same range as the P&L",
+        "Accounting method: Accrual or Cash",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "date": "Date",
+        "txn_id": "Num",
+        "name": "Name",
+        "memo": "Memo/Description",
+        "amount_signed": "Amount"
+      },
+      "group_header_column": "",
+      "group_provides": "account",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/report-management/run-reports-quickbooks-online/L7aILHhbl_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. Each account starts with a heading row in the first column. Amount is signed: positive for a debit and negative for a credit."
+    },
+    "sales_by_customer": {
+      "kind": "sales",
+      "layout": "pivot",
+      "report_name": "Sales by Customer Summary",
+      "menu_path": "Reports > Standard reports > Sales and customers > Sales by Customer Summary",
+      "settings": [
+        "Report period: same range as the P&L",
+        "Display columns by: Months",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "customer": ""
+      },
+      "total_column": "Total",
+      "period_header_example": "Jan 2025",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/report-management/use-reports-see-sales-inventory-status/L7ocoLmqP_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. The first column has a blank header."
+    },
+    "expenses_by_vendor": {
+      "kind": "vendor",
+      "layout": "pivot",
+      "report_name": "Expenses by Vendor Summary",
+      "menu_path": "Reports > Standard reports > Expenses and vendors > Expenses by Vendor Summary",
+      "settings": [
+        "Report period: same range as the P&L",
+        "Display > Display columns by > Date > Months",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "vendor": ""
+      },
+      "constants": {
+        "account": "All expense accounts"
+      },
+      "total_column": "Total",
+      "period_header_example": "Jan 2025",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/receive-payments/run-save-monthly-expense-report-vendor/L7ZOCfJmT_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. The first column has a blank header. The report has no account column, so the account is a fixed label."
+    },
+    "ar_aging": {
+      "kind": "aging",
+      "layout": "grouped",
+      "report_name": "A/R Aging Detail",
+      "menu_path": "Reports > Standard reports > Who owes you > A/R Aging Detail",
+      "settings": [
+        "Report date: last day of the latest closed month",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "name": "Customer",
+        "invoice_date": "Date",
+        "due_date": "Due date",
+        "amount": "Open balance"
+      },
+      "group_header_column": "",
+      "group_provides": null,
+      "constants": {
+        "type": "AR"
+      },
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/report-management/run-reports-quickbooks-online/L7aILHhbl_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
+    },
+    "ap_aging": {
+      "kind": "aging",
+      "layout": "grouped",
+      "report_name": "A/P Aging Detail",
+      "menu_path": "Reports > Standard reports > What you owe > A/P Aging Detail",
+      "settings": [
+        "Report date: last day of the latest closed month",
+        "Export/Print > Export to Excel, or Export as CSV"
+      ],
+      "columns": {
+        "name": "Vendor",
+        "invoice_date": "Date",
+        "due_date": "Due date",
+        "amount": "Open balance"
+      },
+      "group_header_column": "",
+      "group_provides": null,
+      "constants": {
+        "type": "AP"
+      },
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/report-management/run-reports-quickbooks-online/L7aILHhbl_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Report name and menu path match the cited page where it names the report. Column headers are not stated on any vendor page; they follow the standard export layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
+    }
+  },
+  "qbd": {
+    "pl_by_month": {
+      "kind": "pl",
+      "layout": "pivot",
+      "report_name": "Profit & Loss Standard",
+      "menu_path": "Reports > Company & Financial > Profit & Loss Standard",
+      "settings": [
+        "Dates: custom range ending at the latest closed month",
+        "Customize Report > Display tab > Columns: Month",
+        "Report Basis: Accrual or Cash, one export per basis",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "account": ""
+      },
+      "total_column": "TOTAL",
+      "period_header_example": "Jan 25",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header. Use the CSV output, not the Excel workbook."
+    },
+    "bs_by_month": {
+      "kind": "bs",
+      "layout": "pivot",
+      "report_name": "Balance Sheet Standard",
+      "menu_path": "Reports > Company & Financial > Balance Sheet Standard",
+      "settings": [
+        "Dates: custom range ending at the latest closed month",
+        "Customize Report > Display tab > Columns: Month",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "account": ""
+      },
+      "total_column": "TOTAL",
+      "period_header_example": "Jan 31, 25",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header."
+    },
+    "general_ledger": {
+      "kind": "gl",
+      "layout": "grouped",
+      "report_name": "General Ledger",
+      "menu_path": "Reports > Accountant & Taxes > General Ledger",
+      "settings": [
+        "Dates: same range as the P&L",
+        "Report Basis: Accrual or Cash",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "date": "Date",
+        "txn_id": "Num",
+        "name": "Name",
+        "memo": "Memo",
+        "debit": "Debit",
+        "credit": "Credit"
+      },
+      "group_header_column": "",
+      "group_provides": "account",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Each account starts with a heading row in the first column."
+    },
+    "sales_by_customer": {
+      "kind": "sales",
+      "layout": "pivot",
+      "report_name": "Sales by Customer Summary",
+      "menu_path": "Reports > Sales > Sales by Customer Summary",
+      "settings": [
+        "Dates: same range as the P&L",
+        "Customize Report > Display tab > Columns: Month",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "customer": ""
+      },
+      "total_column": "TOTAL",
+      "period_header_example": "Jan 25",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header."
+    },
+    "expenses_by_vendor": {
+      "kind": "vendor",
+      "layout": "pivot",
+      "report_name": "Purchases by Vendor Summary",
+      "menu_path": "Reports > Purchases > Purchases by Vendor Summary",
+      "settings": [
+        "Dates: same range as the P&L",
+        "Customize Report > Display tab > Columns: Month",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "vendor": ""
+      },
+      "constants": {
+        "account": "All expense accounts"
+      },
+      "total_column": "TOTAL",
+      "period_header_example": "Jan 25",
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. This is the closest Desktop report to an expenses-by-vendor view. The first column has a blank header. The report has no account column, so the account is a fixed label."
+    },
+    "ar_aging": {
+      "kind": "aging",
+      "layout": "grouped",
+      "report_name": "A/R Aging Detail",
+      "menu_path": "Reports > Customers & Receivables > A/R Aging Detail",
+      "settings": [
+        "Date: last day of the latest closed month",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "name": "Name",
+        "invoice_date": "Date",
+        "due_date": "Due Date",
+        "amount": "Open Balance"
+      },
+      "group_header_column": "",
+      "group_provides": null,
+      "constants": {
+        "type": "AR"
+      },
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
+    },
+    "ap_aging": {
+      "kind": "aging",
+      "layout": "grouped",
+      "report_name": "A/P Aging Detail",
+      "menu_path": "Reports > Vendors & Payables > A/P Aging Detail",
+      "settings": [
+        "Date: last day of the latest closed month",
+        "Excel > Create New Worksheet > Create a comma separated values (.csv) file > Export"
+      ],
+      "columns": {
+        "name": "Name",
+        "invoice_date": "Date",
+        "due_date": "Due Date",
+        "amount": "Open Balance"
+      },
+      "group_header_column": "",
+      "group_provides": null,
+      "constants": {
+        "type": "AP"
+      },
+      "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
+    }
+  },
+  "xero": {
+    "pl_by_month": {
+      "kind": "pl",
+      "layout": "pivot",
+      "report_name": "Profit and Loss",
+      "menu_path": "Reporting > All reports > Profit and Loss",
+      "settings": [
+        "Date range: the 12 months ending at the latest closed month",
+        "Compare with: 11 previous Months",
+        "Accounting basis: Accrual or Cash, one export per basis",
+        "Export > Excel"
+      ],
+      "columns": {
+        "account": "Account"
+      },
+      "total_column": "Total",
+      "period_header_example": "Jan 2025",
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. Run 12 months at a time; run a second export for earlier months."
+    },
+    "bs_by_month": {
+      "kind": "bs",
+      "layout": "pivot",
+      "report_name": "Balance Sheet",
+      "menu_path": "Reporting > All reports > Balance Sheet",
+      "settings": [
+        "Date: last day of the latest closed month",
+        "Compare with: 11 previous Months",
+        "Export > Excel"
+      ],
+      "columns": {
+        "account": "Account"
+      },
+      "total_column": "Total",
+      "period_header_example": "31 Jan 2025",
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. Run 12 months at a time; run a second export for earlier months."
+    },
+    "general_ledger": {
+      "kind": "gl",
+      "layout": "grouped",
+      "report_name": "Account Transactions",
+      "menu_path": "Reporting > All reports > Account Transactions",
+      "settings": [
+        "Date range: same range as the P&L",
+        "Accounts: all accounts",
+        "Export > Excel"
+      ],
+      "columns": {
+        "date": "Date",
+        "txn_id": "Reference",
+        "memo": "Description",
+        "debit": "Debit",
+        "credit": "Credit"
+      },
+      "group_header_column": "",
+      "group_provides": "account",
+      "constants": {
+        "name": "(not exported)"
+      },
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. The report has no contact column, so the name is a fixed label."
+    },
+    "sales_by_customer": {
+      "kind": "sales",
+      "layout": "flat",
+      "report_name": "Income and Expenses by Contact",
+      "menu_path": "Reporting > All reports > Income and Expenses by Contact",
+      "settings": [
+        "Date range: one calendar month per run",
+        "Run once for each month in the P&L range",
+        "Export > Excel"
+      ],
+      "columns": {
+        "customer": "Contact",
+        "amount": "Income"
+      },
+      "period_mode": "per_run",
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. The report covers one date range per run, so the owner runs it once for each month."
+    },
+    "expenses_by_vendor": {
+      "kind": "vendor",
+      "layout": "flat",
+      "report_name": "Income and Expenses by Contact",
+      "menu_path": "Reporting > All reports > Income and Expenses by Contact",
+      "settings": [
+        "Date range: one calendar month per run",
+        "Run once for each month in the P&L range",
+        "Export > Excel"
+      ],
+      "columns": {
+        "vendor": "Contact",
+        "amount": "Expenses"
+      },
+      "period_mode": "per_run",
+      "constants": {
+        "account": "All expense accounts"
+      },
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. The report covers one date range per run, so the owner runs it once for each month. The report has no account column, so the account is a fixed label."
+    },
+    "ar_aging": {
+      "kind": "aging",
+      "layout": "grouped",
+      "report_name": "Aged Receivables Detail",
+      "menu_path": "Reporting > All reports > Aged Receivables Detail",
+      "settings": [
+        "Date: last day of the latest closed month",
+        "Group by: Invoice Date or Due Date",
+        "Export > Excel"
+      ],
+      "columns": {
+        "invoice_date": "Date",
+        "due_date": "Due Date",
+        "amount": "Due"
+      },
+      "group_header_column": "",
+      "group_provides": "name",
+      "constants": {
+        "type": "AR"
+      },
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. Rows sit under a contact heading."
+    },
+    "ap_aging": {
+      "kind": "aging",
+      "layout": "grouped",
+      "report_name": "Aged Payables Detail",
+      "menu_path": "Reporting > All reports > Aged Payables Detail",
+      "settings": [
+        "Date: last day of the latest closed month",
+        "Group by: Invoice Date or Due Date",
+        "Export > Excel"
+      ],
+      "columns": {
+        "invoice_date": "Date",
+        "due_date": "Due Date",
+        "amount": "Due"
+      },
+      "group_header_column": "",
+      "group_provides": "name",
+      "constants": {
+        "type": "AP"
+      },
+      "source_url": "https://central.xero.com/0/article/Export-or-print-a-report",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The vendor help page did not load as text. Report name, menu path, and headers come from the standard report layout and secondary guides, and need a check against a real export. Xero offers Excel, Google Sheets, and PDF exports; the owner saves the Excel file as CSV if needed. Rows sit under a contact heading."
+    }
+  },
+  "stripe": {
+    "subscriptions": {
+      "kind": "subs",
+      "layout": "flat",
+      "report_name": "Subscriptions export",
+      "menu_path": "Billing > Subscriptions > Export",
+      "settings": [
+        "Date range: All",
+        "Columns: All columns",
+        "Time zone: UTC"
+      ],
+      "columns": {
+        "customer": "Customer Name",
+        "plan": "Plan",
+        "interval": "Interval",
+        "start_date": "Start Date (UTC)",
+        "end_date": "Ended At (UTC)",
+        "amount": "Amount",
+        "currency": "Currency"
+      },
+      "source_url": "https://support.stripe.com/questions/exporting-payment-data",
+      "checked": "2026-11-02",
+      "verified": false,
+      "notes": "The Export button on the Subscriptions list is documented. The vendor does not list the export columns on any page; headers follow the standard export and need a check against a real export. Set the export date range to All and the columns to All. If the Customer Name column is absent, use Customer Email. A canceled subscription that runs to period end also has a Canceled At (UTC) value."
+    }
+  }
+}

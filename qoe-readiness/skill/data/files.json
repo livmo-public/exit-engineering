@@ -1,0 +1,198 @@
+[
+  {
+    "id": "C1", "name": "Monthly profit and loss (P&L)", "module": "core", "critical": true,
+    "period": "Last 2 fiscal years plus year to date",
+    "why_buyers_ask": "A buyer starts every earnings analysis from the monthly P&L. Send both bases if you keep both.",
+    "feeds_tabs": ["bridge", "proof_revenue", "nwc", "input_pl"],
+    "canonical_kind": "pl", "export_ref": ["pl_by_month"]
+  },
+  {
+    "id": "C2", "name": "Monthly balance sheet", "module": "core", "critical": true,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "The balance sheet shows cash, receivables, payables, and debt. A buyer uses it to set the working capital target.",
+    "feeds_tabs": ["nwc", "proof_cash", "deferred_revenue", "input_bs"],
+    "canonical_kind": "bs", "export_ref": ["bs_by_month"]
+  },
+  {
+    "id": "C3", "name": "General ledger detail", "module": "core", "critical": true,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "The ledger lists every entry behind the P&L. A buyer reads it to test cash, expenses, and one-time items.",
+    "feeds_tabs": ["proof_cash", "addbacks", "opex", "input_gl"],
+    "canonical_kind": "gl", "export_ref": ["general_ledger"]
+  },
+  {
+    "id": "C4", "name": "Bank statements, all accounts", "module": "core", "critical": true,
+    "period": "Last 13 months",
+    "why_buyers_ask": "Bank records are the one source the books cannot change. A buyer ties deposits and balances to your reports.",
+    "feeds_tabs": ["proof_cash", "proof_revenue", "input_bank"],
+    "canonical_kind": "bank", "export_ref": []
+  },
+  {
+    "id": "C5", "name": "Bank reconciliations", "module": "core", "critical": true,
+    "period": "Last 13 months",
+    "why_buyers_ask": "A signed reconciliation shows that someone matched the books to the bank each month. Gaps raise doubt about every number.",
+    "feeds_tabs": ["proof_cash"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "C6", "name": "Sales by customer, monthly", "module": "core", "critical": true,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "This report shows who pays you and how much. A buyer tests customer concentration and ties sales to the P&L.",
+    "feeds_tabs": ["revenue", "proof_revenue", "input_sales"],
+    "canonical_kind": "sales", "export_ref": ["sales_by_customer"]
+  },
+  {
+    "id": "C7", "name": "Expenses by vendor, monthly", "module": "core", "critical": true,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "This report shows where the money goes. A buyer looks for one-time costs, personal costs, and vendors tied to the owner.",
+    "feeds_tabs": ["opex", "addbacks", "input_vendor"],
+    "canonical_kind": "vendor", "export_ref": ["expenses_by_vendor"]
+  },
+  {
+    "id": "C8", "name": "Accounts receivable (AR) and accounts payable (AP) aging", "module": "core", "critical": true,
+    "period": "Latest month end",
+    "why_buyers_ask": "Aging shows who owes you and whom you owe. A buyer finds old unpaid invoices and unrecorded bills here.",
+    "feeds_tabs": ["nwc", "findings", "input_aging"],
+    "canonical_kind": "aging", "export_ref": ["ar_aging", "ap_aging"]
+  },
+  {
+    "id": "C9", "name": "Tax returns", "module": "core", "critical": true,
+    "period": "Last 3 years",
+    "why_buyers_ask": "A buyer compares the revenue on your tax return with the revenue in your books. A large gap needs an explanation.",
+    "feeds_tabs": ["findings", "input_tax"],
+    "canonical_kind": "tax", "export_ref": []
+  },
+  {
+    "id": "R1", "name": "Payroll summaries by employee per year", "module": "core", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "Payroll is often the largest cost. A buyer checks owner pay against what a replacement manager would cost.",
+    "feeds_tabs": ["addbacks", "bridge"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R2", "name": "Form 1096 and Form 1099 filings", "module": "core", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "Missing 1099 forms show a compliance gap. A buyer also uses them to find contractors who work like employees.",
+    "feeds_tabs": ["findings"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R3", "name": "Owner list of one-time or non-recurring items", "module": "core", "critical": false,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "A buyer adds back costs that will not repeat. Your list gives the buyer a place to start, and you control the story.",
+    "feeds_tabs": ["addbacks", "bridge"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R4", "name": "Proposed adjustments with support", "module": "core", "critical": false,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "A buyer accepts an adjustment only with a document behind it. An adjustment with no support often gets dropped.",
+    "feeds_tabs": ["addbacks", "bridge"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R5", "name": "Related-party transaction schedule", "module": "core", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "Deals with family or owner entities may not be at market rates. A buyer restates them to market terms.",
+    "feeds_tabs": ["addbacks"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R6", "name": "Leases and rent terms", "module": "core", "critical": false,
+    "period": "Current terms",
+    "why_buyers_ask": "A buyer needs the go-forward rent. If you own the building, rent must reflect what the buyer will pay.",
+    "feeds_tabs": ["addbacks"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R7", "name": "Accounting policies and policy changes", "module": "core", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "A change in policy can move earnings between years. A buyer wants to see what changed and why.",
+    "feeds_tabs": ["scope"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R8", "name": "Reviews, compilations, or audits", "module": "core", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "An outside accountant's report gives a buyer more comfort in your numbers. A buyer asks if one exists.",
+    "feeds_tabs": ["scope"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R9", "name": "Org chart and owner transition plan", "module": "core", "critical": false,
+    "period": "Current",
+    "why_buyers_ask": "A buyer prices the risk that the business depends on you. A clear transition plan lowers that risk.",
+    "feeds_tabs": ["scope"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R10", "name": "Confidential information memorandum (CIM) and letter of intent (LOI)", "module": "core", "critical": false,
+    "period": "Current, if they exist",
+    "why_buyers_ask": "A QoE tests the claims in these documents. The numbers in your marketing must match your books.",
+    "feeds_tabs": ["scope"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "R11", "name": "Statement of cash flows", "module": "core", "critical": false,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "This statement shows where cash came from and where it went. A buyer checks it against the bank.",
+    "feeds_tabs": ["proof_cash"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "S1", "name": "Subscription export from the billing system", "module": "saas", "critical": true,
+    "period": "All subscriptions active in the last 24 months",
+    "why_buyers_ask": "It lists each customer, plan, billing interval, start date, end date, and amount. A buyer rebuilds recurring revenue from it.",
+    "feeds_tabs": ["revenue", "deferred_revenue", "input_subs"],
+    "canonical_kind": "subs", "export_ref": ["subscriptions"]
+  },
+  {
+    "id": "S2", "name": "Contracts for the 20 largest customers by ARR", "module": "saas", "critical": false,
+    "period": "Current",
+    "why_buyers_ask": "A buyer reads contract terms for length, renewal, and exit rights. These terms decide how safe the revenue is.",
+    "feeds_tabs": ["revenue"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "S3", "name": "Deferred revenue schedule", "module": "saas", "critical": false,
+    "period": "Same as the monthly P&L",
+    "why_buyers_ask": "Customers who pay in advance create a liability. A buyer ties your schedule to the balance sheet.",
+    "feeds_tabs": ["deferred_revenue"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "S4", "name": "Monthly MRR or ARR report", "module": "saas", "critical": false,
+    "period": "Last 24 months",
+    "why_buyers_ask": "Buyers price a SaaS business on recurring revenue. They test your report against billing and the P&L.",
+    "feeds_tabs": ["revenue"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "S5", "name": "Capitalized software policy and schedule", "module": "saas", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "Capitalized development costs raise earnings. A buyer checks that you applied the policy the same way each year.",
+    "feeds_tabs": ["findings"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "S6", "name": "Commission plan and payout records", "module": "saas", "critical": false,
+    "period": "Last 3 years",
+    "why_buyers_ask": "Sales commissions are a real cost of growth. A buyer checks how you treat commissions on annual contracts.",
+    "feeds_tabs": ["findings"],
+    "canonical_kind": null, "export_ref": []
+  },
+  {
+    "id": "P1", "name": "Inventory at each period end", "module": "product", "critical": false,
+    "period": "Same as the monthly balance sheet",
+    "why_buyers_ask": "Inventory is cash tied up in stock. A buyer tests counts, old stock, and write-downs.",
+    "feeds_tabs": ["inventory_wip", "input_inventory"],
+    "canonical_kind": "inventory", "export_ref": []
+  },
+  {
+    "id": "P2", "name": "Work in progress (WIP) schedule at each period end", "module": "product", "critical": false,
+    "period": "Same as the monthly balance sheet",
+    "why_buyers_ask": "Unfinished jobs affect revenue timing. A buyer checks that you book revenue as the work is done.",
+    "feeds_tabs": ["inventory_wip", "input_inventory"],
+    "canonical_kind": "inventory", "export_ref": []
+  }
+]
