@@ -35,6 +35,7 @@ YEAR_COLS = {"year"}
 NUMBER_COLS = {"amount", "balance", "debit", "credit", "beginning_balance", "deposits",
                "withdrawals", "ending_balance", "gross_receipts"}
 # Columns that may be blank in a file: an open subscription has no end date.
+# "" in these columns means a blank optional cell (or, for account_type/subtype, not yet mapped).
 OPTIONAL_COLS = {"end_date", "due_date", "account_type", "subtype"}
 # Blank debit or credit in a ledger line means zero.
 BLANK_ZERO_COLS = {("gl", "debit"), ("gl", "credit")}
@@ -140,8 +141,37 @@ def _format(value) -> str:
     return str(value)
 
 
+def _row_types(row: dict) -> tuple[str, tuple]:
+    """Pick the allowed account types from the row's columns: bs, gl, or P&L-like."""
+    if "subtype" in row:
+        return "bs", BS_TYPES
+    if "debit" in row or "credit" in row:
+        return "gl", PL_TYPES + BS_TYPES
+    return "pl", PL_TYPES
+
+
+def _check_entry(account: str, entry, kind: str, allowed: tuple) -> None:
+    if not isinstance(entry, dict) or "account_type" not in entry:
+        raise CanonicalError(f"account '{account}': map entry needs an 'account_type'")
+    if entry["account_type"] not in allowed:
+        raise CanonicalError(
+            f"account '{account}': account_type '{entry['account_type']}' is not valid for a "
+            f"{kind} row; expected one of {', '.join(allowed)}")
+    if kind == "bs":
+        if "subtype" not in entry:
+            raise CanonicalError(f"account '{account}': map entry needs a 'subtype' for a balance sheet row")
+        if entry["subtype"] not in BS_SUBTYPES:
+            raise CanonicalError(
+                f"account '{account}': subtype '{entry['subtype']}' is not valid; "
+                f"expected one of {', '.join(BS_SUBTYPES)}")
+
+
 def apply_account_map(rows: list[dict], account_map: dict[str, dict]) -> list[dict]:
-    """Return new rows with account_type (and subtype when mapped) filled from the map."""
+    """Return new rows with account_type (and subtype on balance sheet rows) filled from the map.
+
+    Raises CanonicalError for unmapped accounts and for map entries that are missing a
+    key or hold a value outside the allowed type lists. An unmapped account_type is "" in a row.
+    """
     unmapped = []
     for row in rows:
         account = row.get("account", "")
@@ -151,10 +181,13 @@ def apply_account_map(rows: list[dict], account_map: dict[str, dict]) -> list[di
         raise CanonicalError("unmapped account(s): " + ", ".join(f"'{a}'" for a in unmapped))
     out = []
     for row in rows:
-        entry = account_map[row.get("account", "")]
+        account = row.get("account", "")
+        entry = account_map[account]
+        kind, allowed = _row_types(row)
+        _check_entry(account, entry, kind, allowed)
         new_row = dict(row)
         new_row["account_type"] = entry["account_type"]
-        if "subtype" in entry:
+        if kind == "bs":
             new_row["subtype"] = entry["subtype"]
         out.append(new_row)
     return out

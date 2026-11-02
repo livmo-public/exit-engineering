@@ -75,3 +75,32 @@ def test_apply_account_map_lists_every_unmapped_account():
     with pytest.raises(canonical.CanonicalError) as exc:
         canonical.apply_account_map(rows, {})
     assert "Rent" in str(exc.value) and "Fuel" in str(exc.value)
+
+
+def test_apply_account_map_entry_missing_account_type_names_account():
+    with pytest.raises(canonical.CanonicalError, match="Hosting"):
+        canonical.apply_account_map([{"account": "Hosting", "basis": "accrual"}], {"Hosting": {}})
+
+
+@pytest.mark.parametrize("bad", ["Revenue", "asset", ""])
+def test_apply_account_map_rejects_bad_pl_type(bad):
+    rows = [{"account": "Hosting", "basis": "accrual", "account_type": ""}]
+    with pytest.raises(canonical.CanonicalError, match="Hosting"):
+        canonical.apply_account_map(rows, {"Hosting": {"account_type": bad}})
+
+
+def test_apply_account_map_rejects_bad_bs_type_and_subtype():
+    rows = [{"account": "Checking", "account_type": "", "subtype": ""}]
+    with pytest.raises(canonical.CanonicalError, match="Checking"):
+        canonical.apply_account_map(rows, {"Checking": {"account_type": "cogs", "subtype": "cash"}})
+    with pytest.raises(canonical.CanonicalError, match="Checking"):
+        canonical.apply_account_map(rows, {"Checking": {"account_type": "asset", "subtype": "bank"}})
+    with pytest.raises(canonical.CanonicalError, match="Checking"):
+        canonical.apply_account_map(rows, {"Checking": {"account_type": "asset"}})
+
+
+def test_apply_account_map_gl_accepts_pl_and_bs_types():
+    rows = [{"account": "Checking", "debit": 1.0, "credit": 0.0, "account_type": ""},
+            {"account": "Hosting", "debit": 0.0, "credit": 1.0, "account_type": ""}]
+    out = canonical.apply_account_map(rows, {"Checking": {"account_type": "asset"}, "Hosting": {"account_type": "cogs"}})
+    assert [r["account_type"] for r in out] == ["asset", "cogs"]
