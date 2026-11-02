@@ -40,6 +40,7 @@ ANNUAL_CUSTOMERS = 12
 SUSPENSE_MONTH, SUSPENSE_AMOUNT = "2025-11", 3150.0
 LEGAL_MONTH, LEGAL_FEE = "2025-11", 12500.0
 RENT, MARKET_RENT = 4500.0, 3250.0
+ABOVE_MARKET_RENT = (RENT - MARKET_RENT) * 12  # 15,000 a year
 
 INTAKE = {
     "business_type": "saas", "revenue_range": "1m_to_5m", "accounting_system": "qbo",
@@ -70,7 +71,7 @@ ADJUSTMENTS = [
      "amounts": {"FY2025": 36000.0, "TTM": 36000.0}, "evidence": "Payroll summary 2025",
      "decision": "approved", "owner_stated": True},
     {"id": "A2", "name": "Rent to owner entity above market",  "source_file": "R6",
-     "amounts": {"FY2025": 15000.0, "TTM": 15000.0}, "evidence": None,
+     "amounts": {"FY2025": ABOVE_MARKET_RENT, "TTM": ABOVE_MARKET_RENT}, "evidence": None,
      "decision": "edited", "owner_stated": True},
     {"id": "A3", "name": "One-time legal fee for a contract dispute", "source_file": "R3",
      "amounts": {LEGAL_MONTH: LEGAL_FEE}, "evidence": "Law firm invoice",

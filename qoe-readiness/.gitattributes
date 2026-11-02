@@ -1,0 +1,4 @@
+# The sample company is generated; git must store its text files byte for byte.
+# canonical.write always writes CRLF, and a test compares the committed bytes with a fresh run.
+examples/**/*.csv -text
+examples/**/progress.json -text
