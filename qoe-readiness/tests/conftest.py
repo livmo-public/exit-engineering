@@ -45,5 +45,10 @@ def scripts_dir():
 
 
 @pytest.fixture
+def fixtures():
+    return ROOT / "tests" / "fixtures"
+
+
+@pytest.fixture
 def sample_dir():
     return ROOT / "examples" / "sample-saas-co"

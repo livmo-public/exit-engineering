@@ -1,0 +1,31 @@
+Sample SaaS Company
+Balance Sheet
+"As of March 31, 2025"
+
+,"Jan 31, 2025","Feb 28, 2025","Mar 31, 2025",Total
+ASSETS
+Current Assets
+Bank Accounts
+Checking,"$60,000.00","$69,850.00","$80,200.00","$80,200.00"
+Total Bank Accounts,"$60,000.00","$69,850.00","$80,200.00","$80,200.00"
+Accounts Receivable
+Accounts Receivable (A/R),"$38,000.00","$39,000.00","$40,500.00","$40,500.00"
+Total Accounts Receivable,"$38,000.00","$39,000.00","$40,500.00","$40,500.00"
+Total Current Assets,"$98,000.00","$108,850.00","$120,700.00","$120,700.00"
+TOTAL ASSETS,"$98,000.00","$108,850.00","$120,700.00","$120,700.00"
+LIABILITIES AND EQUITY
+Liabilities
+Current Liabilities
+Accounts Payable
+Accounts Payable (A/P),"$8,000.00","$8,500.00","$8,800.00","$8,800.00"
+Total Accounts Payable,"$8,000.00","$8,500.00","$8,800.00","$8,800.00"
+Other Current Liabilities
+Deferred revenue,"$20,000.00","$21,000.00","$22,000.00","$22,000.00"
+Total Other Current Liabilities,"$20,000.00","$21,000.00","$22,000.00","$22,000.00"
+Total Current Liabilities,"$28,000.00","$29,500.00","$30,800.00","$30,800.00"
+Total Liabilities,"$28,000.00","$29,500.00","$30,800.00","$30,800.00"
+Equity
+Retained Earnings,"$60,650.00","$60,650.00","$60,650.00","$60,650.00"
+Net Income,"$9,350.00","$18,700.00","$29,250.00","$29,250.00"
+Total Equity,"$70,000.00","$79,350.00","$89,900.00","$89,900.00"
+TOTAL LIABILITIES AND EQUITY,"$98,000.00","$108,850.00","$120,700.00","$120,700.00"

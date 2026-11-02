@@ -1,0 +1,16 @@
+Sample SaaS Company
+A/R Aging Detail
+"As of March 31, 2025"
+
+,Date,Transaction Type,Num,Customer,Due date,Past due,Open balance
+Current
+,03/20/2025,Invoice,4010,Acme Inc,04/19/2025,,"16,000.00"
+,03/25/2025,Invoice,4012,Delta Partners LLC,04/24/2025,,"5,500.00"
+Total for Current,,,,,,,"$21,500.00"
+1 - 30
+,02/25/2025,Invoice,4005,Beta Holdings Inc,03/27/2025,4,"12,000.00"
+Total for 1 - 30,,,,,,,"$12,000.00"
+91 and over
+,11/15/2024,Invoice,3890,Gamma Services LLC,12/15/2024,106,"7,000.00"
+Total for 91 and over,,,,,,,"$7,000.00"
+TOTAL,,,,,,,"$40,500.00"

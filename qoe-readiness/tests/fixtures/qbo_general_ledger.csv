@@ -1,0 +1,17 @@
+Sample SaaS Company
+General Ledger
+"January 2025"
+
+,Date,Transaction Type,Num,Name,Memo/Description,Split,Amount,Balance
+Checking
+,Beginning Balance,,,,,,,"45,000.00"
+,01/05/2025,Deposit,1001,Acme Inc,January invoice paid,Subscription revenue,"15,000.00","60,000.00"
+,01/20/2025,Expense,2001,Hosting Provider A,January hosting,Hosting,"-6,000.00","54,000.00"
+Total for Checking,,,,,,,"$9,000.00",
+Subscription revenue
+,01/02/2025,Invoice,3001,Acme Inc,January invoice,Accounts Receivable (A/R),"-15,000.00","-15,000.00"
+Total for Subscription revenue,,,,,,,"-$15,000.00",
+Hosting
+,01/20/2025,Expense,2001,Hosting Provider A,January hosting,Checking,"6,000.00","6,000.00"
+Total for Hosting,,,,,,,"$6,000.00",
+TOTAL,,,,,,,$0.00,
