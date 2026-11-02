@@ -328,3 +328,22 @@ def test_workbook_inputs_are_files_that_feed_the_tab(files, tabs):
     for tab in tabs:
         for file_id in tab["inputs"]:
             assert tab["id"] in feeds[file_id], (tab["id"], file_id)
+
+
+# ---------------------------------------------------------------- owner-facing text
+
+def _sentences(text):
+    return [s for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s]
+
+
+def test_owner_sentences_at_most_25_words(files, checks, intake):
+    texts = [f["why_buyers_ask"] for f in files]
+    for c in checks:
+        texts += [c["owner_message"], c["fix"]]
+        if c["owner_question"]:
+            texts.append(c["owner_question"])
+    texts += [q["question"] for q in intake]
+    for text in texts:
+        for sentence in _sentences(text):
+            assert len(sentence.split()) <= 25, sentence
+        assert "—" not in text and "–" not in text
