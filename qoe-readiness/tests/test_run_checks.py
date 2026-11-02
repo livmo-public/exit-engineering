@@ -3,6 +3,7 @@
 Window used by most unit tests: latest closed month 2026-03, December year end.
 """
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -273,6 +274,22 @@ def test_k10_year_without_complete_books_is_skipped(ctx_factory):
     assert not run_checks.COMPUTED["K10"](tax_ctx(ctx_factory, 1.0, year="2023"), {"pct": 0.05})
 
 
+def test_k10_tax_year_matches_fiscal_year_that_begins_in_it(ctx_factory):
+    # June year end: FY2025 runs 2024-07 to 2025-06 and holds 12 x 1000 = 12000.
+    # A return for tax year 2024 begins in 2024, so it compares to FY2025.
+    pl = [pl_row(m, 1000.0) for m in month_range("2024-07", "2025-06")]
+    intake = {"fiscal_year_end_month": 6}
+
+    def result(year, gross):
+        ctx = ctx_factory(intake=intake, pl=pl, tax=[{"year": year, "gross_receipts": gross}])
+        return run_checks.COMPUTED["K10"](ctx, {"pct": 0.05})
+
+    assert not result("2024", 12000.0)
+    f = result("2024", 9000.0)  # 3000 / 12000 = 25%
+    assert f and "FY2025" in f[0]["evidence"][0]
+    assert not result("2025", 1.0)  # no complete fiscal year begins in 2025
+
+
 # ---- K16 ---------------------------------------------------------------------
 
 def cap_ctx(ctx_factory, balance, s5_status):
@@ -488,9 +505,9 @@ def test_k11_threshold_follows_payment_year(tmp_path, checks, data_dir):
     state, out = write_world(tmp_path, with_paths=True, vendor_total=by_year["2025"], vendor_period="2025-06")
     candidates = {q["check_id"]: q for q in run_checks.questions(state, data_dir)}["K11"]["candidates"]
     assert [c["year"] for c in candidates] == ["2025"]
+    assert by_year["2026"] > by_year["2025"]  # precondition: the 2026 threshold is higher
     state, out = write_world(tmp_path, with_paths=True, vendor_total=by_year["2025"], vendor_period="2026-06")
-    if by_year["2026"] > by_year["2025"]:
-        assert {q["check_id"]: q for q in run_checks.questions(state, data_dir)}["K11"]["candidates"] == []
+    assert {q["check_id"]: q for q in run_checks.questions(state, data_dir)}["K11"]["candidates"] == []
 
 
 def test_questions_one_per_owner_question_check(tmp_path, checks, data_dir):
@@ -540,3 +557,70 @@ def test_cli_prints_and_saves_findings(tmp_path, data_dir, scripts_dir):
                            capture_output=True, text=True, check=True)
     assert len(progress.load(state_path)["findings"]) == len(saved)
     assert json.loads(rerun.stdout) == printed
+
+
+# ---- fix round 1 -------------------------------------------------------------
+
+def test_findings_take_every_field_from_the_run_catalog(tmp_path, data_dir):
+    custom = tmp_path / "data"
+    shutil.copytree(data_dir, custom)
+    checks_file = custom / "checks.json"
+    records = json.loads(checks_file.read_text(encoding="utf-8"))
+    for record in records:
+        if record["id"] == "K21":
+            record.update(severity="low", name="Custom name", owner_message="Custom message.",
+                          fix="Custom fix.")
+    checks_file.write_text(json.dumps(records), encoding="utf-8")
+    state, out = write_world(tmp_path, basis="cash")
+    bundled = next(f for f in run_checks.run(state, out, data_dir) if f["check_id"] == "K21")
+    changed = next(f for f in run_checks.run(state, out, custom) if f["check_id"] == "K21")
+    assert bundled["severity"] != "low"
+    assert (changed["severity"], changed["name"], changed["owner_message"], changed["fix"]) ==         ("low", "Custom name", "Custom message.", "Custom fix.")
+
+
+def test_k18_message_comes_from_the_run_catalog(tmp_path, data_dir):
+    custom = tmp_path / "data"
+    shutil.copytree(data_dir, custom)
+    records = json.loads((custom / "checks.json").read_text(encoding="utf-8"))
+    for record in records:
+        if record["id"] == "K18":
+            record["owner_message"] = "Custom aging message."
+    (custom / "checks.json").write_text(json.dumps(records), encoding="utf-8")
+    state, out = write_world(tmp_path)
+    canonical.write("aging", [aging_row("AR", "2025-11-01")], out / "aging.csv")
+    f = next(f for f in run_checks.run(state, out, custom) if f["check_id"] == "K18")
+    assert f["owner_message"].startswith("Custom aging message.")
+
+
+def inventory_row(period, amount):
+    return {"period": period, "item_type": "inventory", "amount": amount}
+
+
+def test_files_of_one_kind_merge(tmp_path, data_dir):
+    first, second = tmp_path / "p1.csv", tmp_path / "p2.csv"
+    canonical.write("inventory", [inventory_row("2026-01", 10.0)], first)
+    canonical.write("inventory", [inventory_row("2026-02", 20.0)], second)
+    state = {**progress.new_state(), "intake": {**BASE_INTAKE, "business_type": "product"},
+             "files": {"P1": {"status": "uploaded", "canonical_path": str(first)},
+                       "P2": {"status": "uploaded", "canonical_path": str(second)}}}
+    rows = run_checks._context(state, tmp_path, data_dir).canonical["inventory"]
+    assert sorted(r["period"] for r in rows) == ["2026-01", "2026-02"]
+
+
+def test_one_path_for_two_files_is_read_once(tmp_path, data_dir):
+    canonical.write("inventory", [inventory_row("2026-01", 10.0)], tmp_path / "inventory.csv")
+    state = {**progress.new_state(), "intake": {**BASE_INTAKE, "business_type": "product"},
+             "files": {"P1": {"status": "uploaded"}, "P2": {"status": "uploaded"}}}
+    assert len(run_checks._context(state, tmp_path, data_dir).canonical["inventory"]) == 1
+
+
+def test_callers_cannot_change_cached_catalog_or_later_results(tmp_path, data_dir):
+    state, out = write_world(tmp_path)
+    first = run_checks.review_items(state, out, data_dir)
+    first[0]["params"]["spike_multiple"] = 99
+    first[0]["name"] = "changed"
+    run_checks._catalog(data_dir, "checks.json")[0]["name"] = "changed"
+    second = {i["check_id"]: i for i in run_checks.review_items(state, out, data_dir)}
+    assert second["K02"]["params"]["spike_multiple"] == 1.5
+    assert second["K02"]["name"] != "changed"
+    assert run_checks._catalog(data_dir, "checks.json")[0]["name"] != "changed"

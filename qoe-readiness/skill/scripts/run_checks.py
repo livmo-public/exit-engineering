@@ -13,9 +13,10 @@ Conventions:
 """
 import argparse
 import calendar
+import copy
 import json
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from functools import lru_cache
 from pathlib import Path
@@ -44,6 +45,8 @@ class Context:
     state: dict
     canonical: dict[str, list[dict]]
     periods: metrics.Periods
+    # Check records by id, from the catalog the run uses. Empty means the bundled catalog.
+    checks: dict[str, dict] = field(default_factory=dict)
 
 
 # ---- catalog and finding helpers ---------------------------------------------
@@ -55,10 +58,14 @@ def _load_json(path: str) -> list:
 
 
 def _catalog(data_dir: Path, name: str) -> list[dict]:
-    return _load_json(str(Path(data_dir) / name))
+    """A deep copy of the catalog file, so callers cannot change the cached data."""
+    return copy.deepcopy(_load_json(str(Path(data_dir) / name)))
 
 
-def _record(check_id: str) -> dict:
+def _record(ctx: "Context", check_id: str) -> dict:
+    """The check record from the run's catalog; else from the bundled catalog."""
+    if check_id in ctx.checks:
+        return ctx.checks[check_id]
     return next(c for c in _catalog(DEFAULT_DATA_DIR, "checks.json") if c["id"] == check_id)
 
 
@@ -68,9 +75,9 @@ def _cap(items: list[str]) -> list[str]:
     return items[:MAX_EVIDENCE] + [f"and {len(items) - MAX_EVIDENCE} more"]
 
 
-def _finding(check_id: str, detail: str, evidence: list[str] = (),
+def _finding(ctx: "Context", check_id: str, detail: str, evidence: list[str] = (),
              owner_message: str | None = None) -> dict:
-    record = _record(check_id)
+    record = _record(ctx, check_id)
     return {"id": f"{check_id}-1", "check_id": check_id, "name": record["name"],
             "category": record["category"], "severity": record["severity"],
             "method": record["method"], "status": "fail", "detail": detail,
@@ -161,8 +168,12 @@ def _latest_bs_balances(ctx: Context) -> tuple[str | None, dict[tuple[str, str],
     return period, totals
 
 
-def build_context(state: dict, canonical_rows: dict[str, list[dict]]) -> Context:
-    """Build the check context. Periods come from the P&L and balance sheet months."""
+def build_context(state: dict, canonical_rows: dict[str, list[dict]],
+                  checks: list[dict] | None = None) -> Context:
+    """Build the check context. Periods come from the P&L and balance sheet months.
+
+    checks is the catalog the run uses; findings take their fields from it.
+    """
     intake = state.get("intake", {})
     months = sorted({r["period"] for kind in ("pl", "bs") for r in canonical_rows.get(kind, [])})
     latest = intake.get("latest_closed_month") or (months[-1] if months else None)
@@ -170,7 +181,8 @@ def build_context(state: dict, canonical_rows: dict[str, list[dict]]) -> Context
         periods = metrics.periods(months, int(intake.get("fiscal_year_end_month", 12)), latest)
     else:
         periods = metrics.Periods(months=[], fiscal_years={}, ttm=[])
-    return Context(state=state, canonical=canonical_rows, periods=periods)
+    return Context(state=state, canonical=canonical_rows, periods=periods,
+                   checks={c["id"]: c for c in checks or []})
 
 
 # ---- computed checks ---------------------------------------------------------
@@ -205,7 +217,7 @@ def check_k01(ctx: Context, params: dict) -> list[dict]:
     if not customers:
         return []
     evidence = [f"Annual billing: {name}" for name in customers]
-    return [_finding("K01", f"{len(customers)} customer(s) pay a year or more at once. "
+    return [_finding(ctx, "K01", f"{len(customers)} customer(s) pay a year or more at once. "
                             "The balance sheet has no deferred revenue account.", evidence)]
 
 
@@ -225,7 +237,7 @@ def check_k03(ctx: Context, params: dict) -> list[dict]:
                        f"subscriptions {_money(row['closing'])} ({gap:.1%})")
     if not bad:
         return []
-    return [_finding("K03", f"{len(bad)} of {len(months)} month(s) differ by more than "
+    return [_finding(ctx, "K03", f"{len(bad)} of {len(months)} month(s) differ by more than "
                             f"{params['pct']:.0%}.", bad)]
 
 
@@ -244,7 +256,7 @@ def check_k04(ctx: Context, params: dict) -> list[dict]:
                        f"difference {_money(ending - book)}")
     if not bad:
         return []
-    return [_finding("K04", f"{len(bad)} of {len(compared)} month end(s) differ by more than "
+    return [_finding(ctx, "K04", f"{len(bad)} of {len(compared)} month end(s) differ by more than "
                             f"${params['cash_tolerance']:,}.", bad)]
 
 
@@ -259,7 +271,7 @@ def check_k05(ctx: Context, params: dict) -> list[dict]:
                        f"deposits {_money(row['bank_deposits'])} ({gap:.1%})")
     if not bad:
         return []
-    return [_finding("K05", f"{len(bad)} of {len(comparable)} month(s) differ by more than "
+    return [_finding(ctx, "K05", f"{len(bad)} of {len(comparable)} month(s) differ by more than "
                             f"{params['pct']:.0%}.", bad)]
 
 
@@ -282,7 +294,7 @@ def check_k07(ctx: Context, params: dict) -> list[dict]:
                        f"receivables and deferred change {_money(explained)}")
     if not bad:
         return []
-    return [_finding("K07", f"{len(bad)} month(s) do not tie within {params['pct']:.0%} of "
+    return [_finding(ctx, "K07", f"{len(bad)} month(s) do not tie within {params['pct']:.0%} of "
                             "accrual revenue.", bad)]
 
 
@@ -302,7 +314,7 @@ def check_k08(ctx: Context, params: dict) -> list[dict]:
               for account, amount in sorted(net.items()) if abs(amount) >= minimum]
     if not found:
         return []
-    return [_finding("K08", f"{len(found)} unsorted-item balance(s) found.", found)]
+    return [_finding(ctx, "K08", f"{len(found)} unsorted-item balance(s) found.", found)]
 
 
 def check_k09(ctx: Context, params: dict) -> list[dict]:
@@ -313,24 +325,32 @@ def check_k09(ctx: Context, params: dict) -> list[dict]:
     if not bad:
         return []
     evidence = [f"{period}: {account} {_money(balance)}" for period, account, balance in bad]
-    return [_finding("K09", f"{len(bad)} negative balance(s) found.", evidence)]
+    return [_finding(ctx, "K09", f"{len(bad)} negative balance(s) found.", evidence)]
+
+
+def _fiscal_year_beginning(ctx: Context, year: str) -> tuple[str | None, list[str] | None]:
+    """The complete fiscal year that begins in the calendar year. A return carries its begin year."""
+    for label, months in ctx.periods.fiscal_years.items():
+        if months[0][:4] == year:
+            return label, months
+    return None, None
 
 
 def check_k10(ctx: Context, params: dict) -> list[dict]:
     pl = _pl_rows(ctx)
     bad = []
     for tax in sorted(_rows(ctx, "tax"), key=lambda r: r["year"]):
-        months = ctx.periods.fiscal_years.get(f"FY{tax['year']}")
+        label, months = _fiscal_year_beginning(ctx, tax["year"])
         if not months:
             continue
         books = metrics.ebitda(pl, months)["revenue"]
         gap = _gap(books, tax["gross_receipts"])
         if gap is not None and gap > params["pct"]:
-            bad.append(f"{tax['year']}: tax return {_money(tax['gross_receipts'])}, "
+            bad.append(f"{tax['year']} ({label}): tax return {_money(tax['gross_receipts'])}, "
                        f"books {_money(books)} ({gap:.1%})")
     if not bad:
         return []
-    return [_finding("K10", f"{len(bad)} year(s) differ by more than {params['pct']:.0%}.", bad)]
+    return [_finding(ctx, "K10", f"{len(bad)} year(s) differ by more than {params['pct']:.0%}.", bad)]
 
 
 def check_k16(ctx: Context, params: dict) -> list[dict]:
@@ -342,7 +362,7 @@ def check_k16(ctx: Context, params: dict) -> list[dict]:
     if not held:
         return []
     evidence = [f"{period}: {account} {_money(amount)}" for account, amount in held]
-    return [_finding("K16", "Capitalized software sits on the balance sheet. "
+    return [_finding(ctx, "K16", "Capitalized software sits on the balance sheet. "
                             "No policy file is uploaded.", evidence)]
 
 
@@ -368,8 +388,8 @@ def check_k18(ctx: Context, params: dict) -> list[dict]:
     if not old:
         return []
     total = sum(amount for amount, _ in old)
-    message = _record("K18")["owner_message"] + " Give a short note for each item."
-    return [_finding("K18", f"{len(old)} receivable(s), {_money(total)} in total, are more than "
+    message = _record(ctx, "K18")["owner_message"] + " Give a short note for each item."
+    return [_finding(ctx, "K18", f"{len(old)} receivable(s), {_money(total)} in total, are more than "
                             f"{params['days']} days past due.",
                      [text for _, text in sorted(old, key=lambda item: -item[0])], message)]
 
@@ -387,7 +407,7 @@ def check_k19(ctx: Context, params: dict) -> list[dict]:
                         f"(limit {params['top5_pct']:.0%})")
     if not evidence:
         return []
-    return [_finding("K19", f"{result['customer_count']} customers in the last 12 months.", evidence)]
+    return [_finding(ctx, "K19", f"{result['customer_count']} customers in the last 12 months.", evidence)]
 
 
 def check_k20(ctx: Context, params: dict) -> list[dict]:
@@ -398,7 +418,7 @@ def check_k20(ctx: Context, params: dict) -> list[dict]:
     grr = metrics.retention(subs, start, latest)["grr"]
     if grr is None or grr >= params["grr_min"]:
         return []
-    return [_finding("K20", f"Gross revenue retention from {start} to {latest} is {grr:.1%}.",
+    return [_finding(ctx, "K20", f"Gross revenue retention from {start} to {latest} is {grr:.1%}.",
                      [f"Gross revenue retention {grr:.1%}, minimum {params['grr_min']:.0%}"])]
 
 
@@ -406,7 +426,7 @@ def check_k21(ctx: Context, params: dict) -> list[dict]:
     basis = ctx.state.get("intake", {}).get("accounting_basis")
     if basis != params["trigger_basis"]:
         return []
-    return [_finding("K21", "The owner keeps books on a cash basis. No accrual books exist.")]
+    return [_finding(ctx, "K21", "The owner keeps books on a cash basis. No accrual books exist.")]
 
 
 COMPUTED: dict[str, Callable[[Context, dict], list[dict]]] = {
@@ -454,16 +474,22 @@ def _canonical_path(state: dict, file_id: str, kind: str, canonical_dir: Path) -
 
 
 def _read_canonical(state: dict, canonical_dir: Path, files_catalog: list[dict]) -> dict:
-    """Read the canonical CSV of every uploaded active file. A missing file raises."""
+    """Read the canonical CSV of every uploaded active file. A missing file raises.
+
+    Files of one kind (P1 and P2 are both inventory) merge. A path is read once.
+    """
     rows: dict[str, list[dict]] = {}
+    read_paths: set[Path] = set()
     for record in progress.active_files(state, files_catalog):
         kind = record["canonical_kind"]
-        if not kind or kind in rows or not _uploaded(state, record["id"]):
+        if not kind or not _uploaded(state, record["id"]):
             continue
         path = _canonical_path(state, record["id"], kind, canonical_dir)
         if not path.is_file():
             raise RunChecksError(f"{record['id']} has status uploaded, but {path} does not exist")
-        rows[kind] = canonical.read(kind, path)
+        if path not in read_paths:
+            read_paths.add(path)
+            rows.setdefault(kind, []).extend(canonical.read(kind, path))
     return rows
 
 
@@ -482,7 +508,7 @@ def _should_run(state: dict, check: dict) -> bool:
 
 def _context(state: dict, canonical_dir: Path, data_dir: Path) -> Context:
     rows = _read_canonical(state, canonical_dir, _catalog(data_dir, "files.json"))
-    return build_context(state, rows)
+    return build_context(state, rows, _catalog(data_dir, "checks.json"))
 
 
 def run(state: dict, canonical_dir: Path, data_dir: Path) -> list[dict]:
