@@ -3,6 +3,7 @@
 Standard library and openpyxl only. The functions never change an input file.
 """
 import csv
+import io
 import json
 import math
 import re
@@ -72,7 +73,8 @@ def _year(text: str) -> int:
     return 2000 + int(text) if len(text) == 2 else int(text)
 
 
-_ISO_MONTH_RE = re.compile(r"^(\d{4})-(\d{1,2})(?:-\d{1,2})?$")
+_ISO_MONTH_RE = re.compile(
+    r"^(\d{4})-(\d{1,2})(?:-\d{1,2}(?:[T ]\d{1,2}:\d{2}(?::\d{2}(?:\.\d+)?)?)?)?$")
 _SLASH_MONTH_RE = re.compile(r"^(\d{1,2})/(\d{4})$")
 _NAME_MONTH_RE = re.compile(
     r"^([A-Za-z]{3,9})\.?[ \-]+(?:(\d{1,2}),?[ \-]+)?(\d{4}|\d{2})$")
@@ -153,8 +155,11 @@ def _read_csv(path: Path) -> list[list[str]]:
     try:
         text = raw.decode("utf-8-sig")
     except UnicodeDecodeError:
-        text = raw.decode("cp1252")
-    return list(csv.reader(text.splitlines()))
+        try:
+            text = raw.decode("cp1252")
+        except UnicodeDecodeError:
+            raise NormalizeError("file is not UTF-8 or Windows-1252 text") from None
+    return list(csv.reader(io.StringIO(text, newline="")))
 
 
 def _read_table(path: Path) -> list[list[str]]:
@@ -196,7 +201,8 @@ def parse_pivot(path, kind: str, row_field: str) -> list[dict]:
         if not any(cells):
             continue  # section header or footer text
         key = label.casefold()
-        if key.startswith(("total",) + _FOOTER_PREFIXES) or (kind == "pl" and key in _PL_SUBTOTALS):
+        if (_is_total_label(key, kind) or key.startswith(_FOOTER_PREFIXES)
+                or (kind == "pl" and key in _PL_SUBTOTALS)):
             continue
         for (index, period), text in zip(months.items(), cells):
             try:
@@ -205,6 +211,13 @@ def parse_pivot(path, kind: str, row_field: str) -> list[dict]:
                 raise _fail(path, number, f"column '{_cell(table[header_at], index)}': {err}") from None
             rows.append({"period": period, row_field: label, value_field: amount})
     return rows
+
+
+def _is_total_label(key: str, kind: str) -> bool:
+    """Total rows. Sales and vendor names may start with "Total", so only a bare "Total" counts."""
+    if kind in ("sales", "vendor"):
+        return key == "total"
+    return key == "total" or key.startswith("total ")
 
 
 def _find_month_header(table: list[list[str]], path: Path) -> tuple[int, dict[int, str]]:
@@ -323,9 +336,10 @@ def parse_grouped(path, kind: str, column_map: dict[str, str], group_header_colu
     rows = []
     group = ""
     for number, line in enumerate(table[at + 1:], start=at + 2):
-        if any(_cell(line, i).casefold() in _BALANCE_LABELS for i in range(len(line))):
-            continue
         label = _cell(line, group_index)
+        if (label.casefold() in _BALANCE_LABELS
+                or _cell(line, positions[anchor]).casefold() in _BALANCE_LABELS):
+            continue
         if label.casefold().startswith("total"):
             continue
         if label and not any(_cell(line, i) for i in others):
@@ -403,10 +417,24 @@ def _with_defaults(kind: str, row: dict, basis: str) -> dict:
     return out
 
 
+# Kinds that two reports feed (A/R and A/P aging). A new run replaces only the rows of its own type.
+_MERGE_KEYS = {"aging": "type"}
+
+
+def _merge_existing(kind: str, rows: list[dict], target: Path) -> list[dict]:
+    key = _MERGE_KEYS.get(kind)
+    if key is None or not target.is_file():
+        return rows
+    incoming = {r.get(key) for r in rows}
+    kept = [r for r in canonical.read(kind, target) if r[key] not in incoming]
+    return kept + rows
+
+
 def _write(kind: str, rows: list[dict], out_dir: Path) -> Path:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     target = out_dir / f"{kind}.csv"
+    rows = _merge_existing(kind, rows, target)
     canonical.write(kind, rows, target)
     canonical.read(kind, target)  # fail now if a row is not canonical
     return target
@@ -465,23 +493,26 @@ def _bs(subtype: str) -> dict:
 # First match wins. Order matters: specific rules sit above general ones.
 _RULES = [
     (r"accumulated (depreciation|amortization)", _bs("other_asset")),
+    # Balance sheet words come first, so "Income taxes payable" is not a P&L tax account.
+    (r"^(?!.*(receivable|interest|expense|fee)).*(\bloans?\b|notes? payable|line of credit)", _bs("debt")),
+    (r"receivable", _bs("ar")),
+    (r"accrued", _bs("accrued")),
+    (r"payable", _bs("ap")),
     (r"depreciation", {"account_type": "depreciation"}),
     (r"amortization", {"account_type": "amortization"}),
     (r"income tax|provision for tax", {"account_type": "income_tax"}),
     (r"interest income", {"account_type": "other_income"}),
-    (r"^(?!.*(payable|receivable)).*interest", {"account_type": "interest"}),
+    (r"interest", {"account_type": "interest"}),
     (r"cost of (goods|sales|revenue)|\bcogs\b", {"account_type": "cogs"}),
     (r"capitalized software", _bs("capitalized_software")),
     (r"deferred revenue|unearned revenue", _bs("deferred_revenue")),
-    (r"\bloan\b|note payable|notes payable|line of credit", _bs("debt")),
-    (r"receivable", _bs("ar")),
-    (r"payable", _bs("ap")),
-    (r"accrued", _bs("accrued")),
     (r"inventory", _bs("inventory")),
     (r"work in progress|\bwip\b", _bs("wip")),
     (r"equity|retained earnings|owner'?s?\s+(draw|distribution)", _bs("equity")),
     (r"\bcash\b|checking|savings|\bbank\b(?!\s+(fee|charge|service))", _bs("cash")),
-    (r"revenue|\bsales\b|subscription", {"account_type": "revenue"}),
+    # Names with a cost word stay blank: "Sales and marketing" is not revenue.
+    (r"^(?!.*(marketing|commission|tax|expense|cost|software|advertis)).*(\brevenues?\b|\bsales\b)",
+     {"account_type": "revenue"}),
 ]
 _COMPILED_RULES = [(re.compile(pattern, re.IGNORECASE), entry) for pattern, entry in _RULES]
 

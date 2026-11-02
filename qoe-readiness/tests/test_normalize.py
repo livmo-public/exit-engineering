@@ -556,3 +556,97 @@ def test_propose_account_map_returns_new_dicts():
     b = normalize.propose_account_map(["Checking"])
     a["Checking"]["account_type"] = "changed"
     assert b["Checking"]["account_type"] == "asset"
+
+
+# --- fix round 1 ---
+
+def test_ar_then_ap_aging_keep_both_types(fixtures, tmp_path):
+    ap = tmp_path / "ap.csv"
+    ap.write_text(",Date,Transaction Type,Num,Vendor,Due date,Past due,Open balance\n"
+                  "Current\n,03/10/2025,Bill,77,Hosting Provider A,04/09/2025,,\"400.00\"\n"
+                  "Total for Current,,,,,,,\"$400.00\"\n")
+    out_dir = tmp_path / "out"
+    normalize.normalize("qbo", "ar_aging", fixtures / "qbo_ar_aging.csv", out_dir)
+    out = normalize.normalize("qbo", "ap_aging", ap, out_dir)
+    rows = canonical.read("aging", out)
+    assert [r["type"] for r in rows] == ["AR"] * 4 + ["AP"]
+    # A second AR run replaces the AR rows and keeps the AP row.
+    normalize.normalize("qbo", "ar_aging", fixtures / "qbo_ar_aging.csv", out_dir)
+    rows = canonical.read("aging", out)
+    assert sorted(r["type"] for r in rows) == ["AP"] + ["AR"] * 4
+
+
+def test_pivot_keeps_names_that_start_with_total(tmp_path):
+    p = tmp_path / "s.csv"
+    p.write_text(",Jan 2025,Total\nTotal Fitness LLC,\"1,000.00\",\"1,000.00\"\nTOTAL,\"1,000.00\",\"1,000.00\"\n")
+    sales = normalize.parse_pivot(p, "sales", "customer")
+    assert [(r["customer"], r["amount"]) for r in sales] == [("Total Fitness LLC", 1000.0)]
+    vendor = normalize.parse_pivot(p, "vendor", "vendor")
+    assert [r["vendor"] for r in vendor] == ["Total Fitness LLC"]
+
+
+def test_pivot_pl_and_bs_skip_total_rows_only(tmp_path):
+    p = tmp_path / "p.csv"
+    p.write_text(",Jan 2025\nSales,5\nTotal,5\nTotal Income,5\nTotals Desk,2\n")
+    assert [r["account"] for r in normalize.parse_pivot(p, "pl", "account")] == ["Sales", "Totals Desk"]
+    assert [r["account"] for r in normalize.parse_pivot(p, "bs", "account")] == ["Sales", "Totals Desk"]
+
+
+def test_grouped_keeps_line_with_balance_words_in_memo(tmp_path):
+    p = tmp_path / "gl.csv"
+    p.write_text(",Date,Memo/Description,Amount\nChecking\n,Beginning Balance,,\"45,000.00\"\n"
+                 ",01/05/2025,Opening Balance,\"100.00\"\nTotal for Checking,,,\"100.00\"\n")
+    rows = normalize.parse_grouped(
+        p, "gl", {"date": "Date", "memo": "Memo/Description", "amount_signed": "Amount"}, "")
+    assert [(r["date"], r["memo"], r["debit"]) for r in rows] == [("2025-01-05", "Opening Balance", 100.0)]
+
+
+@pytest.mark.parametrize("account,account_type,subtype", [
+    ("Software subscriptions", "", None),
+    ("Sales and marketing", "", None),
+    ("Sales commissions", "", None),
+    ("Sales tax expense", "", None),
+    ("Income taxes payable", "liability", "ap"),
+    ("Loan receivable", "asset", "ar"),
+    ("Loan payable", "liability", "debt"),
+    ("Loan interest expense", "interest", None),
+    ("Interest payable", "liability", "ap"),
+    ("Sales", "revenue", None),
+    ("Product sales", "revenue", None),
+])
+def test_propose_account_map_ambiguous_names(account, account_type, subtype):
+    entry = normalize.propose_account_map([account])[account]
+    assert entry["account_type"] == account_type
+    assert entry.get("subtype") == subtype
+
+
+def test_month_label_with_time_suffix():
+    assert normalize.parse_month_label("2025-01-01T00:00:00") == "2025-01"
+    assert normalize.parse_month_label("2025-01-31 00:00:00") == "2025-01"
+    assert normalize.parse_month_label("2025-01-31T00:00:00.000") == "2025-01"
+
+
+def test_pivot_reads_xlsx_datetime_headers(tmp_path):
+    from datetime import datetime
+    p = tmp_path / "x.xlsx"
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Account", datetime(2025, 1, 31), datetime(2025, 2, 28), "Total"])
+    ws.append(["Sales", 10, 20, 30])
+    wb.save(p)
+    rows = normalize.parse_pivot(p, "pl", "account")
+    assert [(r["period"], r["amount"]) for r in rows] == [("2025-01", 10.0), ("2025-02", 20.0)]
+
+
+def test_csv_field_with_embedded_newline(tmp_path):
+    p = tmp_path / "x.csv"
+    p.write_text('Client,Product,Price\n"Acme\nInc",Pro,5\n', newline="")
+    rows = normalize.parse_flat(p, "subs", {"customer": "Client", "plan": "Product", "amount": "Price"})
+    assert rows[0]["customer"] == "Acme\nInc"
+
+
+def test_undecodable_file_raises_normalize_error(tmp_path):
+    p = tmp_path / "x.csv"
+    p.write_bytes(b"Account,Jan 2025\nCaf\x81,1\n")  # 0x81 is undefined in cp1252
+    with pytest.raises(normalize.NormalizeError, match="UTF-8"):
+        normalize.parse_pivot(p, "pl", "account")
