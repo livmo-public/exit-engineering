@@ -1,9 +1,9 @@
 [
   {
     "id": "K01", "name": "No deferred revenue on annual billing", "module": "saas", "category": "hygiene", "severity": "critical",
-    "method": "computed", "inputs": ["S1", "C6", "C2"],
+    "method": "computed", "inputs": ["C2"],
     "condition": "Annual or multi-year billing exists, and the balance sheet has no deferred revenue account.",
-    "params": {"min_interval_months": 12, "subtype": "deferred_revenue"},
+    "params": {"any_of": ["S1", "C6"], "min_interval_months": 12, "subtype": "deferred_revenue"},
     "owner_question": null,
     "owner_message": "You bill some customers for a year or more at once, but your balance sheet shows no deferred revenue.",
     "fix": "Book deferred revenue and recognize it ratably. Restate the affected months."
