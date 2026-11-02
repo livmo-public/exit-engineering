@@ -473,7 +473,7 @@ def _canonical_path(state: dict, file_id: str, kind: str, canonical_dir: Path) -
     return Path(given) if given else Path(canonical_dir) / f"{kind}.csv"
 
 
-def _read_canonical(state: dict, canonical_dir: Path, files_catalog: list[dict]) -> dict:
+def read_canonical(state: dict, canonical_dir: Path, files_catalog: list[dict]) -> dict:
     """Read the canonical CSV of every uploaded active file. A missing file raises.
 
     Files of one kind (P1 and P2 are both inventory) merge. A path is read once.
@@ -493,7 +493,7 @@ def _read_canonical(state: dict, canonical_dir: Path, files_catalog: list[dict])
     return rows
 
 
-def _should_run(state: dict, check: dict) -> bool:
+def should_run(state: dict, check: dict) -> bool:
     intake = state.get("intake", {})
     if check["module"] not in progress.active_modules(intake):
         return False
@@ -507,7 +507,7 @@ def _should_run(state: dict, check: dict) -> bool:
 
 
 def _context(state: dict, canonical_dir: Path, data_dir: Path) -> Context:
-    rows = _read_canonical(state, canonical_dir, _catalog(data_dir, "files.json"))
+    rows = read_canonical(state, canonical_dir, _catalog(data_dir, "files.json"))
     return build_context(state, rows, _catalog(data_dir, "checks.json"))
 
 
@@ -516,7 +516,7 @@ def run(state: dict, canonical_dir: Path, data_dir: Path) -> list[dict]:
     ctx = _context(state, canonical_dir, data_dir)
     findings = []
     for check in _catalog(data_dir, "checks.json"):
-        if check["method"] != "computed" or not _should_run(state, check):
+        if check["method"] != "computed" or not should_run(state, check):
             continue
         for number, found in enumerate(COMPUTED[check["id"]](ctx, check["params"]), start=1):
             findings.append({**found, "id": f"{check['id']}-{number}"})
@@ -571,7 +571,7 @@ def review_items(state: dict, canonical_dir: Path, data_dir: Path) -> list[dict]
     ctx = _context(state, canonical_dir, data_dir)
     out = []
     for check in _catalog(data_dir, "checks.json"):
-        if check["method"] != "model_review" or not _should_run(state, check):
+        if check["method"] != "model_review" or not should_run(state, check):
             continue
         series = REVIEW_SERIES.get(check["id"], lambda c, p: {})(ctx, check["params"])
         out.append({"check_id": check["id"], "name": check["name"], "category": check["category"],

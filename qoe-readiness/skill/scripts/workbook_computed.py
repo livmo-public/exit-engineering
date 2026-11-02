@@ -69,8 +69,11 @@ def _pl_extra(book: Book, kind: str) -> tuple[tuple[str, str], ...]:
 
 # ---- Adjusted EBITDA bridge -------------------------------------------------------
 
-def _bridge_monthly(ws: Worksheet, book: Book, header: int) -> dict[str, int]:
-    """Monthly P&L by type below the bridge. Returns the row of each type."""
+def _bridge_monthly(ws: Worksheet, book: Book, header: int) -> tuple[dict[str, int], int]:
+    """Monthly P&L by type below the bridge, then the input-tab total with no type criterion.
+
+    Returns the row of each type and the row of the input-tab total.
+    """
     put(ws, header, 1, "Monthly P&L by type", bold=True)
     for offset, month in enumerate(book.periods.months):
         put(ws, header, 2 + offset, month, bold=True)
@@ -83,7 +86,19 @@ def _bridge_monthly(ws: Worksheet, book: Book, header: int) -> dict[str, int]:
             month_cell = f"{col(2 + offset)}${header}"
             put_formula(ws, row, 2 + offset,
                         month_sum(book, "pl", "amount", "period", month_cell, _pl_extra(book, kind)))
-    return rows
+    total = header + 1 + len(PL_LINES)
+    put(ws, total, 1, f"Total in {book.inputs.titles['pl']}, all account types")
+    basis = (("basis", criterion(book.basis)),) if book.basis else ()
+    for offset in range(len(book.periods.months)):
+        put_formula(ws, total, 2 + offset,
+                    month_sum(book, "pl", "amount", "period", f"{col(2 + offset)}${header}", basis))
+    return rows, total
+
+
+def _label_cols(book: Book, label: str) -> tuple[int, int]:
+    """First and last monthly column of a bridge label."""
+    months, label_months = book.periods.months, book.label_months[label]
+    return 2 + months.index(label_months[0]), 2 + months.index(label_months[-1])
 
 
 def _adjustment_line(book: Book, row: int, label: str) -> str:
@@ -95,9 +110,7 @@ def _adjustment_line(book: Book, row: int, label: str) -> str:
 
 def _bridge_column(ws: Worksheet, book: Book, column: int, label: str, type_rows: dict,
                    counted: list) -> CellMap:
-    months = book.periods.months
-    label_months = book.label_months[label]
-    first, last = 2 + months.index(label_months[0]), 2 + months.index(label_months[-1])
+    first, last = _label_cols(book, label)
     c = col(column)
     for k, (kind, _) in enumerate(PL_LINES):
         put_formula(ws, FIRST_ROW + k, column, f"SUM({row_span(type_rows[kind], first, last)})")
@@ -120,6 +133,7 @@ def _bridge_column(ws: Worksheet, book: Book, column: int, label: str, type_rows
 
 def build_bridge(ws: Worksheet, book: Book) -> CellMap:
     counted = [a for a in book.addbacks if a.counted] if "addbacks" in book.rendered else []
+    # The check: P&L lines sum to the input-tab total, so rows of no listed type show up.
     basis = f" ({book.basis} basis)" if book.basis else ""
     put_row(ws, HEADER_ROW, [f"Line{basis}", *book.labels], bold=True)
     labels = [label for _, label in PL_LINES] + ["Net income"] + [t for _, t, _ in ADD_BACK_ROWS]
@@ -128,14 +142,15 @@ def build_bridge(ws: Worksheet, book: Book) -> CellMap:
     for offset, text in enumerate(labels):
         put(ws, FIRST_ROW + offset, 1, text, bold=text in ("EBITDA", "Owner-adjusted EBITDA"))
     monthly_header = FIRST_ROW + len(labels) + 1
-    type_rows = _bridge_monthly(ws, book, monthly_header)
+    type_rows, file_row = _bridge_monthly(ws, book, monthly_header)
     cells: CellMap = {}
     checks = {}
     for i, label in enumerate(book.labels):
         cells = {**cells, **_bridge_column(ws, book, 2 + i, label, type_rows, counted)}
-        c = col(2 + i)
-        checks[2 + i] = f"ROUND({c}{EBITDA_ROW}-({c}5-{c}6-{c}7+{c}8-{c}9),2)"
-    _check_row(ws, monthly_header + len(PL_LINES) + 2, checks)
+        c, (first, last) = col(2 + i), _label_cols(book, label)
+        lines = f"{c}{FIRST_ROW}:{c}{FIRST_ROW + len(PL_LINES) - 1}"
+        checks[2 + i] = f"ROUND(SUM({lines})-SUM({row_span(file_row, first, last)}),2)"
+    _check_row(ws, file_row + 2, checks)
     widths(ws, max(len(book.labels), len(book.periods.months)) + 1)
     return cells
 
@@ -214,6 +229,11 @@ class Grid:
     ttm_col: int
     last_month_col: int
 
+    @property
+    def ranked_col(self) -> int:
+        """TTM total, blank when zero: metrics ranks only names with a non-zero total."""
+        return self.ttm_col + 3
+
 
 def _names(rows: list[dict], name_col: str, months: list[str], ttm: list[str]):
     """Display names in TTM order, and the spellings of each. SUMIFS ignores case only."""
@@ -231,11 +251,12 @@ def _names(rows: list[dict], name_col: str, months: list[str], ttm: list[str]):
 
 
 def _name_grid(ws: Worksheet, book: Book, kind: str, name_col: str, label: str) -> Grid:
-    """Name by month grid from row 4, with TTM total, share, and rank columns."""
+    """Name by month grid from row 4, with TTM total, share, rank, and ranked TTM columns."""
     months, ttm = book.periods.months, book.periods.ttm
     names, spellings = _names(book.rows.get(kind, []), name_col, months, ttm)
     ttm_col = 2 + len(months)
-    put_row(ws, HEADER_ROW, [label, *months, "TTM total", "Share of TTM", "Rank"], bold=True)
+    put_row(ws, HEADER_ROW, [label, *months, "TTM total", "Share of TTM", "Rank",
+                             "TTM total, blank when zero"], bold=True)
     first, last = FIRST_ROW, FIRST_ROW + len(names) - 1
     t0 = 2 + months.index(ttm[0]) if ttm else ttm_col
     for i, (name, variants) in enumerate(zip(names, spellings)):
@@ -250,6 +271,7 @@ def _name_grid(ws: Worksheet, book: Book, kind: str, name_col: str, label: str) 
         totals = span(ttm_col, first, last)
         put_formula(ws, r, ttm_col + 1, f"IFERROR({col(ttm_col)}{r}/SUM({totals}),0)", PCT)
         put_formula(ws, r, ttm_col + 2, f"RANK({col(ttm_col)}{r},{totals})", COUNT)
+        put_formula(ws, r, ttm_col + 3, f'IF({col(ttm_col)}{r}=0,"",{col(ttm_col)}{r})')
     total, file_row = last + 1, last + 2
     put(ws, total, 1, "Total", bold=True)
     put(ws, file_row, 1, f"Total in {book.inputs.titles[kind]}")
@@ -276,9 +298,11 @@ def _concentration(ws: Worksheet, book: Book, grid: Grid, top: int) -> CellMap:
     if not grid.names:
         put(ws, top, 1, "No sales fall in the months of the P&L.")
         return {}
-    r = span(grid.ttm_col, grid.first_row, grid.total_row - 1)
+    # LARGE skips the blank cells, so zero-total customers never take a top-N place.
+    r = span(grid.ranked_col, grid.first_row, grid.total_row - 1)
+    ttm = span(grid.ttm_col, grid.first_row, grid.total_row - 1)
     put(ws, top, 1, "Customers with TTM sales")
-    put_formula(ws, top, 2, f'COUNTIFS({r},"<>0")', COUNT)
+    put_formula(ws, top, 2, f'COUNTIFS({ttm},"<>0")', COUNT)
     cells = {"revenue.customer_count": (sheet, f"B{top}")}
     for offset, count in enumerate(TOP_COUNTS, start=1):
         put(ws, top + offset, 1, "Top customer share of TTM" if count == 1
@@ -409,7 +433,7 @@ def build_revenue(ws: Worksheet, book: Book) -> CellMap:
         arr, end = _arr_section(ws, book, end + 2)
         cells = {**cells, **arr}
     _check_row(ws, end + 2, _grid_check(grid))
-    widths(ws, grid.ttm_col + 2)
+    widths(ws, grid.ranked_col)
     return cells
 
 
@@ -417,7 +441,7 @@ def build_revenue(ws: Worksheet, book: Book) -> CellMap:
 
 def build_opex(ws: Worksheet, book: Book) -> CellMap:
     grid = _name_grid(ws, book, "vendor", "vendor", "Vendor")
-    months_col, flag_col = grid.ttm_col + 3, grid.ttm_col + 4
+    months_col, flag_col = grid.ranked_col + 1, grid.ranked_col + 2
     put(ws, HEADER_ROW, months_col, "Months with spend", bold=True)
     put(ws, HEADER_ROW, flag_col, "One-time candidate", bold=True)
     for i in range(len(grid.names)):

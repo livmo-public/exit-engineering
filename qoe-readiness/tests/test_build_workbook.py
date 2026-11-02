@@ -14,6 +14,7 @@ import pytest
 
 import build_workbook
 import canonical
+from helpers import month_range
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "skill" / "data"
@@ -274,3 +275,71 @@ def test_next_step_sees_open_findings_beyond_the_gap_list(built):
     assert len(s["gaps"]) == 5 and all(g["type"] == "file" for g in s["gaps"])
     assert any(f["severity"] == "critical" for f in state["findings"])
     assert s["next_step"] == build_workbook.NEXT_STEP_GAPS
+
+
+# ---- fix round 1: Add-backs without the ledger, concentration, bridge check --------
+
+def test_addbacks_render_without_the_ledger(built_without_c3):
+    b = built_without_c3
+    wb = openpyxl.load_workbook(b.path)
+    addbacks = wb["Add-backs"]
+    assert addbacks["A4"].value == "Adjustment"
+    assert [addbacks.cell(r, 4).value for r in range(5, 9)] == ["approved", "edited", "rejected", "no decision"]
+    assert wb["Proof of cash"]["A4"].value == "not available: file missing"
+    bridge = wb["Adjusted EBITDA bridge"]
+    lines = [r for r in range(5, bridge.max_row + 1)
+             if str(bridge.cell(r, 1).value).startswith("Owner-stated adjustment")]
+    assert [bridge.cell(r, 1).value for r in lines] == [
+        "Owner-stated adjustment: Owner salary above market", "Owner-stated adjustment: One-time legal fee"]
+    # TTM is the second label: bridge column C, Add-backs column G (6 + 1). Rows 5 and 6 are counted.
+    sheet, cell = b.cell_map["bridge.adjusted.TTM"]
+    assert sheet == "Adjusted EBITDA bridge" and cell == f"C{lines[-1] + 1}"
+    assert bridge[cell].value == f"=C19+SUM(C{lines[0]}:C{lines[-1]})"
+    for r, source in zip(lines, (5, 6)):
+        formula = bridge.cell(r, 3).value
+        assert f"'Add-backs'!$D${source}" in formula and f"'Add-backs'!$G${source}" in formula
+    scope = [d for _, d in scope_lines(b.path)]
+    assert any(str(d).startswith("Add-backs: built without C3") for d in scope)
+    assert not any("Add-backs tab is not available" in str(d) for d in scope)
+    s = build_workbook.chat_summary(b.state, b.canonical_dir, DATA)
+    assert s["adjusted_ebitda"]["TTM"] == pytest.approx(b.expected_adjusted_ttm)
+
+
+def recalc(path):
+    formulas = pytest.importorskip("formulas")
+    solution = formulas.ExcelModel().loads(str(path)).finish().calculate()
+    return {k.upper(): v.value[0][0] for k, v in solution.items() if hasattr(v, "value")}
+
+
+def value(values, path, sheet, cell):
+    return values[f"'[{path.name.upper()}]{sheet.upper()}'!{cell}"]
+
+
+def test_concentration_and_bridge_check_match_python(tmp_path):
+    import conftest
+    import metrics
+    canonical_dir = conftest._canonical_up_to(tmp_path / "canonical", "2026-03")
+    # TTM 2025-04 to 2026-03. Four positive customers, two zero TTM totals (one sold only in
+    # 2025-02, one nets +300 - 300), two negative. metrics ranks the 6 non-zero customers:
+    # top 5 = 1,000 + 800 + 600 + 400 - 20 = 2,780 of 2,730.
+    sales = [("2025-05", "Alpha", 1000.0), ("2025-05", "Bravo", 800.0), ("2025-05", "Charlie", 600.0),
+             ("2025-05", "Delta", 400.0), ("2025-02", "Zero Before", 500.0), ("2025-06", "Zero Net", 300.0),
+             ("2025-07", "Zero Net", -300.0), ("2025-08", "Credit One", -50.0), ("2025-09", "Credit Two", -20.0)]
+    sales_rows = [{"period": p, "customer": c, "amount": a} for p, c, a in sales]
+    canonical.write("sales", sales_rows, canonical_dir / "sales.csv")
+    # One P&L row with no account type: the bridge check shows it (75 in FY2025 and in the TTM).
+    pl = canonical.read("pl", canonical_dir / "pl.csv")
+    unmapped = {"period": "2025-06", "account": "Misc", "account_type": "", "amount": 75.0, "basis": "accrual"}
+    canonical.write("pl", pl + [unmapped], canonical_dir / "pl.csv")
+    intake = {**conftest.WORKBOOK_INTAKE, "business_type": "services", "billing_system": "none"}
+    others = tuple(f for f in conftest.FILE_KINDS if f not in ("C1", "C2", "C6"))
+    b = conftest._build(tmp_path, canonical_dir, intake, others)
+    values = recalc(b.path)
+    expected = metrics.concentration(sales_rows, month_range("2025-04", "2026-03"))
+    assert expected["top5_pct"] == pytest.approx(2780 / 2730)
+    for key in ("top1_pct", "top5_pct", "customer_count"):
+        assert value(values, b.path, *b.cell_map[f"revenue.{key}"]) == pytest.approx(expected[key]), key
+    assert value(values, b.path, *b.cell_map["revenue.top10_pct"]) == pytest.approx(1.0)
+    ws = openpyxl.load_workbook(b.path)["Adjusted EBITDA bridge"]
+    check = [c.coordinate for c in ws[ws.max_row] if c.data_type == "f"]
+    assert [value(values, b.path, "Adjusted EBITDA bridge", c) for c in check] == [-75.0, -75.0]

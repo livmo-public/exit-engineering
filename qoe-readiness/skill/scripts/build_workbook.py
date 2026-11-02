@@ -95,6 +95,17 @@ def availability(tab: dict, state: dict, files: dict[str, dict], modules: list[s
     return Availability(rendered, () if rendered else missing, missing if rendered else ())
 
 
+def _tab_availability(tab: dict, state: dict, files: dict[str, dict],
+                      modules: list[str]) -> Availability:
+    """Add-backs renders whenever the owner stated adjustments; missing inputs only thin it."""
+    base = availability(tab, state, files, modules)
+    if tab["id"] != "addbacks" or base.rendered or not state.get("adjustments"):
+        return base
+    missing = tuple(i for i in tab["inputs"]
+                    if files[i]["module"] in modules and not _uploaded(state, i))
+    return Availability(True, (), missing)
+
+
 def _basis(state: dict, pl_rows: list[dict]) -> str | None:
     wanted = "cash" if state.get("intake", {}).get("accounting_basis") == "cash" else "accrual"
     return wanted if any(r["basis"] == wanted for r in pl_rows) else None
@@ -116,8 +127,8 @@ def _plan(state: dict, canonical_dir: Path, data_dir: Path) -> Plan:
     modules = progress.active_modules(state.get("intake", {}))
     tabs = tuple(t for t in _load(data_dir, "workbook.json") if t["module"] in modules)
     by_id = {f["id"]: f for f in files}
-    available = {t["id"]: availability(t, state, by_id, modules) for t in tabs}
-    rows = run_checks._read_canonical(state, canonical_dir, files)
+    available = {t["id"]: _tab_availability(t, state, by_id, modules) for t in tabs}
+    rows = run_checks.read_canonical(state, canonical_dir, files)
     periods = run_checks.build_context(state, rows).periods
     label_months = {**periods.fiscal_years, **({"TTM": periods.ttm} if periods.ttm else {})}
     book = Book(
@@ -178,13 +189,14 @@ def _inventory_tab(ws: Worksheet, plan: Plan, tab: dict) -> CellMap:
 def _addbacks_tab(ws: Worksheet, plan: Plan, tab: dict) -> CellMap:
     book = plan.book
     header = ["Adjustment", "Name", "Source file", "Decision", "Owner stated", *book.labels, "Evidence"]
-    assert header.index("Decision") + 1 == ADDBACK_DECISION_COL
-    assert len(header) == ADDBACK_LABEL_COL + len(book.labels)
+    if (header.index("Decision") + 1 != ADDBACK_DECISION_COL
+            or header.index(book.labels[0] if book.labels else "Evidence") + 1 != ADDBACK_LABEL_COL):
+        raise RuntimeError("Add-backs columns do not match the columns the bridge references")
     rows = []
     for item in book.addbacks:
         a = item.adjustment
         amounts = [None if a.get("amounts") is None
-                   else metrics._adjustment_amount(a, book.label_months[label], label)
+                   else metrics.adjustment_amount(a, book.label_months[label], label)
                    for label in book.labels]
         rows.append([a.get("id"), a.get("name"), a.get("source_file"),
                      a.get("decision") or "no decision", "yes" if a.get("owner_stated") else "no",
@@ -226,9 +238,9 @@ def _file_lines(plan: Plan) -> list[tuple[str, str]]:
                                                f"{', '.join(a.blocking)}"))
         elif a.thin:
             lines.append(("Tab built without a file", f"{tab['title']}: built without {', '.join(a.thin)}"))
-    if "bridge" in plan.book.rendered and "addbacks" not in plan.book.rendered:
-        lines.append(("Adjustments", "Adjusted EBITDA bridge: no owner-stated adjustments, "
-                                     "because the Add-backs tab is not available."))
+    if "bridge" in plan.book.rendered and not plan.book.addbacks:
+        lines.append(("Adjustments", "The owner stated no adjustments, so owner-adjusted EBITDA "
+                                     "equals EBITDA."))
     return lines
 
 
@@ -243,7 +255,7 @@ def _scope_lines(plan: Plan) -> list[tuple[str, str]]:
                                              f"({OWNER_STATEMENT})"))
     for check in plan.checks:
         if (check["method"] in ("computed", "model_review") and check["module"] in plan.book.modules
-                and not run_checks._should_run(state, check)):
+                and not run_checks.should_run(state, check)):
             lines.append(("Check not run", f"{check['id']} {check['name']}: not run, "
                                            f"{_not_run_reason(state, check)}"))
     basis = plan.book.basis

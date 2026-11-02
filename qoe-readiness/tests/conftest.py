@@ -161,3 +161,9 @@ def built_14_months(tmp_path_factory):
 def built_product(tmp_path_factory):
     intake = {**WORKBOOK_INTAKE, "business_type": "product", "billing_system": "none"}
     return _build(tmp_path_factory.mktemp("product"), CANONICAL_FIXTURES, intake)
+
+
+@pytest.fixture(scope="module")
+def built_without_c3(tmp_path_factory):
+    # The ledger (C3) is missing; the bank (C4) and the owner-stated adjustments are present.
+    return _build(tmp_path_factory.mktemp("no_c3"), CANONICAL_FIXTURES, WORKBOOK_INTAKE, ("C3",))

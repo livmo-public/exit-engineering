@@ -139,7 +139,7 @@ def ebitda(pl_rows: list[dict], months: list[str]) -> dict[str, float]:
     }
 
 
-def _adjustment_amount(adjustment: dict, months: list[str], label: str) -> float:
+def adjustment_amount(adjustment: dict, months: list[str], label: str) -> float:
     """The amount under the label; else the sum of its month keys that fall in months."""
     amounts = adjustment.get("amounts") or {}
     if label in amounts:
@@ -151,7 +151,7 @@ def _adjustment_amount(adjustment: dict, months: list[str], label: str) -> float
 def adjusted_ebitda(pl_rows: list[dict], adjustments: list[dict], months: list[str],
                     label: str) -> float:
     """EBITDA plus every approved or edited adjustment amount for the label."""
-    added = sum(_adjustment_amount(a, months, label) for a in adjustments
+    added = sum(adjustment_amount(a, months, label) for a in adjustments
                 if a.get("decision") in COUNTED_DECISIONS)
     return ebitda(pl_rows, months)["ebitda"] + added
 
