@@ -1,0 +1,7 @@
+customer,plan,interval,start_date,end_date,amount,currency
+Acme Inc,Pro,month,2024-06-01,,500.0,USD
+ACME INC,Annual add-on,year,2025-03-10,,1200.0,USD
+Beta LLC,Basic,month,2025-01-01,2025-09-30,300.0,USD
+Gamma Co,Annual,year,2025-07-01,,2400.0,USD
+Delta Ltd,Basic,month,2025-11-01,,200.0,USD
+Delta Ltd,Seats,month,2026-02-01,,100.0,USD
