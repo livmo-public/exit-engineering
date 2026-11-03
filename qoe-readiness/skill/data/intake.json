@@ -1,0 +1,79 @@
+[
+  {
+    "id": "business_type",
+    "question": "What type of business do you run?",
+    "type": "choice",
+    "choices": ["saas", "services", "product", "project"],
+    "required": true
+  },
+  {
+    "id": "revenue_range",
+    "question": "What is your annual revenue range?",
+    "type": "choice",
+    "choices": ["under_500k", "500k_to_1m", "1m_to_5m", "5m_to_10m", "10m_to_20m", "over_20m"],
+    "required": true
+  },
+  {
+    "id": "accounting_system",
+    "question": "Which accounting system holds your books?",
+    "type": "choice",
+    "choices": ["qbo", "qbd", "xero", "other"],
+    "required": true
+  },
+  {
+    "id": "billing_system",
+    "question": "Which system bills your subscription customers?",
+    "type": "choice",
+    "choices": ["stripe", "other", "none"],
+    "required": false,
+    "required_when": {"business_type": "saas"}
+  },
+  {
+    "id": "accounting_basis",
+    "question": "Do you keep your books on a cash basis, an accrual basis, or both?",
+    "type": "choice",
+    "choices": ["cash", "accrual", "both"],
+    "required": true
+  },
+  {
+    "id": "fiscal_year_end_month",
+    "question": "In which month does your fiscal year end? Enter a number from 1 to 12.",
+    "type": "int",
+    "min": 1,
+    "max": 12,
+    "required": true
+  },
+  {
+    "id": "latest_closed_month",
+    "question": "What is the latest month your books are closed? Use the format YYYY-MM.",
+    "type": "month",
+    "required": true
+  },
+  {
+    "id": "sale_timeline",
+    "question": "When do you plan to sell the business?",
+    "type": "choice",
+    "choices": ["within_3_months", "3_to_12_months", "12_to_36_months", "over_36_months", "not_sure"],
+    "required": true
+  },
+  {
+    "id": "buyer_financing",
+    "question": "How do you expect the buyer to pay for the business?",
+    "type": "choice",
+    "choices": ["sba", "conventional", "cash", "unknown"],
+    "required": true
+  },
+  {
+    "id": "price_may_reach_3m",
+    "question": "Could the sale price reach $3 million or more?",
+    "type": "choice",
+    "choices": ["yes", "no", "unknown"],
+    "required": true
+  },
+  {
+    "id": "advisor_name",
+    "question": "If an advisor helps you with this skill, what is the advisor's name? Leave blank if none.",
+    "type": "text",
+    "required": false
+  }
+]

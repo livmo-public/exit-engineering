@@ -1,0 +1,5 @@
+id,Customer Name,Customer Email,Status,Plan,Interval,Start Date (UTC),Ended At (UTC),Canceled At (UTC),Amount,Currency
+sub_001,"ACME INC ",ap@example.com,active,Pro,month,2024-03-01 09:15:00,,,15000.00,usd
+sub_002,Beta  Holdings Inc,billing@example.com,active,Pro,year,2024-06-15 14:02:10,,,12000.00,usd
+sub_003,gamma services llc,fin@example.com,canceled,Basic,month,2024-01-10 08:00:00,2025-03-10 08:00:00,2025-02-20 11:30:00,9000.00,usd
+sub_004,Delta Partners LLC,ops@example.com,active,Basic,month,2024-09-01 12:00:00,,,5000.00,usd

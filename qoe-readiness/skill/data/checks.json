@@ -1,0 +1,195 @@
+[
+  {
+    "id": "K01", "name": "No deferred revenue on annual billing", "module": "saas", "category": "hygiene", "severity": "critical",
+    "method": "computed", "inputs": ["C2"],
+    "condition": "Annual or multi-year billing exists, and the balance sheet has no deferred revenue account.",
+    "params": {"any_of": ["S1", "C6"], "min_interval_months": 12, "subtype": "deferred_revenue"},
+    "owner_question": null,
+    "owner_message": "You bill some customers for a year or more at once, but your balance sheet shows no deferred revenue.",
+    "fix": "Book deferred revenue and recognize it ratably. Restate the affected months."
+  },
+  {
+    "id": "K02", "name": "Revenue spikes in annual billing months", "module": "saas", "category": "hygiene", "severity": "medium",
+    "method": "model_review", "inputs": ["C1", "S1"],
+    "condition": "Monthly revenue spikes in the same months as annual billing.",
+    "params": {"spike_multiple": 1.5},
+    "owner_question": null,
+    "owner_message": "For review: revenue rises in the same months that annual invoices go out. You may book annual contracts all at once.",
+    "fix": "Recognize annual contracts over the service period."
+  },
+  {
+    "id": "K03", "name": "Deferred revenue does not match subscriptions", "module": "saas", "category": "hygiene", "severity": "high",
+    "method": "computed", "inputs": ["S1", "C2"],
+    "condition": "Deferred revenue balance differs from the subscription schedule by more than the tolerance.",
+    "params": {"pct": 0.05},
+    "owner_question": null,
+    "owner_message": "The deferred revenue on your balance sheet differs from the amount your subscription data supports by more than 5%.",
+    "fix": "Build a deferred revenue roll-forward and tie it monthly."
+  },
+  {
+    "id": "K04", "name": "Bank balance does not match balance sheet cash", "module": "core", "category": "hygiene", "severity": "critical",
+    "method": "computed", "inputs": ["C4", "C2"],
+    "condition": "Bank ending balance differs from balance sheet cash at any month end by more than the tolerance.",
+    "params": {"cash_tolerance": 100},
+    "owner_question": null,
+    "owner_message": "At one or more month ends, the bank balance and the cash on your balance sheet differ by more than $100.",
+    "fix": "Reconcile the account for each month that fails."
+  },
+  {
+    "id": "K05", "name": "Deposits do not match booked revenue", "module": "core", "category": "hygiene", "severity": "high",
+    "method": "computed", "inputs": ["C4", "C1"],
+    "condition": "Bank deposits differ from booked revenue by more than the tolerance in a month, with no explanation.",
+    "params": {"pct": 0.05},
+    "owner_question": null,
+    "owner_message": "In one or more months, bank deposits differ from your booked revenue by more than 5%.",
+    "fix": "Find and book the missing or extra items, or document the timing difference."
+  },
+  {
+    "id": "K06", "name": "Bank reconciliations missing or stale", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "owner_question", "inputs": ["C5"],
+    "condition": "A reconciliation month is missing, or uncleared items are older than the limit.",
+    "params": {"days": 90},
+    "owner_question": "Does a signed bank reconciliation exist for every month, with no uncleared item older than 90 days?",
+    "owner_message": "A reconciliation is missing for at least one month, or old items are still uncleared.",
+    "fix": "Complete the missing reconciliations and clear old items."
+  },
+  {
+    "id": "K07", "name": "Cash and accrual books do not tie", "module": "core", "category": "hygiene", "severity": "high",
+    "method": "computed", "inputs": ["C1", "C2"],
+    "condition": "Accrual minus cash revenue differs from the change in AR minus the change in deferred revenue by more than the tolerance.",
+    "params": {"pct": 0.05},
+    "owner_question": null,
+    "owner_message": "Your cash and accrual revenue differ by an amount that your receivables and deferred revenue do not explain.",
+    "fix": "Find the entries that break the tie between the two bases."
+  },
+  {
+    "id": "K08", "name": "Suspense or uncategorized balance", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "computed", "inputs": ["C2", "C3"],
+    "condition": "A suspense, uncategorized, or ask-my-accountant account has a balance.",
+    "params": {"name_patterns": ["suspense", "uncategorized", "ask my accountant", "ask accountant", "unapplied", "clearing"], "min_abs_balance": 1},
+    "owner_question": null,
+    "owner_message": "An account for unsorted items still holds a balance. A buyer reads this as a sign of loose books.",
+    "fix": "Reclassify each item to its correct account."
+  },
+  {
+    "id": "K09", "name": "Negative AR, AP, or inventory balance", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "computed", "inputs": ["C2"],
+    "condition": "AR, AP, or inventory has a negative balance.",
+    "params": {"subtypes": ["ar", "ap", "inventory"]},
+    "owner_question": null,
+    "owner_message": "Receivables, payables, or inventory shows a negative balance. These accounts should not go below zero.",
+    "fix": "Find and correct the entries that cause the negative balance."
+  },
+  {
+    "id": "K10", "name": "Tax return revenue does not match books", "module": "core", "category": "hygiene", "severity": "high",
+    "method": "computed", "inputs": ["C9", "C1"],
+    "condition": "Tax return revenue differs from book revenue by more than the tolerance.",
+    "params": {"pct": 0.05},
+    "owner_question": null,
+    "owner_message": "The revenue on your tax return differs from the revenue in your books by more than 5%.",
+    "fix": "Prepare a book-to-tax reconciliation."
+  },
+  {
+    "id": "K11", "name": "Missing Form 1099 filings", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "owner_question", "inputs": ["C7", "R2"],
+    "condition": "A contractor's annual payments reach the 1099 threshold for that year, and no 1099 exists.",
+    "params": {
+      "threshold_by_year": {"2023": 600, "2024": 600, "2025": 600, "2026": 2000},
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/am-i-required-to-file-a-form-1099-or-other-information-return",
+      "checked": "2026-11-02"
+    },
+    "owner_question": "Did you file a Form 1099 for every contractor whose payments in a year reached the IRS threshold?",
+    "owner_message": "At least one contractor reached the 1099 payment threshold in a year, and no matching 1099 filing exists.",
+    "fix": "File the missing forms or document why none is due."
+  },
+  {
+    "id": "K12", "name": "No related-party schedule", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "owner_question", "inputs": ["C3", "R5"],
+    "condition": "A vendor or customer is related to the owner, and no related-party schedule exists.",
+    "params": {},
+    "owner_question": "Do you buy from or sell to a family member or a company you own? If yes, do you keep a schedule of those deals?",
+    "owner_message": "You deal with a related party and have no schedule of those deals. A buyer will ask for one.",
+    "fix": "Build the schedule with terms at market rates."
+  },
+  {
+    "id": "K13", "name": "Add-back without support", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "owner_question", "inputs": ["R3", "R4", "C3"],
+    "condition": "An add-back has no document behind it.",
+    "params": {},
+    "owner_question": "Does a document support each add-back, such as an invoice, a contract, or a ledger entry?",
+    "owner_message": "At least one add-back has no document behind it. A buyer often drops such an add-back.",
+    "fix": "Attach support, or the add-back moves to scope and limitations."
+  },
+  {
+    "id": "K14", "name": "Owner pay and replacement cost", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "owner_question", "inputs": ["R1", "C1"],
+    "condition": "Owner pay is missing from payroll, or the owner does not state replacement cost.",
+    "params": {},
+    "owner_question": "What would it cost per year to hire someone to do your job, including pay and benefits?",
+    "owner_message": "Your pay does not appear in payroll, or you have not stated what a replacement manager would cost.",
+    "fix": "State the cost to hire a replacement. The difference becomes an adjustment."
+  },
+  {
+    "id": "K15", "name": "Equipment purchases in operating expense", "module": "core", "category": "hygiene", "severity": "low",
+    "method": "model_review", "inputs": ["C3"],
+    "condition": "A single opex entry exceeds the capitalization threshold and looks like equipment.",
+    "params": {"capitalization_threshold": 2500},
+    "owner_question": null,
+    "owner_message": "For review: some large expense entries look like equipment. They may belong on the balance sheet.",
+    "fix": "Review for CapEx that sits in OpEx, and the reverse."
+  },
+  {
+    "id": "K16", "name": "Capitalized software without a policy", "module": "saas", "category": "hygiene", "severity": "medium",
+    "method": "computed", "inputs": ["C2", "S5"],
+    "condition": "Capitalized software sits on the balance sheet with no policy.",
+    "params": {"subtype": "capitalized_software"},
+    "owner_question": null,
+    "owner_message": "Your balance sheet holds capitalized software, and no written policy or schedule supports it.",
+    "fix": "Write the policy and the schedule."
+  },
+  {
+    "id": "K17", "name": "Mixed treatment of sales commissions", "module": "saas", "category": "hygiene", "severity": "low",
+    "method": "owner_question", "inputs": ["S6", "C1"],
+    "condition": "Commissions on annual contracts are expensed in some periods and capitalized in others.",
+    "params": {},
+    "owner_question": "Do you expense commissions on annual contracts in every period, or capitalize them in every period?",
+    "owner_message": "You treat commissions on annual contracts in two ways across periods. A buyer sees this as a change in policy.",
+    "fix": "Pick one treatment and apply it to all periods."
+  },
+  {
+    "id": "K18", "name": "Old receivables with no note", "module": "core", "category": "hygiene", "severity": "medium",
+    "method": "computed", "inputs": ["C8"],
+    "condition": "AR over the age limit has no note.",
+    "params": {"days": 90},
+    "owner_message": "Some receivables are more than 90 days old, and you have given no note on them.",
+    "owner_question": null,
+    "fix": "Explain each item or write it off."
+  },
+  {
+    "id": "K19", "name": "Customer concentration", "module": "core", "category": "risk", "severity": "high",
+    "method": "computed", "inputs": ["C6"],
+    "condition": "The top customer exceeds 20% of revenue, or the top 5 customers exceed 50%.",
+    "params": {"top1_pct": 0.20, "top5_pct": 0.50},
+    "owner_question": null,
+    "owner_message": "One customer, or your five largest customers, make up a large share of revenue. A buyer will discount for this risk.",
+    "fix": "No fix in the books. The guidebook explains how buyers price this risk."
+  },
+  {
+    "id": "K20", "name": "Low gross revenue retention", "module": "saas", "category": "risk", "severity": "high",
+    "method": "computed", "inputs": ["S1"],
+    "condition": "Annual gross revenue retention is below the minimum.",
+    "params": {"grr_min": 0.70},
+    "owner_question": null,
+    "owner_message": "Your customers keep less than 70% of last year's recurring revenue. A buyer will discount for this churn.",
+    "fix": "No fix in the books. See the retention item in the SaaS Sellability Checklist."
+  },
+  {
+    "id": "K21", "name": "Cash-basis books only", "module": "core", "category": "hygiene", "severity": "high",
+    "method": "computed", "inputs": ["C1"],
+    "condition": "The P&L exists on a cash basis only, and no accrual P&L exists.",
+    "params": {"trigger_basis": "cash"},
+    "owner_question": null,
+    "owner_message": "Accrual books are needed. A buyer's QoE converts cash-basis books to accrual, and the result can differ from your figures.",
+    "fix": "Keep accrual books, or ask your bookkeeper for an accrual-basis P&L and balance sheet."
+  }
+]

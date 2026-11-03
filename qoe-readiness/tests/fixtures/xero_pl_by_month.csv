@@ -1,0 +1,18 @@
+Profit and Loss
+Sample SaaS Company
+For the 3 months ended 31 March 2025
+Account,Jan 2025,Feb 2025,Mar 2025,Total
+Trading Income
+Subscription revenue,41000.00,41000.00,43000.00,125000.00
+Total Trading Income,41000.00,41000.00,43000.00,125000.00
+Cost of Sales
+Hosting,6000.00,6000.00,6200.00,18200.00
+Total Cost of Sales,6000.00,6000.00,6200.00,18200.00
+Gross Profit,35000.00,35000.00,36800.00,106800.00
+Operating Expenses
+Payroll,22000.00,22000.00,22500.00,66500.00
+Software,3000.00,3000.00,3100.00,9100.00
+Depreciation,500.00,500.00,500.00,1500.00
+Refunds,(100.00),0.00,-50.00,(150.00)
+Total Operating Expenses,25600.00,25500.00,26300.00,77400.00
+Net Profit,9400.00,9500.00,10500.00,29400.00

@@ -1,0 +1,61 @@
+date,txn_id,account,account_type,name,memo,debit,credit
+2025-01-15,R0,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-01-15,R0,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-01-20,P0,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-01-20,P0,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-02-15,R1,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-02-15,R1,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-02-20,P1,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-02-20,P1,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-03-15,R2,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-03-15,R2,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-03-20,P2,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-03-20,P2,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-04-15,R3,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-04-15,R3,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-04-20,P3,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-04-20,P3,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-05-15,R4,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-05-15,R4,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-05-20,P4,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-05-20,P4,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-06-15,R5,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-06-15,R5,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-06-20,P5,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-06-20,P5,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-07-15,R6,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-07-15,R6,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-07-20,P6,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-07-20,P6,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-08-15,R7,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-08-15,R7,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-08-20,P7,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-08-20,P7,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-09-15,R8,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-09-15,R8,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-09-20,P8,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-09-20,P8,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-10-15,R9,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-10-15,R9,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-10-20,P9,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-10-20,P9,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-11-15,R10,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-11-15,R10,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-11-20,P10,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-11-20,P10,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2025-12-15,R11,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2025-12-15,R11,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2025-12-20,P11,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2025-12-20,P11,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2026-01-15,R12,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2026-01-15,R12,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2026-01-20,P12,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2026-01-20,P12,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2026-02-15,R13,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2026-02-15,R13,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2026-02-20,P13,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2026-02-20,P13,Checking,asset,Payroll,Payroll run,0.0,7000.0
+2026-03-15,R14,Checking,asset,Acme Inc,Customer receipt,9500.0,0.0
+2026-03-15,R14,Subscription revenue,revenue,Acme Inc,Customer receipt,0.0,9500.0
+2026-03-20,P14,Salaries,opex,Payroll,Payroll run,7000.0,0.0
+2026-03-20,P14,Checking,asset,Payroll,Payroll run,0.0,7000.0

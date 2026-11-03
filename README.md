@@ -5,6 +5,7 @@ Free resources from LIVMO for founders who want to engineer an exit: how to prep
 ## Contents
 
 - `saas/saas-sellability-checklist/`: the SaaS Sellability Checklist. Five detailed editions, one per ARR range, and one master checklist with all five stages side by side.
+- `qoe-readiness/`: the QoE Readiness skill and guidebook. Run a light, owner-prepared Quality of Earnings check in Claude or ChatGPT.
 
 ## Who LIVMO is
 

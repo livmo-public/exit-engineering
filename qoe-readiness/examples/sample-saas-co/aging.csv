@@ -1,0 +1,5 @@
+type,name,invoice_date,due_date,amount
+AR,Sample Customer 02,2026-09-01,2026-09-28,7500.0
+AR,Sample Customer 03,2026-09-01,2026-09-28,1000.0
+AR,Sample Customer 05,2026-09-01,2026-09-28,3500.0
+AP,Hosting Provider,2026-09-25,2026-10-25,8387.0

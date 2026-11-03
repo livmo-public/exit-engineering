@@ -1,0 +1,136 @@
+period,account,account_type,amount,basis
+2025-01,Subscription revenue,revenue,10000.0,accrual
+2025-01,Hosting,cogs,2000.0,accrual
+2025-01,Salaries,opex,4000.0,accrual
+2025-01,Rent,opex,1000.0,accrual
+2025-01,Depreciation,depreciation,200.0,accrual
+2025-01,Interest expense,interest,100.0,accrual
+2025-01,Income tax,income_tax,300.0,accrual
+2025-01,Interest income,other_income,50.0,accrual
+2025-01,Subscription revenue,revenue,9000.0,cash
+2025-02,Subscription revenue,revenue,10000.0,accrual
+2025-02,Hosting,cogs,2000.0,accrual
+2025-02,Salaries,opex,4000.0,accrual
+2025-02,Rent,opex,1000.0,accrual
+2025-02,Depreciation,depreciation,200.0,accrual
+2025-02,Interest expense,interest,100.0,accrual
+2025-02,Income tax,income_tax,300.0,accrual
+2025-02,Interest income,other_income,50.0,accrual
+2025-02,Subscription revenue,revenue,9000.0,cash
+2025-03,Subscription revenue,revenue,10000.0,accrual
+2025-03,Hosting,cogs,2000.0,accrual
+2025-03,Salaries,opex,4000.0,accrual
+2025-03,Rent,opex,1000.0,accrual
+2025-03,Depreciation,depreciation,200.0,accrual
+2025-03,Interest expense,interest,100.0,accrual
+2025-03,Income tax,income_tax,300.0,accrual
+2025-03,Interest income,other_income,50.0,accrual
+2025-03,Subscription revenue,revenue,9000.0,cash
+2025-04,Subscription revenue,revenue,10000.0,accrual
+2025-04,Hosting,cogs,2000.0,accrual
+2025-04,Salaries,opex,4000.0,accrual
+2025-04,Rent,opex,1000.0,accrual
+2025-04,Depreciation,depreciation,200.0,accrual
+2025-04,Interest expense,interest,100.0,accrual
+2025-04,Income tax,income_tax,300.0,accrual
+2025-04,Interest income,other_income,50.0,accrual
+2025-04,Subscription revenue,revenue,9000.0,cash
+2025-05,Subscription revenue,revenue,10000.0,accrual
+2025-05,Hosting,cogs,2000.0,accrual
+2025-05,Salaries,opex,4000.0,accrual
+2025-05,Rent,opex,1000.0,accrual
+2025-05,Depreciation,depreciation,200.0,accrual
+2025-05,Interest expense,interest,100.0,accrual
+2025-05,Income tax,income_tax,300.0,accrual
+2025-05,Interest income,other_income,50.0,accrual
+2025-05,Subscription revenue,revenue,9000.0,cash
+2025-06,Subscription revenue,revenue,10000.0,accrual
+2025-06,Hosting,cogs,2000.0,accrual
+2025-06,Salaries,opex,4000.0,accrual
+2025-06,Rent,opex,1000.0,accrual
+2025-06,Depreciation,depreciation,200.0,accrual
+2025-06,Interest expense,interest,100.0,accrual
+2025-06,Income tax,income_tax,300.0,accrual
+2025-06,Interest income,other_income,50.0,accrual
+2025-06,Subscription revenue,revenue,9000.0,cash
+2025-07,Subscription revenue,revenue,10000.0,accrual
+2025-07,Hosting,cogs,2000.0,accrual
+2025-07,Salaries,opex,4000.0,accrual
+2025-07,Rent,opex,1000.0,accrual
+2025-07,Depreciation,depreciation,200.0,accrual
+2025-07,Interest expense,interest,100.0,accrual
+2025-07,Income tax,income_tax,300.0,accrual
+2025-07,Interest income,other_income,50.0,accrual
+2025-07,Subscription revenue,revenue,9000.0,cash
+2025-08,Subscription revenue,revenue,10000.0,accrual
+2025-08,Hosting,cogs,2000.0,accrual
+2025-08,Salaries,opex,4000.0,accrual
+2025-08,Rent,opex,1000.0,accrual
+2025-08,Depreciation,depreciation,200.0,accrual
+2025-08,Interest expense,interest,100.0,accrual
+2025-08,Income tax,income_tax,300.0,accrual
+2025-08,Interest income,other_income,50.0,accrual
+2025-08,Subscription revenue,revenue,9000.0,cash
+2025-09,Subscription revenue,revenue,10000.0,accrual
+2025-09,Hosting,cogs,2000.0,accrual
+2025-09,Salaries,opex,4000.0,accrual
+2025-09,Rent,opex,1000.0,accrual
+2025-09,Depreciation,depreciation,200.0,accrual
+2025-09,Interest expense,interest,100.0,accrual
+2025-09,Income tax,income_tax,300.0,accrual
+2025-09,Interest income,other_income,50.0,accrual
+2025-09,Subscription revenue,revenue,9000.0,cash
+2025-10,Subscription revenue,revenue,10000.0,accrual
+2025-10,Hosting,cogs,2000.0,accrual
+2025-10,Salaries,opex,4000.0,accrual
+2025-10,Rent,opex,1000.0,accrual
+2025-10,Depreciation,depreciation,200.0,accrual
+2025-10,Interest expense,interest,100.0,accrual
+2025-10,Income tax,income_tax,300.0,accrual
+2025-10,Interest income,other_income,50.0,accrual
+2025-10,Subscription revenue,revenue,9000.0,cash
+2025-11,Subscription revenue,revenue,10000.0,accrual
+2025-11,Hosting,cogs,2000.0,accrual
+2025-11,Salaries,opex,4000.0,accrual
+2025-11,Rent,opex,1000.0,accrual
+2025-11,Depreciation,depreciation,200.0,accrual
+2025-11,Interest expense,interest,100.0,accrual
+2025-11,Income tax,income_tax,300.0,accrual
+2025-11,Interest income,other_income,50.0,accrual
+2025-11,Subscription revenue,revenue,9000.0,cash
+2025-12,Subscription revenue,revenue,10000.0,accrual
+2025-12,Hosting,cogs,2000.0,accrual
+2025-12,Salaries,opex,4000.0,accrual
+2025-12,Rent,opex,1000.0,accrual
+2025-12,Depreciation,depreciation,200.0,accrual
+2025-12,Interest expense,interest,100.0,accrual
+2025-12,Income tax,income_tax,300.0,accrual
+2025-12,Interest income,other_income,50.0,accrual
+2025-12,Subscription revenue,revenue,9000.0,cash
+2026-01,Subscription revenue,revenue,11000.0,accrual
+2026-01,Hosting,cogs,2000.0,accrual
+2026-01,Salaries,opex,4000.0,accrual
+2026-01,Rent,opex,1000.0,accrual
+2026-01,Depreciation,depreciation,200.0,accrual
+2026-01,Interest expense,interest,100.0,accrual
+2026-01,Income tax,income_tax,300.0,accrual
+2026-01,Interest income,other_income,50.0,accrual
+2026-01,Subscription revenue,revenue,9000.0,cash
+2026-02,Subscription revenue,revenue,11000.0,accrual
+2026-02,Hosting,cogs,2000.0,accrual
+2026-02,Salaries,opex,4000.0,accrual
+2026-02,Rent,opex,1000.0,accrual
+2026-02,Depreciation,depreciation,200.0,accrual
+2026-02,Interest expense,interest,100.0,accrual
+2026-02,Income tax,income_tax,300.0,accrual
+2026-02,Interest income,other_income,50.0,accrual
+2026-02,Subscription revenue,revenue,9000.0,cash
+2026-03,Subscription revenue,revenue,11000.0,accrual
+2026-03,Hosting,cogs,2000.0,accrual
+2026-03,Salaries,opex,4000.0,accrual
+2026-03,Rent,opex,1000.0,accrual
+2026-03,Depreciation,depreciation,200.0,accrual
+2026-03,Interest expense,interest,100.0,accrual
+2026-03,Income tax,income_tax,300.0,accrual
+2026-03,Interest income,other_income,50.0,accrual
+2026-03,Subscription revenue,revenue,9000.0,cash
