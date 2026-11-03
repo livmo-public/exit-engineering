@@ -179,7 +179,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header. Use the CSV output, not the Excel workbook."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header. Use the CSV output, not the Excel workbook."
     },
     "bs_by_month": {
       "kind": "bs",
@@ -199,7 +199,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header."
     },
     "general_ledger": {
       "kind": "gl",
@@ -224,7 +224,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Each account starts with a heading row in the first column."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Each account starts with a heading row in the first column."
     },
     "sales_by_customer": {
       "kind": "sales",
@@ -244,7 +244,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. The first column has a blank header."
     },
     "expenses_by_vendor": {
       "kind": "vendor",
@@ -267,7 +267,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Menu group comes from Desktop community answers; the report is also findable by typing its name in the Reports search field. The first column has a blank header. The report has no account column, so the account is a fixed label."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Menu group comes from Desktop community answers; the report is also findable by typing its name in the Reports search field. The first column has a blank header. The report has no account column, so the account is a fixed label."
     },
     "ar_aging": {
       "kind": "aging",
@@ -292,7 +292,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
     },
     "ap_aging": {
       "kind": "aging",
@@ -317,7 +317,7 @@
       "source_url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/export-reports/export-reports-excel-workbooks-quickbooks-desktop/L4cLJEeXt_US_en_US",
       "checked": "2026-11-02",
       "verified": false,
-      "notes": "Export steps match the cited page. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
+      "notes": "The cited page confirms the Excel export and says CSV export exists; it lists no CSV steps, which follow the standard export window. The report name, menu group, and column headers are not stated on any vendor page; they follow the standard report layout and need a check against a real export. Rows sit under an aging bucket heading such as Current or 1 - 30."
     }
   },
   "xero": {
