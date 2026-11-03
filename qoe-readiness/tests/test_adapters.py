@@ -45,9 +45,9 @@ def knowledge_files(skill_dir: Path) -> set[str]:
 
 
 def expected_zip_members(skill_dir: Path) -> dict[str, bytes]:
-    """The files the package must hold, keyed by archive name, read straight from the skill folder."""
+    """The files the package must hold, keyed by archive name, read from the skill folder with LF endings."""
     wanted = {"SKILL.md"} | ({"LICENSE"} if (skill_dir / "LICENSE").is_file() else set()) | knowledge_files(skill_dir)
-    return {f"qoe-readiness/{name}": (skill_dir / name).read_bytes() for name in wanted}
+    return {f"qoe-readiness/{name}": (skill_dir / name).read_bytes().replace(b"\r\n", b"\n") for name in wanted}
 
 
 @pytest.fixture(scope="module")

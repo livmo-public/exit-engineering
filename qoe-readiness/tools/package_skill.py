@@ -1,7 +1,7 @@
 """Package the skill folder into dist/qoe-readiness-skill.zip.
 
 The zip root folder is qoe-readiness/. It holds SKILL.md, LICENSE (when present), core/, data/,
-and scripts/. It leaves out gpt-instructions.md, caches, and tests.
+and scripts/. Text files use LF line endings. It leaves out gpt-instructions.md, caches, and tests.
 """
 import argparse
 import zipfile
@@ -15,6 +15,7 @@ TOP_FILES = ("SKILL.md", "LICENSE")
 FOLDERS = ("core", "data", "scripts")
 SKIPPED_PARTS = {"__pycache__"}
 SKIPPED_SUFFIXES = {".pyc", ".pyo"}
+TEXT_SUFFIXES = {".md", ".json", ".py"}
 FIXED_TIME = (2026, 11, 2, 0, 0, 0)  # a fixed time keeps the zip bytes stable between runs
 
 
@@ -25,6 +26,12 @@ def members(skill_dir: Path) -> list[Path]:
         found.extend(p for p in (skill_dir / folder).rglob("*")
                      if p.is_file() and not SKIPPED_PARTS & set(p.parts) and p.suffix not in SKIPPED_SUFFIXES)
     return sorted(found, key=lambda p: p.relative_to(skill_dir).as_posix())
+
+
+def archive_bytes(path: Path) -> bytes:
+    """Read a file for the zip. Text files use LF endings, so the zip does not depend on git's checkout."""
+    data = path.read_bytes()
+    return data.replace(b"\r\n", b"\n") if path.suffix in TEXT_SUFFIXES or path.name == "LICENSE" else data
 
 
 def package(skill_dir: Path, out_zip: Path) -> Path:
@@ -39,7 +46,7 @@ def package(skill_dir: Path, out_zip: Path) -> Path:
             info = zipfile.ZipInfo(name, date_time=FIXED_TIME)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o644 << 16
-            archive.writestr(info, path.read_bytes())
+            archive.writestr(info, archive_bytes(path))
     return out_zip
 
 
