@@ -343,3 +343,11 @@ def test_concentration_and_bridge_check_match_python(tmp_path):
     ws = openpyxl.load_workbook(b.path)["Adjusted EBITDA bridge"]
     check = [c.coordinate for c in ws[ws.max_row] if c.data_type == "f"]
     assert [value(values, b.path, "Adjusted EBITDA bridge", c) for c in check] == [-75.0, -75.0]
+
+
+def test_ready_next_step_does_not_send_the_seller_to_the_lender_requirement():
+    text = build_workbook.NEXT_STEP_READY
+    assert "SBA lender" in text and "seller did not order" in text
+    assert "Commission" not in text
+    assert not any(len(s.split()) > 25 for s in text.split(". "))
+    assert "–" not in text and "—" not in text

@@ -290,3 +290,51 @@ def test_exports_advise_csv_for_quickbooks_desktop(core_dir):
 def test_exports_name_per_month_runs_for_xero(core_dir):
     md = (core_dir / "exports.md").read_text(encoding="utf-8").lower()
     assert "one export for each month" in md
+
+
+# ---- fix round 1 ------------------------------------------------------------------------------
+
+def test_stage3_pdf_paths_write_the_csv_and_record_canonical_path():
+    steps = sections(read_stage(3))["Steps for the model"]
+    for needle in ('canonical.write("bank"', 'canonical.write("tax"', 'canonical.write("inventory"',
+                   '"canonical_path": str(', "P1 and P2", "item_type"):
+        assert needle in steps, needle
+
+
+def test_stage3_merges_bases_and_ranges_without_a_folder_workaround():
+    steps = sections(read_stage(3))["Steps for the model"]
+    assert "normalize_ranges" in steps
+    assert "own folder" not in steps
+    assert 'WORK / "pl_cash"' not in steps
+
+
+def test_stage4_asks_the_owner_questions_before_the_adjustment_review():
+    steps = sections(read_stage(4))["Steps for the model"]
+    assert steps.index("### Owner questions") < steps.index("### Adjustment review")
+    review = steps.split("### Adjustment review")[1].split("###")[0]
+    assert "owner-question answers" in review
+
+
+def test_stage4_counts_an_adjustment_only_after_the_owner_states_an_amount():
+    steps = sections(read_stage(4))["Steps for the model"]
+    assert "at least one amount" in steps
+    assert '"amounts": {}' not in steps
+    assert "assert owner_amounts" in steps
+
+
+def test_stage5_says_a_seller_ordered_qoe_does_not_meet_the_sba_requirement():
+    steps = sections(read_stage(5))["Steps for the model"]
+    assert "does not meet the SBA lender requirement" in steps
+
+
+def test_stage1_sba_claims_each_have_a_recorded_quote():
+    text = read_stage(1)
+    owner = sections(text)["Owner text"]
+    assert "in an sba deal the buyer pays" not in owner.lower()
+    assert "the lender must obtain a QoE" in owner
+    assert "must reduce the loan amount" in owner
+    for quote in ("the loan amount must be reduced accordingly",
+                  "Borrower out of pocket expenses (including business valuations and QoE)",
+                  "The Lender may not rely upon a QoE report prepared by another party",
+                  "Lenders may elect to have that report reviewed by one of their approved vendors"):
+        assert quote in text, quote

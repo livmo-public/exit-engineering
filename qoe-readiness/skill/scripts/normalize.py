@@ -417,8 +417,12 @@ def _with_defaults(kind: str, row: dict, basis: str) -> dict:
     return out
 
 
-# Kinds that two reports feed (A/R and A/P aging). A new run replaces only the rows of its own type.
-_MERGE_KEYS = {"aging": "type"}
+# Kinds that several runs feed. A new run replaces only the rows that share its value in this column:
+# A/R and A/P aging share a file by type, and a cash and an accrual P&L share a file by basis.
+_MERGE_KEYS = {"aging": "type", "pl": "basis"}
+# The columns that identify one row of a pivot report. Overlapping exports repeat these keys.
+_ROW_KEYS = {"pl": ("period", "account", "basis"), "bs": ("period", "account"),
+             "sales": ("period", "customer"), "vendor": ("period", "vendor", "account")}
 
 
 def _merge_existing(kind: str, rows: list[dict], target: Path) -> list[dict]:
@@ -456,10 +460,38 @@ def normalize_runs(system: str, report_id: str, files: dict[str, Path], out_dir:
     preset = _preset(system, report_id)
     if preset.get("period_mode") != "per_run":
         raise NormalizeError(f"{system} {report_id} is not a per_run report; use normalize()")
+    seen: dict[Path, str] = {}
+    for period in sorted(files):
+        resolved = Path(files[period]).resolve()
+        if resolved in seen:
+            raise NormalizeError(
+                f"runs overlap: {resolved.name} is given for both {seen[resolved]} and {period}; "
+                "give one export for each month")
+        seen[resolved] = period
     rows = []
     for period in sorted(files):
         rows.extend(_preset_rows(preset, Path(files[period]), "accrual", period))
     return _write(preset["kind"], rows, out_dir)
+
+
+def normalize_ranges(system: str, report_id: str, files: list[Path], out_dir: Path, *,
+                     basis: str = "accrual") -> Path:
+    """Convert several exports of one pivot report that cover different date ranges.
+
+    Xero runs a P&L or balance sheet for about 12 months at a time, and ranges can overlap.
+    Each (period, account) keeps one row. The file that comes later in `files` wins an overlap.
+    """
+    preset = _preset(system, report_id)
+    if preset.get("period_mode") == "per_run":
+        raise NormalizeError(f"{system} {report_id} is a per_run report; use normalize_runs()")
+    if preset["layout"] != "pivot":
+        raise NormalizeError(f"{system} {report_id} is not a pivot report; use normalize()")
+    keys = _ROW_KEYS[preset["kind"]]
+    merged: dict[tuple, dict] = {}
+    for path in files:
+        for row in _preset_rows(preset, Path(path), basis, None):
+            merged[tuple(canonical.name_key(str(row[k])) for k in keys)] = row
+    return _write(preset["kind"], list(merged.values()), out_dir)
 
 
 # --- generic path ---

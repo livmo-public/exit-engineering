@@ -56,7 +56,19 @@ The Cash Proof wording, word for word from the SOP:
 
 > The QoE must include a Cash Proof. For purposes of this requirement, a Cash Proof is a financial analysis that reconstructs cash receipts and disbursements by reconciling bank statement data to the income statement and tax return for each period under review.
 
-Business Purchase Price, from the same appendix: it excludes owner-occupied commercial real estate in the sale. Loan proceeds may cover borrower out-of-pocket costs, including business valuations and QoE.
+The loan amount, word for word from the SOP (Appendix 15):
+
+> When a change of ownership transaction requires a Quality of Earnings (QoE) report as part of the necessary financial due diligence, the Lender must use the report’s findings to calculate the Debt Service Coverage. If that Debt Service Coverage does not support the business valuation and proposed debt structure, the loan amount must be reduced accordingly.
+
+Buyer-commissioned reports, word for word from the SOP:
+
+> Recognizing that some Applicant buyers may elect to commission their own QoE prior to engaging with the Lender for financing as part of their own due diligence, Lenders may elect to have that report reviewed by one of their approved vendors to help mitigate costs. The findings of that vendor review must be included in the loan file along with the original QoE report. The Lender may not rely upon a QoE report prepared by another party without a review being performed by one of their vendors.
+
+Costs, word for word from the SOP (Appendix 15, uses of proceeds). The SOP lists these among the funds a change of ownership loan may include. It does not say who pays for a QoE.
+
+> Change of ownership transactions may include funds for: Working Capital; Borrower out of pocket expenses (including business valuations and QoE); and Owner-Occupied Commercial Real Estate when structured on a blended basis.
+
+Business Purchase Price, from the same appendix: it excludes owner-occupied commercial real estate in the sale.
 
 ## Owner text
 
@@ -86,10 +98,11 @@ A QoE sits on top of these. It starts from your books and tests them against the
 
 ### Sell-side and buy-side QoE
 
-A sell-side QoE is ordered and paid for by the seller. It helps you find and fix problems before buyers see them.
+A sell-side QoE is ordered by the seller. It helps you find and fix problems before buyers see them.
 A buy-side QoE is ordered by the buyer or the buyer's lender. It tests what the seller claims.
-In an SBA deal the buyer pays. Loan proceeds may cover the cost.
-A sell-side report does not replace a buy-side report. A buyer or lender may order its own report.
+In an SBA deal, the loan can include QoE costs among the borrower's out-of-pocket costs.
+A sell-side report does not replace a buy-side report. On an SBA deal at or above the threshold, the lender must obtain a QoE that the seller did not order.
+A buyer may commission a QoE first. The lender may then have its own vendor review that report.
 
 ### The SBA rule
 
@@ -98,7 +111,7 @@ For an initial acquisition or a business expansion, the rule applies at a price 
 The SBA sets the $3 million line before buyer equity, seller debt, or other financing. The price does not include owner-occupied real estate.
 In that case the lender must obtain a QoE. It must be done for the benefit of the lender.
 An independent, experienced financial professional must do the work. The SBA says the report must not be prepared by or for the seller.
-The lender uses the QoE earnings to test the loan. If cash flow does not support the price, the lender must reduce the loan amount.
+The lender uses the QoE earnings to test the loan. If those earnings do not support the valuation and the debt structure, the lender must reduce the loan amount.
 The SBA says an owner buyout does not need a QoE.
 Source: SBA SOP 50 10 8.1 on sba.gov, as of 2026-11-02.
 Link: https://www.sba.gov/document/sop-50-10-lender-development-company-loan-programs

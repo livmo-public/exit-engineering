@@ -15,6 +15,7 @@ FLOOR_MONTHS = 12
 FILE_STATUSES = ("uploaded", "partial", "missing", "not_applicable")
 RESPONSE_TYPES = ("fix", "explain", "accept")
 DECISIONS = ("approved", "edited", "rejected")
+COUNTED_DECISIONS = ("approved", "edited")
 BLOCKING_SEVERITIES = ("critical", "high")
 
 TEXT_INTAKE_COMPLETE = "Every intake question has an answer."
@@ -196,11 +197,21 @@ def _response_is_valid(response) -> bool:
     return True
 
 
+def _adjustment_is_decided(adjustment: dict) -> bool:
+    """A decision counts when it is valid. approved and edited also need an amount the owner stated."""
+    decision = adjustment.get("decision")
+    if decision not in DECISIONS:
+        return False
+    if decision in COUNTED_DECISIONS:
+        return bool(adjustment.get("amounts"))
+    return True
+
+
 def _stage4(state: dict, data_dir: Path) -> list[GateItem]:
     responses = state.get("responses", {})
     blocking = [f for f in state.get("findings", []) if f.get("severity") in BLOCKING_SEVERITIES]
     findings_done = all(_response_is_valid(responses.get(f["id"])) for f in blocking)
-    adjustments_done = all(a.get("decision") in DECISIONS for a in state.get("adjustments", []))
+    adjustments_done = all(_adjustment_is_decided(a) for a in state.get("adjustments", []))
     return [
         GateItem(TEXT_FINDINGS, findings_done),
         GateItem(TEXT_ADJUSTMENTS, adjustments_done),

@@ -24,37 +24,41 @@ This stage records the status of every file, converts each uploaded export to a 
 10. Choose the system from `state["intake"]["accounting_system"]` for books, and from `billing_system` for subscriptions. Use the report ids in `files.json` under `export_ref`.
 11. Convert with `normalize.normalize(system, report_id, path, WORK, basis=...)`. It writes `WORK/{kind}.csv`. Use `basis` `accrual` or `cash` for the P&L.
 12. C8 has two reports: `ar_aging` and `ap_aging`. Run both. The second call keeps the rows of the first.
-13. A P&L on two bases, or a Xero export in two date ranges, writes the same file twice. Convert each into its own folder, then join the rows and write once with `canonical.write`.
-14. For Xero sales and vendor reports, ask for one export per month. Convert them with `normalize.normalize_runs`, using a dict of `YYYY-MM` to file path.
-15. For any other system, read the column headers of the owner's file. Propose a column map to the canonical columns. Run `normalize.normalize_generic` only after the owner confirms the map.
-16. If the headers or the layout differ from the preset, tell the owner what differs. Do not guess. Use the generic path with a confirmed column map.
-17. Store the result as an absolute path. Save `state["files"][file_id]` with `status`, `source_system`, and `canonical_path`, where `canonical_path` is `str(Path(path).resolve())`.
-18. Files with no canonical kind need only a status. These are C5, R1 to R11, and S2 to S6.
+13. A cash P&L and an accrual P&L share one folder. Call `normalize.normalize` once for each basis with the same `WORK`. The file keeps both bases. A new call for one basis replaces only that basis.
+14. Xero runs a P&L or balance sheet for about 12 months at a time. Convert every range in one call: `normalize.normalize_ranges(system, report_id, [paths], WORK, basis=...)`. The later file wins an overlap.
+15. For Xero sales and vendor reports, ask for one export per month. Convert them with `normalize.normalize_runs`, using a dict of `YYYY-MM` to file path. Give each month once. A file given for two months raises an overlap error.
+16. For any other system, read the column headers of the owner's file. Propose a column map to the canonical columns. Run `normalize.normalize_generic` only after the owner confirms the map.
+17. If the headers or the layout differ from the preset, tell the owner what differs. Do not guess. Use the generic path with a confirmed column map.
+18. Store the result as an absolute path. Save `state["files"][file_id]` with `status`, `source_system`, and `canonical_path`, where `canonical_path` is `str(Path(path).resolve())`.
+19. Files with no canonical kind need only a status. These are C5, R1 to R11, and S2 to S6.
 
 ### Read PDFs and paper
 
-19. For bank statements (C4), in PDF or CSV form, read the 4 monthly totals for each account and each month: `beginning_balance`, `deposits`, `withdrawals`, `ending_balance`. Use positive numbers for withdrawals.
-20. Ask for 13 months of statements. Thirteen months give both ends of a 12-month window.
-21. For tax returns (C9), read the gross receipts or sales line for each year. Write one row per year with `year` and `gross_receipts`.
-22. For inventory and WIP (P1, P2), read the period-end amount. Write one row per period with `item_type` `inventory` or `wip`. P1 and P2 share one file; join their rows.
-23. Show every value you read to the owner in a plain list. Write the canonical CSV only after the owner confirms the values. Fix each value the owner corrects.
-24. If a PDF does not parse, or the scan is unclear, ask the owner to type the values. A typed value is an owner statement.
+20. For bank statements (C4), in PDF or CSV form, read the 4 monthly totals for each account and each month: `beginning_balance`, `deposits`, `withdrawals`, `ending_balance`. Use positive numbers for withdrawals.
+21. Ask for 13 months of statements. Thirteen months give both ends of a 12-month window.
+22. For tax returns (C9), read the gross receipts or sales line for each year. Write one row per year with `year` and `gross_receipts`.
+23. For inventory and WIP (P1, P2), read the period-end amount. Write one row per period with `item_type` `inventory` for P1 or `wip` for P2.
+24. Show every value you read to the owner in a plain list. Fix each value the owner corrects. Write the canonical CSV only after the owner confirms the values.
+25. After the owner confirms, write the rows with `canonical.write` to `WORK / "bank.csv"`, `WORK / "tax.csv"`, or `WORK / "inventory.csv"`. The checks read `canonical_path` from the state, and fall back to `<canonical folder>/<kind>.csv`.
+26. Then save the file entry with `status` `uploaded`, `source_system` `pdf`, and `canonical_path` set to `str(path.resolve())`. Use `typed` as the `source_system` when the owner typed the values.
+27. P1 and P2 both write rows to `inventory.csv`. Read the existing rows, drop the rows with the same `item_type`, add the new rows, and write once. Give P1 and P2 the same `canonical_path`.
+28. If a PDF does not parse, or the scan is unclear, ask the owner to type the values. A typed value is an owner statement.
 
 ### Account map
 
-25. After C1 and C2 are converted, and C3 if present, collect the distinct `account` names from the P&L, balance sheet, and ledger rows.
-26. Run `normalize.propose_account_map(accounts)`. Show the proposal to the owner. Mark each blank `account_type` as "needs your answer."
-27. Ask the owner to confirm or correct every entry. Do not decide an unclear account yourself. A balance sheet entry also needs a `subtype`.
-28. Save the confirmed map in `state["account_map"]`. Apply it with `canonical.apply_account_map` to the P&L, balance sheet, and ledger rows. Write each file back.
-29. Set `account_map_confirmed` to true only after the owner confirms the full map. A later fix to the map needs a new confirmation.
+29. After C1 and C2 are converted, and C3 if present, collect the distinct `account` names from the P&L, balance sheet, and ledger rows.
+30. Run `normalize.propose_account_map(accounts)`. Show the proposal to the owner. Mark each blank `account_type` as "needs your answer."
+31. Ask the owner to confirm or correct every entry. Do not decide an unclear account yourself. A balance sheet entry also needs a `subtype`.
+32. Save the confirmed map in `state["account_map"]`. Apply it with `canonical.apply_account_map` to the P&L, balance sheet, and ledger rows. Write each file back.
+33. Set `account_map_confirmed` to true only after the owner confirms the full map. A later fix to the map needs a new confirmation.
 
 ### Hard floor and gate
 
-30. Check the hard floor with `progress.meets_floor(state, data_dir)`. It needs C1 and C2 to cover the 12 months that end at `latest_closed_month`. It also needs C3 or C4 with status `uploaded`.
-31. If the floor fails, find the cause. Read the months with `progress.months_covered` on the canonical rows. Tell the owner which months are missing.
-32. If `accounting_basis` is `cash`, tell the owner about the single accrual finding (check K21) and that the workbook says "cash basis." Ask if the bookkeeper can produce an accrual P&L and balance sheet.
-33. Show the gate checklist with `progress.gate_status(state, 3, data_dir)`. If every item passes, offer a `progress.json` file and open Stage 4.
-34. If an item fails, say which one and what closes it. Do not open Stage 4. A missing file that is not part of the floor does not block the gate.
+34. Check the hard floor with `progress.meets_floor(state, data_dir)`. It needs C1 and C2 to cover the 12 months that end at `latest_closed_month`. It also needs C3 or C4 with status `uploaded`.
+35. If the floor fails, find the cause. Read the months with `progress.months_covered` on the canonical rows. Tell the owner which months are missing.
+36. If `accounting_basis` is `cash`, tell the owner about the single accrual finding (check K21) and that the workbook says "cash basis." Ask if the bookkeeper can produce an accrual P&L and balance sheet.
+37. Show the gate checklist with `progress.gate_status(state, 3, data_dir)`. If every item passes, offer a `progress.json` file and open Stage 4.
+38. If an item fails, say which one and what closes it. Do not open Stage 4. A missing file that is not part of the floor does not block the gate.
 
 Code to record a file and to convert it:
 
@@ -72,12 +76,12 @@ state = {**state, "files": {**state["files"], "C1": entry}}
 progress.save(state, Path("progress.json"))
 ```
 
-Code for two bases, a one-folder-each conversion, then a join:
+Code for two bases in one file, and for Xero date ranges:
 
 ```python
-accrual = normalize.normalize("qbo", "pl_by_month", Path("pl_accrual.csv"), WORK / "pl_accrual", basis="accrual")
-cash = normalize.normalize("qbo", "pl_by_month", Path("pl_cash.csv"), WORK / "pl_cash", basis="cash")
-canonical.write("pl", canonical.read("pl", accrual) + canonical.read("pl", cash), WORK / "pl.csv")
+normalize.normalize("qbo", "pl_by_month", Path("pl_accrual.csv"), WORK, basis="accrual")
+normalize.normalize("qbo", "pl_by_month", Path("pl_cash.csv"), WORK, basis="cash")
+normalize.normalize_ranges("xero", "bs_by_month", [Path("bs_2024.xlsx"), Path("bs_2025.xlsx")], WORK)
 ```
 
 Code for Xero reports that run one month at a time:
@@ -86,6 +90,24 @@ Code for Xero reports that run one month at a time:
 runs = {"2025-01": Path("contact-2025-01.xlsx"), "2025-02": Path("contact-2025-02.xlsx")}
 normalize.normalize_runs("xero", "sales_by_customer", runs, WORK)
 normalize.normalize_runs("xero", "expenses_by_vendor", runs, WORK)
+```
+
+Code for values read from PDFs, with bank, tax, and inventory:
+
+```python
+bank = [{"account": "Operating", "month": "2025-01", "beginning_balance": opening, "deposits": deposits,
+         "withdrawals": withdrawals, "ending_balance": closing}]  # Values the owner confirmed.
+canonical.write("bank", bank, WORK / "bank.csv")
+entry = {"status": "uploaded", "source_system": "pdf", "canonical_path": str((WORK / "bank.csv").resolve())}
+state = {**state, "files": {**state["files"], "C4": entry}}
+
+canonical.write("tax", [{"year": "2025", "gross_receipts": receipts}], WORK / "tax.csv")  # Same pattern for C9.
+
+# P1 and P2 share one file. Keep the rows of the other item type.
+target = WORK / "inventory.csv"
+kept = canonical.read("inventory", target) if target.is_file() else []
+new_rows = [{"period": "2025-01", "item_type": "inventory", "amount": amount}]  # "wip" for P2.
+canonical.write("inventory", [r for r in kept if r["item_type"] != "inventory"] + new_rows, target)
 ```
 
 Code for the account map:

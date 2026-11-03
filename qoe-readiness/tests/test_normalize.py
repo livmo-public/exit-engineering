@@ -347,7 +347,7 @@ def test_normalize_pl_defaults(fixtures, tmp_path):
     out = normalize.normalize("qbo", "pl_by_month", fixtures / "qbo_pl_by_month.csv", tmp_path)
     rows = canonical.read("pl", out)
     assert all(r["account_type"] == "" and r["basis"] == "accrual" for r in rows)
-    cash = normalize.normalize("qbo", "pl_by_month", fixtures / "qbo_pl_by_month.csv", tmp_path,
+    cash = normalize.normalize("qbo", "pl_by_month", fixtures / "qbo_pl_by_month.csv", tmp_path / "cash",
                                basis="cash")
     assert {r["basis"] for r in canonical.read("pl", cash)} == {"cash"}
 
@@ -650,3 +650,59 @@ def test_undecodable_file_raises_normalize_error(tmp_path):
     p.write_bytes(b"Account,Jan 2025\nCaf\x81,1\n")  # 0x81 is undefined in cp1252
     with pytest.raises(normalize.NormalizeError, match="UTF-8"):
         normalize.parse_pivot(p, "pl", "account")
+
+
+# --- merging and overlapping exports ---
+
+def _qbo_pl(tmp_path, name, months, revenue):
+    """A small P&L export: one revenue account, one column per month, a Total column."""
+    path = tmp_path / name
+    head = ",".join(months)
+    cells = ",".join(f'"{v:,.2f}"' for v in revenue)
+    path.write_text(f"Sample\nProfit and Loss\n\n,{head},Total\nIncome\nSubscription revenue,{cells},\"0.00\"\n",
+                    encoding="utf-8")
+    return path
+
+
+def test_pl_rows_merge_by_basis(tmp_path):
+    out = tmp_path / "out"
+    accrual = _qbo_pl(tmp_path, "accrual.csv", ["Jan 2025", "Feb 2025"], [100.0, 200.0])
+    cash = _qbo_pl(tmp_path, "cash.csv", ["Jan 2025", "Feb 2025"], [90.0, 180.0])
+    normalize.normalize("qbo", "pl_by_month", accrual, out, basis="accrual")
+    path = normalize.normalize("qbo", "pl_by_month", cash, out, basis="cash")
+    rows = canonical.read("pl", path)
+    assert sorted((r["basis"], r["period"], r["amount"]) for r in rows) == [
+        ("accrual", "2025-01", 100.0), ("accrual", "2025-02", 200.0),
+        ("cash", "2025-01", 90.0), ("cash", "2025-02", 180.0)]
+
+
+def test_rerun_of_one_basis_replaces_only_that_basis(tmp_path):
+    out = tmp_path / "out"
+    normalize.normalize("qbo", "pl_by_month", _qbo_pl(tmp_path, "a1.csv", ["Jan 2025"], [100.0]), out, basis="accrual")
+    normalize.normalize("qbo", "pl_by_month", _qbo_pl(tmp_path, "c1.csv", ["Jan 2025"], [90.0]), out, basis="cash")
+    path = normalize.normalize("qbo", "pl_by_month", _qbo_pl(tmp_path, "a2.csv", ["Jan 2025"], [150.0]), out,
+                               basis="accrual")
+    rows = canonical.read("pl", path)
+    assert sorted((r["basis"], r["amount"]) for r in rows) == [("accrual", 150.0), ("cash", 90.0)]
+
+
+def test_ranges_keep_every_month_and_the_later_file_wins_an_overlap(tmp_path):
+    first = _qbo_pl(tmp_path, "first.csv", ["Jan 2025", "Feb 2025", "Mar 2025"], [100.0, 200.0, 300.0])
+    second = _qbo_pl(tmp_path, "second.csv", ["Mar 2025", "Apr 2025"], [310.0, 400.0])
+    path = normalize.normalize_ranges("qbo", "pl_by_month", [first, second], tmp_path / "out", basis="accrual")
+    assert [(r["period"], r["amount"]) for r in canonical.read("pl", path)] == [
+        ("2025-01", 100.0), ("2025-02", 200.0), ("2025-03", 310.0), ("2025-04", 400.0)]
+
+
+def test_ranges_reject_a_per_run_report(tmp_path):
+    p = tmp_path / "run.csv"
+    p.write_text(XERO_RUN)
+    with pytest.raises(normalize.NormalizeError, match="per_run"):
+        normalize.normalize_ranges("xero", "sales_by_customer", [p], tmp_path / "out")
+
+
+def test_normalize_runs_rejects_one_file_given_for_two_months(tmp_path):
+    run = tmp_path / "run.csv"
+    run.write_text(XERO_RUN)
+    with pytest.raises(normalize.NormalizeError, match="overlap"):
+        normalize.normalize_runs("xero", "sales_by_customer", {"2025-01": run, "2025-02": run}, tmp_path / "out")

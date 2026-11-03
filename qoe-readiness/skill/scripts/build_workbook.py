@@ -43,7 +43,8 @@ SEVERITIES = ("critical", "high", "medium", "low")
 MAX_TOP_FINDINGS = 5
 MAX_GAPS = 5
 NEXT_STEP_GAPS = "Book a LIVMO exit assessment. It helps you close these gaps before a buyer orders a QoE."
-NEXT_STEP_READY = "Commission an independent sell-side QoE. Your files and answers are ready for one."
+NEXT_STEP_READY = ("Your files and answers are ready for a QoE. A sell-side QoE helps you prepare the sale. "
+                   "An SBA lender must obtain a QoE that the seller did not order.")
 FINDINGS_HEADER = ["Finding", "Check", "Name", "Category", "Severity", "Method", "Status",
                    "Response", "Owner answer", "Detail", "Fix", "Evidence"]
 INVENTORY_HEADER = ["File", "Name", "Module", "Critical", "Status", "Reason", "Source system",

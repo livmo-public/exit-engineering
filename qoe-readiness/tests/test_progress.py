@@ -111,7 +111,22 @@ def test_stage4_gate_needs_responses_and_adjustment_decisions(data_dir):
     assert not progress.gate_passed(s, 4, data_dir)
     s = {**s, "responses": {"K04-1": {"type": "accept"}}, "adjustments": [{"id": "A1", "decision": None}]}
     assert not progress.gate_passed(s, 4, data_dir)
-    s = {**s, "adjustments": [{"id": "A1", "decision": "approved"}]}
+    s = {**s, "adjustments": [{"id": "A1", "decision": "approved", "amounts": {"TTM": 12000.0}}]}
+    assert progress.gate_passed(s, 4, data_dir)
+
+
+@pytest.mark.parametrize("decision", ["approved", "edited"])
+@pytest.mark.parametrize("amounts", [None, {}])
+def test_stage4_counted_adjustment_needs_an_owner_stated_amount(data_dir, decision, amounts):
+    adjustment = {"id": "A1", "decision": decision, "amounts": amounts}
+    s = {**READY_STATE, "adjustments": [adjustment]}
+    assert not progress.gate_passed(s, 4, data_dir)
+    stated = {**adjustment, "amounts": {"TTM": 500.0}}
+    assert progress.gate_passed({**READY_STATE, "adjustments": [stated]}, 4, data_dir)
+
+
+def test_stage4_rejected_adjustment_needs_no_amount(data_dir):
+    s = {**READY_STATE, "adjustments": [{"id": "A1", "decision": "rejected", "amounts": {}}]}
     assert progress.gate_passed(s, 4, data_dir)
 
 

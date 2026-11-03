@@ -19,11 +19,12 @@ This stage builds the owner-prepared QoE readiness workbook and gives the owner 
 11. If `basis` is `cash`, say "cash basis" next to each figure. Explain that the single accrual finding (check K21) stays open until accrual books exist.
 12. Show `gaps`. For a gap with `type` `file`, name the file and the tabs it stops (`blocks_tabs`) or thins (`thins_tabs`). For a gap with `type` `finding`, name the finding and its `fix`.
 13. Show `next_step` word for word.
-14. Tell the owner that a tab without its input file shows "not available: file missing." Those tabs also appear in the scope and limitations tab.
-15. Offer a final `progress.json` file so the owner can resume later.
-16. Never call the output a QoE, an audit, a review, or a compilation. Give no valuation and no tax, legal, or accounting advice.
-17. If `advisor_name` is set, the workbook names the advisor as facilitator only. The label stays "owner-prepared."
-18. If the owner adds a file or changes an answer, return to the stage the change affects. Run the later stages again.
+14. Then say that a QoE the seller orders does not meet the SBA lender requirement. The SOP says the report must not be prepared by or for the seller.
+15. Tell the owner that a tab without its input file shows "not available: file missing." Those tabs also appear in the scope and limitations tab.
+16. Offer a final `progress.json` file so the owner can resume later.
+17. Never call the output a QoE, an audit, a review, or a compilation. Give no valuation and no tax, legal, or accounting advice.
+18. If `advisor_name` is set, the workbook names the advisor as facilitator only. The label stays "owner-prepared."
+19. If the owner adds a file or changes an answer, return to the stage the change affects. Run the later stages again.
 
 Code for the last gate check:
 
@@ -83,6 +84,7 @@ The accrual finding stays open until you have accrual books. A buyer's QoE conve
 
 This workbook is your own preparation for a QoE. It is not a QoE, and it gives no valuation.
 It gives no tax, legal, or accounting advice. A buyer or lender will commission an independent QoE.
+A QoE that the seller orders does not meet the SBA lender requirement.
 
 ## Gate
 

@@ -19,26 +19,27 @@ This stage runs the spot checks, collects the owner's response to each serious f
 8. Present every candidate as "for review." A review item has a severity of medium or lower. It has no gate effect and needs no response. Do not save it as a finding.
 9. If the owner finds a real error in a review item, treat it as a fix. Ask for the corrected file in the normal way.
 
-### Adjustment review
-
-10. Name each candidate adjustment. Take them from R1, R3, R4, R5, R6, and from the owner-question answers. Typical candidates are owner pay against replacement cost, rent to an owner entity, a one-time legal fee, and personal costs the business paid.
-11. The owner states every amount. You never propose an amount. Never fill an amount from the books, a document, or an example. Never suggest a range.
-12. If the owner asks to see ledger entries, show them. The owner then types the amount. If the owner says "use the ledger amount," ask the owner to state the number.
-13. Get the period labels with `metrics.periods`: one label for each complete fiscal year, such as `FY2025`, and `TTM`. A single month uses its `YYYY-MM` key.
-14. Ask for a separate amount for each label that applies. An amount that falls in a fiscal year and in the TTM goes under both labels.
-15. For each candidate, ask the owner to approve, edit, or reject it. Approve means the owner states the amount and confirms it. Edit means the owner changes a stated amount. Reject means no amount counts.
-16. Ask what document supports each amount. Save the answer as `evidence`, or `None` if the owner has no document.
-17. Save each candidate in `state["adjustments"]` as shown in the code. Only approved and edited adjustments enter adjusted EBITDA.
-18. A candidate the owner does not use still needs a response. Record it with `decision` `rejected` and empty `amounts`.
-
 ### Owner questions
 
-19. Call `run_checks.questions(state, data_dir)`. It returns one question for each `owner_question` check that applies. Ask each question in the owner's words. Show `candidates` when K11 has any.
-20. Ask K13 and K14 with the other questions. The adjustment review is already done, so the owner's answers rest on it.
-21. Decide for each question whether the owner's answer confirms the condition of the check. If the answer shows a problem, the condition holds. If the answer shows no problem, leave it out.
-22. Write a JSON file that maps `check_id` to the owner's statement. Include only the answers to questions you actually asked. Never add an answer the owner did not give.
-23. Run `python scripts/run_checks.py --state progress.json --canonical work --answers answers.json`. This call replaces all owner-question findings in the state. Put every confirmed answer in the file each time.
-24. An owner-question finding carries the note "Owner statement, no document." Tell the owner that this note goes into the workbook.
+10. Call `run_checks.questions(state, data_dir)`. It returns one question for each `owner_question` check that applies. Ask each question in the owner's words. Show `candidates` when K11 has any.
+11. Ask every question before the adjustment review. The answers to K12, K13, and K14 name candidates for it.
+12. Decide for each question whether the owner's answer confirms the condition of the check. If the answer shows a problem, the condition holds. If the answer shows no problem, leave it out.
+13. Write a JSON file that maps `check_id` to the owner's statement. Include only the answers to questions you actually asked. Never add an answer the owner did not give.
+14. Run `python scripts/run_checks.py --state progress.json --canonical work --answers answers.json`. This call replaces all owner-question findings in the state. Put every confirmed answer in the file each time.
+15. An owner-question finding carries the note "Owner statement, no document." Tell the owner that this note goes into the workbook.
+
+### Adjustment review
+
+16. Name each candidate adjustment. Take them from R1, R3, R4, R5, R6, and from the owner-question answers you saved above. Typical candidates are owner pay against replacement cost, rent to an owner entity, a one-time legal fee, and personal costs the business paid.
+17. The owner states every amount. You never propose an amount. Never fill an amount from the books, a document, or an example. Never suggest a range.
+18. If the owner asks to see ledger entries, show them. The owner then types the amount. If the owner says "use the ledger amount," ask the owner to state the number.
+19. Get the period labels with `metrics.periods`: one label for each complete fiscal year, such as `FY2025`, and `TTM`. A single month uses its `YYYY-MM` key.
+20. Ask for a separate amount for each label that applies. An amount that falls in a fiscal year and in the TTM goes under both labels.
+21. For each candidate, ask the owner to approve, edit, or reject it. Approve means the owner states the amount and confirms it. Edit means the owner changes a stated amount. Reject means no amount counts.
+22. Ask what document supports each amount. Save the answer as `evidence`, or `None` if the owner has no document.
+23. Save each candidate in `state["adjustments"]` as shown in the code. Only approved and edited adjustments enter adjusted EBITDA.
+24. Record `approved` or `edited` only after the owner states at least one amount. A candidate with no stated amount gets `decision` `rejected`.
+After the review, ask K13 again if any adjustment has no `evidence`. Run `--answers` again with every confirmed answer.
 
 ### Responses
 
@@ -73,11 +74,13 @@ intake = state["intake"]
 p = metrics.periods(progress.months_covered(rows), intake["fiscal_year_end_month"], intake["latest_closed_month"])
 labels = list(p.fiscal_years) + ["TTM"]
 
+# owner_amounts maps each label to the number the owner gave. Never fill it yourself.
 adjustment = {
     "id": "A1", "name": "Rent to an owner entity", "source_file": "R5",
-    "amounts": {},  # The owner types each amount. Fill it from the owner's words only.
+    "amounts": owner_amounts,  # Label to amount, exactly as the owner typed it.
     "evidence": None, "decision": "approved", "owner_stated": True,
 }
+assert owner_amounts, "approved or edited needs at least one amount that the owner stated"
 state = {**state, "adjustments": [*state["adjustments"], adjustment]}
 progress.save(state, Path("progress.json"))
 ```
@@ -120,7 +123,7 @@ An adjustment changes your earnings to show what the business earns for a new ow
 - A personal cost that the business paid.
 
 I name each candidate. You tell me the amount. I never suggest an amount, and I never fill one in.
-For each candidate you approve it, edit it, or reject it. Only approved and edited adjustments count in adjusted EBITDA.
+For each candidate you approve it, edit it, or reject it. An approved or edited item needs an amount from you. Only approved and edited adjustments count in adjusted EBITDA.
 Each amount is your statement. A buyer will ask for a document behind each one.
 
 ## Gate
