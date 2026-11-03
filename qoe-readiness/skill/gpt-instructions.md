@@ -66,12 +66,14 @@ for folder, names in FILES.items():
 (PROJECT / "work").mkdir(exist_ok=True)
 os.chdir(PROJECT)
 sys.path.insert(0, str(PROJECT / "scripts"))
+data_dir = PROJECT / "data"
 print(sorted(p.relative_to(PROJECT).as_posix() for p in PROJECT.rglob("*") if p.is_file()))
 ```
 
 The scripts find `data` as a sibling of `scripts`. Do not move them. The stage files use the paths `scripts/`, `data/`, `work/`, and `progress.json`. They are relative to `PROJECT`.
 
 - Run every command with `PROJECT` as the current folder.
+- Code Interpreter has no shell. Run `python scripts/<name>.py ...` with `subprocess.run([sys.executable, "scripts/<name>.py", ...], cwd=PROJECT)`.
 - Save `progress.json` in `PROJECT`. Save the canonical CSV files in `PROJECT / "work"`.
 - Store every `canonical_path` as an absolute path. Use `str(path.resolve())`.
 - The owner uploads files to `/mnt/data`. Read them from there.

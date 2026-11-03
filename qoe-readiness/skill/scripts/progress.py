@@ -17,6 +17,7 @@ RESPONSE_TYPES = ("fix", "explain", "accept")
 DECISIONS = ("approved", "edited", "rejected")
 COUNTED_DECISIONS = ("approved", "edited")
 BLOCKING_SEVERITIES = ("critical", "high")
+REVIEW_STATUS = "review"
 
 TEXT_INTAKE_COMPLETE = "Every intake question has an answer."
 TEXT_DISCLAIMER = "The owner acknowledges the disclaimer."
@@ -207,9 +208,14 @@ def _adjustment_is_decided(adjustment: dict) -> bool:
     return True
 
 
+def is_blocking(finding: dict) -> bool:
+    """A critical or high finding needs a response. A finding for review never blocks a gate."""
+    return finding.get("severity") in BLOCKING_SEVERITIES and finding.get("status") != REVIEW_STATUS
+
+
 def _stage4(state: dict, data_dir: Path) -> list[GateItem]:
     responses = state.get("responses", {})
-    blocking = [f for f in state.get("findings", []) if f.get("severity") in BLOCKING_SEVERITIES]
+    blocking = [f for f in state.get("findings", []) if is_blocking(f)]
     findings_done = all(_response_is_valid(responses.get(f["id"])) for f in blocking)
     adjustments_done = all(_adjustment_is_decided(a) for a in state.get("adjustments", []))
     return [

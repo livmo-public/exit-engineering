@@ -6,6 +6,7 @@ formulas library; every key of the cell map is compared with metrics on the same
 import json
 from pathlib import Path
 
+import openpyxl
 import pytest
 
 import build_workbook
@@ -129,3 +130,17 @@ def test_sample_is_deterministic_and_the_committed_copy_is_current(tmp_path, sam
     fresh = progress.load(first / "progress.json")
     for key in ("findings", "responses", "adjustments", "intake"):
         assert committed[key] == fresh[key], key
+
+
+def test_committed_sample_workbook_matches_a_fresh_build(sample_built, sample_dir):
+    """The committed example workbook equals a rebuild cell for cell. Run tools/make_sample.py to refresh it."""
+    fresh = openpyxl.load_workbook(sample_built.path)
+    committed = openpyxl.load_workbook(sample_dir / make_sample.WORKBOOK_NAME)
+    assert committed.sheetnames == fresh.sheetnames
+    for name in fresh.sheetnames:
+        a, b = fresh[name], committed[name]
+        assert (a.max_row, a.max_column) == (b.max_row, b.max_column), name
+        for row_a, row_b in zip(a.iter_rows(), b.iter_rows()):
+            for ca, cb in zip(row_a, row_b):
+                assert ca.value == cb.value, f"{name}!{ca.coordinate}: run python tools/make_sample.py " \
+                                             "examples/sample-saas-co"

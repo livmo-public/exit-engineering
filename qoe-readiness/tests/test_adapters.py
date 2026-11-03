@@ -173,6 +173,14 @@ def test_gpt_setup_snippet_builds_the_layout_the_scripts_expect(tmp_path, skill_
     assert Path(out).resolve() == (project / "data").resolve()
 
 
+def test_gpt_setup_defines_data_dir_and_says_how_to_run_a_script(gpt_md):
+    snippet = _setup_snippet(gpt_md)
+    assert 'data_dir = PROJECT / "data"' in snippet
+    text = " ".join(gpt_md.split())
+    assert "subprocess.run" in text and "no shell" in text
+    assert "python scripts/<name>.py" in text
+
+
 # ---- package -----------------------------------------------------------------------
 
 def test_zip_contents(tmp_path, skill_dir):

@@ -135,6 +135,13 @@ def test_stage4_ignores_medium_and_low_findings(data_dir):
     assert progress.gate_passed(s, 4, data_dir)
 
 
+def test_stage4_ignores_review_findings_at_any_severity(data_dir):
+    review = {"id": "K02-1", "severity": "high", "method": "model_review", "status": "review"}
+    assert progress.gate_passed({**READY_STATE, "findings": [review]}, 4, data_dir)
+    assert not progress.is_blocking(review)
+    assert progress.is_blocking({**review, "status": "fail"})
+
+
 def test_stage4_high_needs_response_and_explain_needs_text(data_dir):
     s = {**READY_STATE, "findings": [{"id": "K05-1", "severity": "high"}]}
     assert not progress.gate_passed(s, 4, data_dir)

@@ -245,15 +245,31 @@ def _file_lines(plan: Plan) -> list[tuple[str, str]]:
     return lines
 
 
-def _scope_lines(plan: Plan) -> list[tuple[str, str]]:
-    state = plan.book.state
-    lines = _file_lines(plan)
+def _owner_statement_lines(state: dict) -> list[tuple[str, str]]:
+    """Owner statements with no document: explain responses, owner-question answers, and
+    counted adjustments with no evidence."""
+    lines = []
     responses = state.get("responses", {})
     for f in _sorted_findings(state):
         response = responses.get(f.get("id"), {})
         if response.get("type") == "explain":
             lines.append(("Owner statement", f"{f['id']} {f.get('name')}: {response.get('text')} "
                                              f"({OWNER_STATEMENT})"))
+    for f in _sorted_findings(state):
+        if f.get("method") == "owner_question":
+            evidence = f.get("evidence", [])
+            answer = "; ".join(e.removeprefix(run_checks.OWNER_EVIDENCE_PREFIX) for e in evidence)
+            lines.append(("Owner statement", f"{f['id']} {f.get('name')}: {answer} ({OWNER_STATEMENT})"))
+    for a in state.get("adjustments", []):
+        if a.get("decision") in progress.COUNTED_DECISIONS and not a.get("evidence"):
+            lines.append(("Owner statement", f"{a.get('id')} {a.get('name')}: the owner stated the "
+                                             f"amount, and no document supports it ({OWNER_STATEMENT})"))
+    return lines
+
+
+def _scope_lines(plan: Plan) -> list[tuple[str, str]]:
+    state = plan.book.state
+    lines = _file_lines(plan) + _owner_statement_lines(state)
     for check in plan.checks:
         if (check["method"] in ("computed", "model_review") and check["module"] in plan.book.modules
                 and not run_checks.should_run(state, check)):
@@ -386,8 +402,7 @@ def _gaps(plan: Plan) -> list[dict]:
     open_findings = [{"type": "finding", "id": f["id"], "name": f.get("name"),
                       "severity": f.get("severity"), "fix": f.get("fix")}
                      for f in _sorted_findings(state)
-                     if f.get("severity") in progress.BLOCKING_SEVERITIES
-                     and responses.get(f["id"], {}).get("type") != "fix"]
+                     if progress.is_blocking(f) and responses.get(f["id"], {}).get("type") != "fix"]
     return files + open_findings
 
 

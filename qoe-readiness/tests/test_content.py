@@ -197,6 +197,14 @@ def test_sba_record_has_required_wording():
         assert needle in text, needle
 
 
+def test_sba_record_quotes_the_business_purchase_price_definition():
+    quote = ("> For purposes of the 7(a) loan facilitating the change of ownership, the “Business Purchase "
+             "Price” excludes all owner-occupied commercial real estate assets being acquired in the "
+             "transaction.")
+    text = read_stage(1)
+    assert quote in text.splitlines()
+    assert "it excludes owner-occupied commercial real estate in the sale" not in text
+
 # ---- stage 2 ----------------------------------------------------------------------------
 
 def test_stage2_uses_catalog_and_module_rules():
@@ -236,6 +244,25 @@ def test_stage4_runs_checks_and_passes_only_asked_answers():
     for needle in ("run_checks.py", "--answers", "model_review", "for review", "owner_question",
                    "only the answers", "fix", "explain", "accept"):
         assert needle in steps, needle
+
+
+def test_stage4_saves_the_review_items_it_shows():
+    steps = sections(read_stage(4))["Steps for the model"]
+    for needle in ("--reviews reviews.json", "status `review`", "Save the candidates you showed"):
+        assert needle in steps, needle
+    assert "Do not save it as a finding" not in steps
+    import run_checks
+    assert "--reviews" in Path(run_checks.__file__).read_text(encoding="utf-8")
+
+
+def test_stage5_chat_summary_count_matches_its_list():
+    owner = sections(read_stage(5))["Owner text"]
+    block = owner.split("### Your chat summary", 1)[1].split("###", 1)[0]
+    words = {"three": 3, "four": 4, "five": 5, "six": 6}
+    count = re.search(r"I show you (\w+) items\.", block)
+    assert count, "the chat summary names its item count"
+    bullets = [ln for ln in block.splitlines() if ln.startswith("- ")]
+    assert words[count.group(1)] == len(bullets)
 
 
 def test_stage4_owner_states_every_adjustment_amount():

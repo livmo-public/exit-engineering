@@ -671,3 +671,68 @@ def test_cli_answers_replace_owner_question_findings_and_keep_the_rest(tmp_path,
     assert "K12-1" in saved and "K02-1" in saved and "K13-1" not in saved
     subprocess.run(command, capture_output=True, text=True, check=True)
     assert "K12-1" in {f["id"] for f in progress.load(state_path)["findings"]}
+
+
+# ---- review findings (final review) ---------------------------------------------
+
+def test_review_findings_store_the_items_the_model_showed(tmp_path, data_dir):
+    state, _ = write_world(tmp_path)
+    items = ["2025-06: revenue 3,000.00 against a 1,000.00 average", "2026-02: annual billing spike"]
+    [found] = run_checks.review_findings(state, {"K02": items}, data_dir)
+    record = next(c for c in json.loads((data_dir / "checks.json").read_text(encoding="utf-8"))
+                  if c["id"] == "K02")
+    assert (found["id"], found["check_id"], found["method"], found["status"]) == \
+        ("K02-1", "K02", "model_review", "review")
+    assert (found["name"], found["category"], found["owner_message"], found["fix"]) == \
+        (record["name"], record["category"], record["owner_message"], record["fix"])
+    assert found["detail"].startswith("For review")
+    assert found["evidence"] == items
+
+
+def test_review_findings_cap_severity_at_medium(tmp_path, data_dir):
+    custom = tmp_path / "data"
+    shutil.copytree(data_dir, custom)
+    records = json.loads((custom / "checks.json").read_text(encoding="utf-8"))
+    for record in records:
+        if record["id"] == "K02":
+            record["severity"] = "critical"
+    (custom / "checks.json").write_text(json.dumps(records), encoding="utf-8")
+    state, _ = write_world(tmp_path)
+    [capped] = run_checks.review_findings(state, {"K02": ["2025-06 spike"]}, custom)
+    [low] = run_checks.review_findings(state, {"K15": ["2025-11 Equipment 4,000.00"]}, custom)
+    assert capped["severity"] == "medium"
+    assert low["severity"] == "low"
+
+
+def test_review_findings_reject_bad_input(tmp_path, data_dir):
+    state, _ = write_world(tmp_path, skip=("S1",))
+    for bad in ("K04", "K12", "K99", "K02"):  # K02 cannot run without S1
+        with pytest.raises(run_checks.RunChecksError, match=bad):
+            run_checks.review_findings(state, {bad: ["item"]}, data_dir)
+    for empty in ([], ["  "], "one item"):
+        with pytest.raises(run_checks.RunChecksError, match="K15"):
+            run_checks.review_findings(state, {"K15": empty}, data_dir)
+    with pytest.raises(run_checks.RunChecksError):
+        run_checks.review_findings(state, ["K15"], data_dir)
+    assert run_checks.review_findings(state, {}, data_dir) == []
+
+
+def test_cli_reviews_replace_review_findings_and_keep_the_rest(tmp_path, data_dir, scripts_dir):
+    state, out = write_world(tmp_path, basis="cash")
+    state_path, reviews = tmp_path / "progress.json", tmp_path / "reviews.json"
+    progress.save({**state, "findings": [
+        {"id": "K02-1", "check_id": "K02", "method": "model_review", "severity": "medium", "status": "review"},
+        {"id": "K12-1", "check_id": "K12", "method": "owner_question", "severity": "medium"}]}, state_path)
+    reviews.write_text(json.dumps({"K15": ["2025-11 Equipment 4,000.00"]}), encoding="utf-8")
+    command = [sys.executable, str(scripts_dir / "run_checks.py"), "--state", str(state_path),
+               "--canonical", str(out), "--data", str(data_dir)]
+    subprocess.run(command + ["--reviews", str(reviews)], capture_output=True, text=True, check=True)
+    saved = {f["id"]: f for f in progress.load(state_path)["findings"]}
+    assert "K15-1" in saved and "K12-1" in saved and "K02-1" not in saved
+    assert saved["K15-1"]["status"] == "review"
+    subprocess.run(command, capture_output=True, text=True, check=True)
+    assert "K15-1" in {f["id"] for f in progress.load(state_path)["findings"]}
+    bad = tmp_path / "bad.json"
+    bad.write_text(json.dumps({"K04": ["x"]}), encoding="utf-8")
+    failed = subprocess.run(command + ["--reviews", str(bad)], capture_output=True, text=True)
+    assert failed.returncode == 1 and "K04" in failed.stderr

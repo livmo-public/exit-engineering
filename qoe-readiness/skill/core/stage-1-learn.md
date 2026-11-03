@@ -68,7 +68,9 @@ Costs, word for word from the SOP (Appendix 15, uses of proceeds). The SOP lists
 
 > Change of ownership transactions may include funds for: Working Capital; Borrower out of pocket expenses (including business valuations and QoE); and Owner-Occupied Commercial Real Estate when structured on a blended basis.
 
-Business Purchase Price, from the same appendix: it excludes owner-occupied commercial real estate in the sale.
+Business Purchase Price, word for word from the SOP (Appendix 15):
+
+> For purposes of the 7(a) loan facilitating the change of ownership, the “Business Purchase Price” excludes all owner-occupied commercial real estate assets being acquired in the transaction.
 
 ## Owner text
 

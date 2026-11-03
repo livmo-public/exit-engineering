@@ -54,8 +54,21 @@ def test_readme_install_steps_match_install_steps_file():
     text = readme_text()
     for step in steps:
         assert step in text, step
-    for heading in ("## Claude.ai", "## Claude Code", "## ChatGPT custom GPT"):
-        assert heading in text
+    # The routes are '##' in install-steps.md and '###' under '## Install' in the README.
+    source = (ROOT / "tools" / "install-steps.md").read_text(encoding="utf-8")
+    routes = re.findall(r"^## (.+)$", source, flags=re.M)
+    assert routes == ["Claude.ai", "Claude Code", "ChatGPT custom GPT"]
+    install = text.split("\n## Install\n", 1)[1].split("\n## ", 1)[0]
+    assert re.findall(r"^### (.+)$", install, flags=re.M) == routes
+    assert re.match(r"\s*### ", install), "the Install section opens with its first route"
+
+
+def test_readme_and_install_steps_describe_the_start_text_as_an_instruction():
+    for path in (README, ROOT / "tools" / "install-steps.md"):
+        text = path.read_text(encoding="utf-8")
+        assert "shows its start text first" not in text, path.name
+        assert "shows this text first" not in text, path.name
+    assert "instruct" in " ".join(readme_text().split()).split("## Files")[0]
 
 
 def test_readme_says_the_sample_is_synthetic_and_paths_are_relative():
@@ -81,6 +94,8 @@ def test_readme_lists_the_checks_before_you_rely_on_it():
     assert "real export from each accounting system" in text
     assert "column layouts are not yet confirmed" in text.lower()
     assert "Skills upload location" in text
+    assert "No live run in Claude.ai or ChatGPT has been done yet" in text
+    assert "scripted dry run" in text
 
 
 def test_readme_has_the_license_line():

@@ -66,7 +66,7 @@ Owner-prepared QoE readiness workbook. Designed by LIVMO. LIVMO is not responsib
 
 ### Your chat summary
 
-I show you five items.
+I show you four items.
 
 - The five most important findings.
 - Reported EBITDA and owner-adjusted EBITDA for the last fiscal year and the trailing 12 months (TTM).

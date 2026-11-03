@@ -351,3 +351,42 @@ def test_ready_next_step_does_not_send_the_seller_to_the_lender_requirement():
     assert "Commission" not in text
     assert not any(len(s.split()) > 25 for s in text.split(". "))
     assert "–" not in text and "—" not in text
+
+
+# ---- final review: owner statements and review findings in the workbook ---------------
+
+def _rebuild(tmp_path, state, canonical_dir):
+    path = tmp_path / "workbook.xlsx"
+    build_workbook.build(state, canonical_dir, DATA, path)
+    return path
+
+
+def test_scope_lists_owner_answers_and_adjustments_with_no_document(tmp_path, built):
+    import run_checks
+    owner = run_checks.owner_findings(built.state, {"K12": "We rent from a company I own."}, DATA)
+    adjustments = [*built.state["adjustments"],
+                   {"id": "A5", "name": "Owner car lease", "source_file": "R3", "amounts": {"TTM": 900.0},
+                    "evidence": None, "decision": "approved", "owner_stated": True}]
+    state = {**built.state, "findings": [*built.state["findings"], *owner], "adjustments": adjustments}
+    lines = scope_lines(_rebuild(tmp_path, state, built.canonical_dir))
+    statements = [str(d) for item, d in lines if item == "Owner statement"]
+    [k12] = [d for d in statements if d.startswith("K12-1")]
+    assert "We rent from a company I own." in k12 and k12.endswith("(owner statement, no document)")
+    assert k12.count("no document") == 1
+    # A2 (edited) and A5 (approved) have no evidence; A1 has evidence, A3 is rejected, A4 undecided.
+    no_document = [d for d in statements if d.startswith("A")]
+    assert [d.split(" ")[0] for d in no_document] == ["A2", "A5"]
+    assert all(d.endswith("(owner statement, no document)") for d in no_document)
+
+
+def test_findings_tab_shows_review_findings(tmp_path, built):
+    import run_checks
+    reviews = run_checks.review_findings(built.state, {"K15": ["2025-11 Equipment purchase 4,000.00"]}, DATA)
+    state = {**built.state, "findings": [*built.state["findings"], *reviews]}
+    ws = openpyxl.load_workbook(_rebuild(tmp_path, state, built.canonical_dir))["Findings"]
+    header = [c.value for c in ws[4]]
+    rows = [dict(zip(header, (c.value for c in row))) for row in ws.iter_rows(min_row=5)]
+    [row] = [r for r in rows if r["Finding"] == "K15-1"]
+    assert row["Status"] == "review" and row["Method"] == "model_review"
+    assert row["Detail"].startswith("For review")
+    assert "Equipment purchase" in row["Evidence"]

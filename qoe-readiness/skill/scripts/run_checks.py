@@ -34,6 +34,11 @@ MAX_LARGE_ENTRIES = 25
 CASH_SKIPPED_CHECKS = ("K01", "K07")
 # Inputs whose absence is the finding: K16 fires when the policy file (S5) is not uploaded.
 ABSENCE_INPUTS = {"K16": ("S5",)}
+# A finding for review has this severity at most.
+REVIEW_SEVERITY_ORDER = ("critical", "high", "medium", "low")
+MAX_REVIEW_SEVERITY = "medium"
+# The evidence line of an owner-question finding starts with this text.
+OWNER_EVIDENCE_PREFIX = "Owner statement, no document: "
 
 
 class RunChecksError(ValueError):
@@ -543,7 +548,37 @@ def owner_findings(state: dict, answers: dict[str, str], data_dir: Path) -> list
         if not str(statement).strip():
             raise RunChecksError(f"{check_id}: the owner statement is empty")
         out.append(_finding(ctx, check_id, "The owner's answer confirms the condition.",
-                            [f"Owner statement, no document: {str(statement).strip()}"]))
+                            [OWNER_EVIDENCE_PREFIX + str(statement).strip()]))
+    return out
+
+
+def _review_severity(severity: str) -> str:
+    """A finding for review has a severity of medium at most."""
+    order = REVIEW_SEVERITY_ORDER
+    return severity if order.index(severity) >= order.index(MAX_REVIEW_SEVERITY) else MAX_REVIEW_SEVERITY
+
+
+def review_findings(state: dict, reviews: dict[str, list[str]], data_dir: Path) -> list[dict]:
+    """One finding for review per model_review check, holding the items the model showed the owner.
+
+    reviews maps a check id to the list of items the model showed. The status is "review", the
+    severity is the catalog severity capped at medium, and the items are the evidence.
+    """
+    if not isinstance(reviews, dict):
+        raise RunChecksError("review items must be a JSON object of check id to a list of items")
+    records = _catalog(data_dir, "checks.json")
+    by_id = {c["id"]: c for c in records}
+    ctx = build_context(state, {}, records)
+    out = []
+    for check_id, items in reviews.items():
+        check = by_id.get(check_id)
+        if not check or check["method"] != "model_review" or not should_run(state, check):
+            raise RunChecksError(f"{check_id} is not a review check that can run")
+        if not isinstance(items, list) or not items or not all(str(i).strip() for i in items):
+            raise RunChecksError(f"{check_id}: give a list of the items you showed, none blank")
+        shown = [str(i).strip() for i in items]
+        found = _finding(ctx, check_id, f"For review: {len(shown)} item(s) for the owner to look at.", shown)
+        out.append({**found, "severity": _review_severity(check["severity"]), "status": progress.REVIEW_STATUS})
     return out
 
 
@@ -613,6 +648,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--answers", type=Path,
                         help="JSON file of owner statements by owner-question check id; "
                              "replaces the owner-question findings in the state")
+    parser.add_argument("--reviews", type=Path,
+                        help="JSON file of the review items shown to the owner, by model-review check id; "
+                             "replaces the review findings in the state")
     args = parser.parse_args(argv)
     try:
         state = progress.load(args.state)
@@ -622,6 +660,10 @@ def main(argv: list[str] | None = None) -> int:
             with open(args.answers, encoding="utf-8") as handle:
                 findings += owner_findings(state, json.load(handle), args.data)
             replaced.append("owner_question")
+        if args.reviews:
+            with open(args.reviews, encoding="utf-8") as handle:
+                findings += review_findings(state, json.load(handle), args.data)
+            replaced.append("model_review")
         kept = [f for f in state["findings"] if f.get("method") not in replaced]
         progress.save({**state, "findings": kept + findings}, args.state)
     except (RunChecksError, canonical.CanonicalError, ValueError, OSError) as err:
