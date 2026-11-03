@@ -15,6 +15,7 @@ SECTIONS = ["Purpose", "Steps for the model", "Owner text", "Gate"]
 MAX_WORDS = 25
 STAGE1_DISCLAIMER = ("A buyer or lender will commission an independent QoE. This workbook is your own "
                      "preparation for that QoE. LIVMO designed this skill and is not responsible for its output.")
+BASE64_PAYLOAD = re.compile(r"base64,[A-Za-z0-9+/=]{200,}")
 SKIPPED_DIRS = {"__pycache__", ".pytest_cache", ".ruff_cache", ".git"}
 
 
@@ -85,9 +86,11 @@ def all_repo_text():
         if not path.is_file() or SKIPPED_DIRS & set(path.relative_to(ROOT).parts):
             continue
         try:
-            out[str(path.relative_to(ROOT))] = path.read_text(encoding="utf-8")
+            text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
+        # Embedded fonts and logos are base64 text. Random letters in them can spell a short term.
+        out[str(path.relative_to(ROOT))] = BASE64_PAYLOAD.sub("base64,", text)
     return out
 
 
