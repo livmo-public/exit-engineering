@@ -35,6 +35,16 @@ def denylist():
 
 
 @pytest.fixture
+def qoe_root():
+    return ROOT
+
+
+@pytest.fixture
+def repo_root():
+    return ROOT.parent
+
+
+@pytest.fixture
 def data_dir():
     return ROOT / "skill" / "data"
 
