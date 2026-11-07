@@ -87,7 +87,7 @@ The facts for a 7(a) loan that finances a change of ownership:
 
 The SBA can change these rules. Check the current SOP before you rely on them.
 
-Results shows a warning when an input breaks one of these rules. The warning says "for an SBA 7(a) loan". A warning does not block Results, because a buyer can also use a lender outside the SBA program.
+Results shows a warning when an input breaks one of these rules. Each warning names the SBA 7(a) loan. A warning does not block Results, because a buyer can also use a lender outside the SBA program.
 
 ## What the calculator leaves out
 
