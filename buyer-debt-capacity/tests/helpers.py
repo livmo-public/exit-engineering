@@ -1,7 +1,11 @@
 """Workbook test helpers: recalculate with the formulas library and read cell values."""
 from pathlib import Path
 
+from openpyxl import load_workbook
+
 import pytest
+
+import build_calculator as bc
 
 from calc_math import MESSAGE_ORDER, annuity_factor, evaluate, message_text
 
@@ -73,3 +77,24 @@ def compare(inputs, name: str, path, cells: dict, values: dict, facts: dict) -> 
     for code in MESSAGE_ORDER:
         expected = message_text(code, inputs, result, facts) if code in shown else ""
         assert (got(f"msg.{code}") or "") == expected, f"{name}.msg.{code}"
+
+
+TEXT_SUFFIXES = {".md", ".py", ".json", ".txt", ".ini", ".gitignore", ".gitattributes", ""}
+COMMITTED = (bc.BLANK_FILE, bc.SAMPLE_FILE)
+
+
+def committed_strings():
+    for path in COMMITTED:
+        wb = load_workbook(path)
+        for ws in wb:
+            for row in ws.iter_rows():
+                for c in row:
+                    if isinstance(c.value, str):
+                        yield f"{path.name}:{ws.title}!{c.coordinate}", c.value
+
+
+def text_files():
+    skip = {"__pycache__", ".pytest_cache", ".ruff_cache", ".git"}
+    for path in bc.ROOT.rglob("*"):
+        if path.is_file() and not skip & set(path.parts) and path.suffix in TEXT_SUFFIXES:
+            yield path

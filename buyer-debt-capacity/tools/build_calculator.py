@@ -6,6 +6,7 @@ and the SBA values block on Deal terms.
 """
 from __future__ import annotations
 
+import os
 import re
 import zipfile
 from datetime import datetime
@@ -324,6 +325,8 @@ CREATOR = "LIVMO"
 
 
 ZIP_TIME = (2026, 1, 1, 0, 0, 0)
+ZIP_SYSTEM_UNIX = 3
+ZIP_FILE_MODE = 0o644 << 16
 CORE_PROPS = "docProps/core.xml"
 
 
@@ -336,13 +339,17 @@ def fix_save_time(path: Path) -> None:
     with zipfile.ZipFile(path) as source:
         entries = [(info.filename, source.read(info.filename)) for info in source.infolist()]
     stamp = FIXED_DATE.strftime("%Y-%m-%dT%H:%M:%SZ").encode()
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as target:
+    temp = path.with_name(path.name + ".tmp")
+    with zipfile.ZipFile(temp, "w", zipfile.ZIP_DEFLATED) as target:
         for name, data in entries:
             if name == CORE_PROPS:
                 data = re.sub(rb"(<dcterms:modified[^>]*>)[^<]*", rb"\g<1>" + stamp, data)
             info = zipfile.ZipInfo(name, date_time=ZIP_TIME)
             info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = ZIP_SYSTEM_UNIX
+            info.external_attr = ZIP_FILE_MODE
             target.writestr(info, data)
+    os.replace(temp, path)
 
 
 def write_descriptions(ws, descriptions: tuple[str, ...]) -> None:

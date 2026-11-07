@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 import build_calculator as bc
 from base_inputs import base
 from calc_math import Addback, Deduction, default_inputs, load_facts
-from helpers import cell_value, recalculate
+from helpers import cell_value, committed_strings, recalculate, text_files
 
 FACTS = load_facts()
 TEXT_FIELDS = {"period_basis", "period_end", "seller_standby"}
@@ -206,9 +206,15 @@ def test_formulas_use_only_allowed_functions(wb):
 
 
 def test_denylist_terms_absent(wb, denylist):
-    text = " ".join(str(c.value) for ws in wb for row in ws.iter_rows() for c in row if c.value).lower()
-    for term in denylist:
-        assert term not in text
+    """No denylist term in a built workbook, the committed .xlsx files, or any repo text file."""
+    texts = [("built workbook", str(c.value)) for ws in wb for row in ws.iter_rows()
+             for c in row if c.value]
+    texts += list(committed_strings())
+    texts += [(path.name, path.read_text(encoding="utf-8", errors="ignore")) for path in text_files()]
+    for where, text in texts:
+        lowered = text.lower()
+        for term in denylist:
+            assert term not in lowered, f"denylist term in {where}"
 
 
 def test_exported_total_cells_hold_the_formulas(tmp_path):

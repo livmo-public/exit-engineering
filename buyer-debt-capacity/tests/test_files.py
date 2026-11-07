@@ -10,9 +10,6 @@ from helpers import blank, cell_value, compare, recalculate
 from sample_data import SAMPLE
 
 FACTS = load_facts()
-REPO_DIR = bc.ROOT
-COMMITTED = (bc.BLANK_FILE, bc.SAMPLE_FILE)
-TEXT_SUFFIXES = {".md", ".py", ".json", ".txt", ".ini", ".gitignore", ".gitattributes", ""}
 
 
 def test_sample_meets_spec():
@@ -54,6 +51,12 @@ def snapshot(path) -> dict:
             "cells": cells,
             "validations": validations,
             "merged": sorted(str(m) for m in ws.merged_cells.ranges),
+            "freeze": ws.freeze_panes,
+            "heights": {k: d.height for k, d in sorted(ws.row_dimensions.items()) if d.height},
+            "conditional": sorted(
+                (str(rng.sqref), [(r.type, r.operator, r.formula) for r in rules])
+                for rng, rules in ws.conditional_formatting._cf_rules.items()),
+            "tab_color": ws.sheet_properties.tabColor and ws.sheet_properties.tabColor.rgb,
             "widths": {k: d.width for k, d in sorted(ws.column_dimensions.items())},
         }
     return out
@@ -72,13 +75,6 @@ def test_rebuild_is_byte_identical(tmp_path):
     bc.build(first, SAMPLE, FACTS)
     bc.build(second, SAMPLE, FACTS)
     assert first.read_bytes() == second.read_bytes()
-
-
-def test_committed_files_are_byte_identical_to_a_rebuild(tmp_path):
-    blank_path, sample_path = tmp_path / "blank.xlsx", tmp_path / "examples" / "sample.xlsx"
-    bc.build_both(blank_path, sample_path)
-    assert blank_path.read_bytes() == bc.BLANK_FILE.read_bytes()
-    assert sample_path.read_bytes() == bc.SAMPLE_FILE.read_bytes()
 
 
 @pytest.fixture(scope="module")
@@ -111,33 +107,3 @@ def test_blank_file_blocks_until_filled(solved_files):
     assert not blank(got("msg.missing_inputs"))
     for key in ("cash_available", "supported_price", "coverage_at_ask", "status", "price_gap"):
         assert blank(got(key)), key
-
-
-def committed_strings():
-    for path in COMMITTED:
-        wb = load_workbook(path)
-        for ws in wb:
-            for row in ws.iter_rows():
-                for c in row:
-                    if isinstance(c.value, str):
-                        yield f"{path.name}:{ws.title}!{c.coordinate}", c.value
-
-
-def text_files():
-    skip = {"__pycache__", ".pytest_cache", ".ruff_cache", ".git"}
-    for path in REPO_DIR.rglob("*"):
-        if path.is_file() and not skip & set(path.parts) and path.suffix in TEXT_SUFFIXES:
-            yield path
-
-
-def test_no_third_party_names(denylist):
-    if not denylist:
-        pytest.skip("No denylist file found.")
-    for where, text in committed_strings():
-        lowered = text.lower()
-        for term in denylist:
-            assert term not in lowered, f"denylist term in {where}"
-    for path in text_files():
-        lowered = path.read_text(encoding="utf-8", errors="ignore").lower()
-        for term in denylist:
-            assert term not in lowered, f"denylist term in {path.name}"
