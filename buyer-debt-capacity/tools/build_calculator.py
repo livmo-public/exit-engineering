@@ -42,10 +42,10 @@ ANSWER_CELLS: tuple[tuple[str, str], ...] = tuple((ROLE, f"B{row}") for row in r
 # Add-backs tab. The owner pay row is fixed; ADDBACK_ROWS are the 25 free rows below it.
 OWNER_PAY_ROW = 4
 ADDBACK_ROWS = (5, 4 + MAX_ADDBACKS)  # (5, 29)
-ADDBACK_TOTAL_CELL = (ADDBACKS, "C30")
-PROOF_MISSING_CELL = (ADDBACKS, "C31")
-DEDUCTION_ROWS = (35, 34 + MAX_DEDUCTIONS)  # (35, 44)
-DEDUCTION_TOTAL_CELL = (ADDBACKS, "C45")
+ADDBACK_TOTAL_CELL = (ADDBACKS, f"C{ADDBACK_ROWS[1] + 2}")
+PROOF_MISSING_CELL = (ADDBACKS, f"C{ADDBACK_ROWS[1] + 3}")
+DEDUCTION_ROWS = (ADDBACK_ROWS[1] + 7, ADDBACK_ROWS[1] + 6 + MAX_DEDUCTIONS)  # (36, 45)
+DEDUCTION_TOTAL_CELL = (ADDBACKS, f"C{DEDUCTION_ROWS[1] + 1}")
 ADDBACK_COLS = {"category": "A", "description": "B", "amount": "C", "proof": "D", "note": "E"}
 DEDUCTION_COLS = {"category": "A", "description": "B", "amount": "C", "note": "D"}
 
@@ -172,9 +172,9 @@ def write_profit(ws) -> None:
     for row, label in labels.items():
         ws[f"A{row}"] = label
         ws[f"A{row}"].alignment = WRAP
-    ws["A11"].font = BOLD
-    ws["B11"] = "=SUM(B6:B10)"
-    ws["B11"].number_format = MONEY
+    ws[f"A{EBITDA_CELL[1][1:]}"].font = BOLD
+    ws[EBITDA_CELL[1]] = "=SUM(B6:B10)"
+    ws[EBITDA_CELL[1]].number_format = MONEY
     ws["D12"] = "Required. Enter 0 if no owner draws pay."
     for field in INPUT_CELLS:
         sheet, cell = INPUT_CELLS[field]
@@ -202,27 +202,29 @@ def write_addbacks(ws) -> None:
     for row in range(first, last + 1):
         for key in ("category", "description", "amount", "proof", "note"):
             _input(ws, f"{ADDBACK_COLS[key]}{row}", fmt=MONEY if key == "amount" else None)
-    ws[f"A{last + 2}"] = "Total add-backs, including owner pay"
-    ws[f"C{last + 2}"] = f"=SUM(C{OWNER_PAY_ROW}:C{last})"
-    ws[f"A{last + 3}"] = "Add-backs with no proof on file"
-    ws[f"C{last + 3}"] = f'=COUNTIF(D{first}:D{last},"no")'
-    for row in (last + 2, last + 3):
-        ws[f"A{row}"].font = BOLD
-    ws["C30"].number_format = MONEY
-    ws["A33"] = ("Deductions: profit that a lender removes, such as one-time income or a below-market cost. "
+    total, proof = ADDBACK_TOTAL_CELL[1], PROOF_MISSING_CELL[1]
+    ws[f"A{total[1:]}"] = "Total add-backs, including owner pay"
+    ws[total] = f"=SUM(C{OWNER_PAY_ROW}:C{last})"
+    ws[f"A{proof[1:]}"] = "Add-backs with no proof on file"
+    ws[proof] = f'=COUNTIF(D{first}:D{last},"no")'
+    for cell in (total, proof):
+        ws[f"A{cell[1:]}"].font = BOLD
+    ws[total].number_format = MONEY
+    ws[f"A{DEDUCTION_ROWS[0] - 2}"] = ("Deductions: profit that a lender removes, such as one-time income or a below-market cost. "
                        "For a below-market cost, enter the difference to market cost.")
-    ws["A33"].font = BOLD
+    ws[f"A{DEDUCTION_ROWS[0] - 2}"].font = BOLD
     for col, text in zip("ABCD", ("Category", "Description", "Amount", "Note")):
-        ws[f"{col}34"] = text
-        ws[f"{col}34"].font = BOLD
+        ws[f"{col}{DEDUCTION_ROWS[0] - 1}"] = text
+        ws[f"{col}{DEDUCTION_ROWS[0] - 1}"].font = BOLD
     d_first, d_last = DEDUCTION_ROWS
     for row in range(d_first, d_last + 1):
         for key in ("category", "description", "amount", "note"):
             _input(ws, f"{DEDUCTION_COLS[key]}{row}", fmt=MONEY if key == "amount" else None)
-    ws[f"A{d_last + 1}"] = "Total deductions"
-    ws[f"A{d_last + 1}"].font = BOLD
-    ws[f"C{d_last + 1}"] = f"=SUM(C{d_first}:C{d_last})"
-    ws[f"C{d_last + 1}"].number_format = MONEY
+    d_total = DEDUCTION_TOTAL_CELL[1]
+    ws[f"A{d_total[1:]}"] = "Total deductions"
+    ws[f"A{d_total[1:]}"].font = BOLD
+    ws[d_total] = f"=SUM(C{d_first}:C{d_last})"
+    ws[d_total].number_format = MONEY
     _list(ws, ADDBACK_CATEGORIES, f"A{first}:A{last}")
     _list(ws, YES_NO, f"D{first}:D{last}")
     _list(ws, DEDUCTION_CATEGORIES, f"A{d_first}:A{d_last}")
@@ -247,7 +249,7 @@ def write_role(ws) -> None:
     _input(ws, "B12", fmt=MONEY)
     _marker(ws, 12, "ISBLANK(B12)")
     ws["A13"] = "Operator note: the roles that the salary pays for"
-    _input(ws, "B13")
+    _input(ws, OPERATOR_NOTE_CELL[1])
     for (_, cell) in ANSWER_CELLS:
         _list(ws, YES_NO, cell)
     _decimal(ws, "B12")
@@ -280,10 +282,10 @@ def write_deal(ws) -> None:
             _marker(ws, row, f"AND(B6>0,ISBLANK(B{row}))")
         elif field != "asking_price":
             _marker(ws, row, f"ISBLANK(B{row})")
-    ws["A16"] = "Bank loan share of price (100% minus down payment minus seller note)"
-    ws["A16"].font = BOLD
-    ws["B16"] = "=1-B5-B6"
-    ws["B16"].number_format = PERCENT
+    ws[f"A{BANK_SHARE_CELL[1][1:]}"] = "Bank loan share of price (100% minus down payment minus seller note)"
+    ws[f"A{BANK_SHARE_CELL[1][1:]}"].font = BOLD
+    ws[BANK_SHARE_CELL[1]] = "=1-B5-B6"
+    ws[BANK_SHARE_CELL[1]].number_format = PERCENT
     _list(ws, YES_NO, "B7")
     _decimal(ws, "B4 B13 B14")
     _decimal(ws, "B5:B6 B8 B10", minimum=0, maximum=1)

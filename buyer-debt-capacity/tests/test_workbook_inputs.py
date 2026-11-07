@@ -5,7 +5,7 @@ from openpyxl import load_workbook
 
 import build_calculator as bc
 from base_inputs import base
-from calc_math import default_inputs, load_facts
+from calc_math import Addback, Deduction, default_inputs, load_facts
 from helpers import cell_value, recalculate
 
 FACTS = load_facts()
@@ -77,7 +77,7 @@ def test_profit_ebitda_formula(built):
     values = recalculate(built)
     i = base()
     expected = i.net_profit + i.interest + i.income_taxes + i.depreciation + i.amortization
-    assert cell_value(values, built, "Profit", "B11") == pytest.approx(expected)
+    assert cell_value(values, built, *bc.EBITDA_CELL) == pytest.approx(expected)
 
 
 def test_owner_pay_row_links_to_profit(wb):
@@ -209,3 +209,26 @@ def test_denylist_terms_absent(wb, denylist):
     text = " ".join(str(c.value) for ws in wb for row in ws.iter_rows() for c in row if c.value).lower()
     for term in denylist:
         assert term not in text
+
+
+def test_exported_total_cells_hold_the_formulas(tmp_path):
+    path = tmp_path / "totals.xlsx"
+    inputs = base(
+        seller_pct=0.15,
+        addbacks=(Addback("other", 20_000.0, "yes"), Addback("one-time cost", 5_000.0, "no")),
+        deductions=(Deduction("one-time income", 7_000.0),),
+    )
+    bc.build(path, inputs, FACTS)
+    values = recalculate(path)
+    got = lambda ref: cell_value(values, path, *ref)
+    assert got(bc.ADDBACK_TOTAL_CELL) == pytest.approx(inputs.owner_pay + 25_000.0)
+    assert got(bc.PROOF_MISSING_CELL) == 1
+    assert got(bc.DEDUCTION_TOTAL_CELL) == pytest.approx(7_000.0)
+    assert got(bc.BANK_SHARE_CELL) == pytest.approx(1 - inputs.down_pct - inputs.seller_pct)
+    wb = load_workbook(path)
+    for ref in (bc.ADDBACK_TOTAL_CELL, bc.PROOF_MISSING_CELL, bc.DEDUCTION_TOTAL_CELL,
+                bc.BANK_SHARE_CELL, bc.EBITDA_CELL):
+        assert str(wb[ref[0]][ref[1]].value).startswith("="), ref
+    assert wb[bc.OPERATOR_NOTE_CELL[0]][bc.OPERATOR_NOTE_CELL[1]].fill.fill_type == "solid"
+    assert wb[bc.ADDBACK_TOTAL_CELL[0]][bc.ADDBACK_TOTAL_CELL[1]].number_format != "General"
+    assert wb[bc.DEDUCTION_TOTAL_CELL[0]][bc.DEDUCTION_TOTAL_CELL[1]].number_format != "General"
