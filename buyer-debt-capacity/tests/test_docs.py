@@ -1,0 +1,70 @@
+"""Docs and license checks: the README, the root README and LICENSE, and no em-dashes."""
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+from openpyxl import load_workbook
+
+import build_calculator as bc
+from calc_math import load_facts
+
+BDC_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = BDC_ROOT.parent
+README = BDC_ROOT / "README.md"
+FACTS = load_facts()
+BOOKING = "https://calendly.com/khaledazar/exit-builder"
+HEADINGS = ("How to use", "Cash flow steps", "Operator salary", "SBA rules", "QoE Readiness", "License")
+EM_DASH = "—"
+
+
+def readme_text() -> str:
+    return README.read_text(encoding="utf-8")
+
+
+def test_readme_starts_with_liability():
+    paragraphs = [p for p in readme_text().split("\n\n") if p.strip() and not p.startswith("#")]
+    assert bc.LIABILITY in paragraphs[0]
+
+
+def test_readme_sections():
+    text = readme_text()
+    for heading in HEADINGS:
+        assert f"\n## {heading}\n" in text, heading
+
+
+def test_readme_sba_source():
+    text = readme_text()
+    for key in ("url", "sop_version", "checked"):
+        assert FACTS[key] in text, key
+
+
+def test_readme_booking_link_only():
+    text = readme_text()
+    assert BOOKING in text
+    assert "Who LIVMO is" not in text
+
+
+def test_root_readme_lists_tool():
+    assert "`buyer-debt-capacity/`" in (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+
+def test_root_license_mit_for_spreadsheets():
+    text = (REPO_ROOT / "LICENSE").read_text(encoding="utf-8")
+    assert "Spreadsheet files (.xlsx)" in text
+    assert "buyer-debt-capacity/tools/LICENSE" in text
+
+
+def test_qoe_readme_license_line_covers_sample_workbook():
+    text = (REPO_ROOT / "qoe-readiness" / "README.md").read_text(encoding="utf-8")
+    assert "sample workbook (.xlsx)" in text
+
+
+def test_no_em_dash():
+    assert EM_DASH not in readme_text()
+    for path in (bc.BLANK_FILE, bc.SAMPLE_FILE):
+        for ws in load_workbook(path):
+            for row in ws.iter_rows():
+                for cell in row:
+                    if isinstance(cell.value, str):
+                        assert EM_DASH not in cell.value, (path, ws.title, cell.coordinate)

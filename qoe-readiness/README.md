@@ -72,4 +72,4 @@ Book a 30-minute exit assessment: https://calendly.com/khaledazar/exit-builder
 
 ## License
 
-The guidebook (PDF and HTML) is licensed under CC BY-NC-ND 4.0. The skill in `skill/` and the tools in `tools/` are licensed under the MIT License. See `skill/LICENSE`, `tools/LICENSE`, and the root `LICENSE`.
+The guidebook (PDF and HTML) is licensed under CC BY-NC-ND 4.0. The skill in `skill/`, the tools in `tools/`, and the sample workbook (.xlsx) are licensed under the MIT License. See `skill/LICENSE`, `tools/LICENSE`, and the root `LICENSE`.
