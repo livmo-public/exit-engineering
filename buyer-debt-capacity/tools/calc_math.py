@@ -55,7 +55,10 @@ MESSAGES: dict[str, str] = {
     "heavy": "Heavy owner dependence. Buyers and lenders usually ask for a transition period with the seller.",
     "proof": "{n} {noun} no proof on file. A lender asks for proof of each add-back.",
     "sba_down": "The down payment is below the {down} minimum equity injection " + SBA_SUFFIX,
-    "sba_term": "The bank loan term is longer than the {term}-year maximum term " + SBA_SUFFIX,
+    "sba_term": (
+        "The bank loan term is longer than the {term}-year maximum payoff period "
+        "for an SBA 7(a) loan that does not finance real estate."
+    ),
     "sba_coverage": "The coverage target is below the {coverage} minimum debt service coverage " + SBA_SUFFIX,
     "sba_standby": (
         "The standby seller note is above {limit} of the price. "

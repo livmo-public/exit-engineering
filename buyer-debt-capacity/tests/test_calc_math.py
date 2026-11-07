@@ -372,8 +372,13 @@ def test_message_text_carries_values():
     assert "10%" in down and down.endswith("for an SBA 7(a) loan.")
     assert message_text("qoe", i, r, FACTS).endswith(
         "See the QoE Readiness skill in this repo to prepare.")
-    for code in ("sba_term", "sba_coverage", "sba_standby"):
+    for code in ("sba_coverage", "sba_standby"):
         assert message_text(code, i, r, FACTS).endswith("for an SBA 7(a) loan.")
+    term = message_text("sba_term", i, r, FACTS)
+    assert term.endswith("for an SBA 7(a) loan that does not finance real estate.")
+    assert "10-year maximum payoff period" in term
+    qoe = message_text("qoe", i, r, FACTS)
+    assert qoe.startswith("When a new owner buys the business at this price")
 
 
 SHARES_100 = [(0.7, 0.3), (0.18, 0.82), (0.41, 0.59), (0.57, 0.43), (0.69, 0.31), (0.5, 0.5)]

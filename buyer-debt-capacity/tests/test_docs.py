@@ -7,7 +7,8 @@ import pytest
 from openpyxl import load_workbook
 
 import build_calculator as bc
-from calc_math import load_facts
+from calc_math import evaluate, load_facts
+from sample_data import SAMPLE
 
 BDC_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = BDC_ROOT.parent
@@ -68,3 +69,24 @@ def test_no_em_dash():
                 for cell in row:
                     if isinstance(cell.value, str):
                         assert EM_DASH not in cell.value, (path, ws.title, cell.coordinate)
+
+
+def test_readme_sample_figures_match_the_math():
+    r = evaluate(SAMPLE, FACTS)
+    text = readme_text()
+    assert f"Cash available for debt: ${r.cash_available:,.0f}." in text
+    assert f"Supported price: about ${r.supported_price / 1e6:.2f}M." in text
+    assert f"Asking price: ${SAMPLE.asking_price / 1e6:.1f}M." in text
+    assert f"Coverage at the asking price: {r.coverage_at_ask:.2f}." in text
+    assert f'Status: "{r.status}".' in text
+    assert "qoe" in r.flags
+
+
+def test_readme_sba_scope_qualifiers():
+    text = readme_text()
+    assert "does not finance real estate" in text
+    assert "new owner buys the business" in text
+    assert "owner buyout" in text.lower()
+    assert "loan limit" in text
+    assert "has everything you need" not in text
+    assert "only with proof" not in text
