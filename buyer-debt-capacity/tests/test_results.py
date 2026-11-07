@@ -7,7 +7,9 @@ import pytest
 from openpyxl import load_workbook
 
 import build_calculator as bc
-from calc_math import MESSAGE_ORDER, annuity_factor, evaluate, message_text
+from calc_math import (
+    MESSAGE_ORDER, STATUS_NO, STATUS_TIGHT, STATUS_YES, annuity_factor, evaluate, message_text,
+)
 from helpers import cell_value, error_cells, recalculate
 from scenarios import FACTS, NULL_FACTS, SCENARIOS
 
@@ -102,6 +104,53 @@ def compare(name: str, path, cells: dict, values: dict, facts: dict) -> None:
 def test_results_match_python(name, solved):
     path, cells, values = solved(name)
     compare(name, path, cells, values, FACTS)
+
+
+# Scenario intent, written out by hand so that a change in calc_math cannot move it.
+EXPECTED_STATUS = {
+    "ask_not_financeable": STATUS_NO, "ask_tight_low_edge": STATUS_TIGHT,
+    "ask_tight_high_edge": STATUS_TIGHT, "ask_financeable": STATUS_YES,
+}
+EXPECTED_FLAGS = {"qoe_at_3m": {"qoe"}, "qoe_below_3m": set(), "loan_limit": {"loan_limit"}}
+EXPECTED_BLOCKS = {
+    "blank_file": {"missing_inputs", "missing_answers", "operator_blank"},
+    "missing_net_profit": {"missing_inputs"}, "missing_net_profit_low_cash": {"missing_inputs"},
+    "missing_bank_term": {"missing_inputs"}, "missing_answer": {"missing_answers"},
+    "missing_answer_and_no_cash": {"missing_answers", "no_cash"}, "answer_not_yes_no": {"missing_answers"},
+    "padded_text": {"missing_answers"},
+    "operator_blank": {"operator_blank"}, "operator_blank_no_operator": {"operator_blank"},
+    "operator_zero_no_operator": {"operator_zero"},
+    "seller_missing_terms": {"missing_inputs"}, "seller_missing_standby": {"missing_inputs"},
+    "seller_missing_years": {"missing_inputs"},
+    "pct_as_whole_number": {"bad_terms"}, "shares_over_100": {"bad_terms"}, "rate_whole_number": {"bad_terms"},
+    "seller_rate_whole_number": {"bad_terms"}, "coverage_too_high": {"bad_terms"},
+    "term_in_months": {"bad_terms"}, "seller_term_in_months": {"bad_terms"},
+    "no_cash": {"no_cash"}, "missing_and_bad_terms": {"missing_inputs", "bad_terms"},
+    "heavy_and_blocked": {"missing_inputs"},
+}
+
+
+def shown_codes(values, path, cells, codes) -> set[str]:
+    return {c for c in codes if not blank(cell_value(values, path, *cells[f"msg.{c}"]))}
+
+
+@pytest.mark.parametrize("name", sorted(set(EXPECTED_STATUS) | set(EXPECTED_FLAGS) | set(EXPECTED_BLOCKS)
+                                        | {"shares_100_float"}))
+def test_scenario_intent(name, solved):
+    path, cells, values = solved(name)
+
+    def got(key: str):
+        return cell_value(values, path, *cells[key])
+
+    if name in EXPECTED_STATUS:
+        assert got("status") == EXPECTED_STATUS[name]
+    if name in EXPECTED_FLAGS:
+        assert shown_codes(values, path, cells, ("qoe", "loan_limit")) == EXPECTED_FLAGS[name]
+    blocks = shown_codes(values, path, cells, MESSAGE_ORDER[:6])
+    assert blocks == EXPECTED_BLOCKS.get(name, set())
+    if name == "shares_100_float":
+        assert blank(got("supported_price")) and blank(got("max_bank_loan"))
+        assert got("bank_loan_at_price") == 0 and got("status") == STATUS_YES
 
 
 @pytest.mark.parametrize("name", list(SCENARIOS))

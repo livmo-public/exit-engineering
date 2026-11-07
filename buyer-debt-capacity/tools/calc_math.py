@@ -22,6 +22,7 @@ MAX_RATE = 1.0
 MAX_COVERAGE_TARGET = 5
 MAX_TERM_YEARS = 40
 ZERO_RATE = 1e-12
+BANK_SHARE_DIGITS = 9  # Rounding removes the float residual of 1 - down - seller (Excel shows 0).
 
 STATUS_NO = "Not financeable at these terms"
 STATUS_TIGHT = "Tight"
@@ -191,8 +192,11 @@ def _or(value, fallback):
 
 
 def _word(text: str | None) -> str | None:
-    """Return "yes" or "no" for those answers in any case. Any other text is blank."""
-    word = (text or "").strip().lower()
+    """Return "yes" or "no" for those answers in any case. Any other text is blank.
+
+    Surrounding spaces are not removed, because the sheet cannot remove them (no TRIM).
+    """
+    word = (text or "").lower()
     return word if word in ("yes", "no") else None
 
 
@@ -341,8 +345,13 @@ def evaluate(inputs: Inputs, facts: dict) -> Result:
     )
 
 
+def bank_share_of(i: Inputs) -> float:
+    """Bank loan share of price, rounded like the sheet cell =ROUND(1-down-seller, 9)."""
+    return xl_round(1 - i.down_pct - i.seller_pct, BANK_SHARE_DIGITS)
+
+
 def _debt_capacity(i: Inputs, cash: float) -> dict:
-    bank_share = 1 - i.down_pct - i.seller_pct
+    bank_share = bank_share_of(i)
     seller_factor = 0.0
     if i.seller_pct > 0 and _word(i.seller_standby) == "no":
         seller_factor = annuity_factor(i.seller_rate, i.seller_years)

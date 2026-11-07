@@ -72,6 +72,9 @@ SCENARIOS: dict[str, Inputs] = {
     "unlimited_price": base(down_pct=0.5, seller_pct=0.5, seller_standby="yes"),
     "unlimited_price_with_ask": base(down_pct=0.5, seller_pct=0.5, seller_standby="yes",
                                      asking_price=1_000_000.0),
+    "shares_100_float": base(down_pct=0.7, seller_pct=0.3, seller_standby="yes", asking_price=1_000_000.0),
+    "padded_text": base(answers=(" yes", "no", "no", "no", "yes", "no"),
+                        addbacks=(Addback("other", 20_000.0, " no"),)),
     # Asking price
     "ask_zero": base(asking_price=0.0),
     "ask_tight_low_edge": base(asking_price=_ask_for_coverage(1.25)),

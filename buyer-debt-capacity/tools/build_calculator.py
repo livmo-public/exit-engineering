@@ -12,7 +12,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.worksheet.datavalidation import DataValidation
 
-from calc_math import MAX_ADDBACKS, MAX_DEDUCTIONS, Inputs
+from calc_math import BANK_SHARE_DIGITS, MAX_ADDBACKS, MAX_DEDUCTIONS, Inputs
 
 LIABILITY = (
     "Designed by LIVMO. LIVMO is not responsible for this output. You supply every number, "
@@ -285,7 +285,8 @@ def write_deal(ws) -> None:
             _marker(ws, row, f"ISBLANK(B{row})")
     ws[f"A{BANK_SHARE_CELL[1][1:]}"] = "Bank loan share of price (100% minus down payment minus seller note)"
     ws[f"A{BANK_SHARE_CELL[1][1:]}"].font = BOLD
-    ws[BANK_SHARE_CELL[1]] = "=1-B5-B6"
+    down, seller = INPUT_CELLS["down_pct"][1], INPUT_CELLS["seller_pct"][1]
+    ws[BANK_SHARE_CELL[1]] = f"=ROUND(1-{down}-{seller},{BANK_SHARE_DIGITS})"
     ws[BANK_SHARE_CELL[1]].number_format = PERCENT
     _list(ws, YES_NO, "B7")
     _decimal(ws, "B4 B13 B14")

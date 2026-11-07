@@ -6,6 +6,7 @@ from base_inputs import base
 from calc_math import (
     MESSAGE_ORDER,
     MESSAGES,
+    STATUS_YES,
     Addback,
     Deduction,
     annuity_factor,
@@ -373,3 +374,31 @@ def test_message_text_carries_values():
         "See the QoE Readiness skill in this repo to prepare.")
     for code in ("sba_term", "sba_coverage", "sba_standby"):
         assert message_text(code, i, r, FACTS).endswith("for an SBA 7(a) loan.")
+
+
+SHARES_100 = [(0.7, 0.3), (0.18, 0.82), (0.41, 0.59), (0.57, 0.43), (0.69, 0.31), (0.5, 0.5)]
+
+
+@pytest.mark.parametrize("down, seller", SHARES_100)
+def test_shares_adding_to_100_leave_no_bank_loan(down, seller):
+    """1 - down - seller leaves a float residual for some pairs. The rounded share is 0."""
+    assert down + seller == 1
+    r = run(down_pct=down, seller_pct=seller, seller_standby="yes", asking_price=1_000_000.0)
+    assert r.blocks == ()
+    assert r.supported_price is None and r.max_bank_loan is None
+    assert r.coverage_at_ask is None and r.price_gap is None
+    assert r.bank_loan_at_price == 0
+    assert r.status == STATUS_YES
+    assert r.flags == ()
+    r = run(down_pct=down, seller_pct=seller, seller_standby="yes")
+    assert r.supported_price is None and r.price_used is None and r.bank_loan_at_price is None
+
+
+def test_surrounding_spaces_are_not_removed():
+    """The sheet cannot TRIM, so " yes" and " no" count as blank text, the same as in the sheet."""
+    r = run(answers=(" no", "no", "no", "no", "yes", "no"))
+    assert "missing_answers" in r.blocks and r.dependence_score is None
+    r = run(addbacks=(Addback("other", 20_000.0, " no"),))
+    assert r.proof_missing == 0 and "proof" not in r.warnings
+    r = run(seller_pct=0.1, seller_standby="no ")
+    assert "missing_inputs" in r.blocks
