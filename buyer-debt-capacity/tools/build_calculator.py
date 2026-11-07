@@ -1,7 +1,8 @@
 """Build the Buyer Debt Capacity Calculator workbook (Excel and Google Sheets, live formulas).
 
 Copyright (c) 2026 LIVMO. MIT license.
-Task 2 writes "Start here" and the 5 input tabs. A later task adds the Results tab writer.
+This module writes "Start here" and the 5 input tabs. results_tab.py writes the Results tab
+and the SBA values block on Deal terms.
 """
 from __future__ import annotations
 
@@ -294,11 +295,6 @@ def write_deal(ws) -> None:
     _widths(ws, {"A": 62, "B": 18, "C": 12, "D": 56})
 
 
-def write_results_placeholder(ws) -> None:
-    ws["A1"] = "Results"
-    ws["A1"].font = Font(bold=True, size=14)
-
-
 def write_inputs(wb, inputs: Inputs) -> None:
     """Write the input values. None leaves the cell empty."""
     for field, (sheet, cell) in INPUT_CELLS.items():
@@ -320,7 +316,9 @@ def write_inputs(wb, inputs: Inputs) -> None:
 
 
 def build(path: Path, inputs: Inputs, facts: dict) -> dict[str, tuple[str, str]]:
-    """Write the workbook. Return the Results cell map (empty until the Results writer exists)."""
+    """Write the workbook. Return the Results cell map: key -> (sheet, cell)."""
+    import results_tab  # Imported here: results_tab reads the constants of this module.
+
     wb = Workbook()
     wb.remove(wb.active)
     sheets = {name: wb.create_sheet(name) for name in TABS}
@@ -329,7 +327,8 @@ def build(path: Path, inputs: Inputs, facts: dict) -> dict[str, tuple[str, str]]
     write_addbacks(sheets[ADDBACKS])
     write_role(sheets[ROLE])
     write_deal(sheets[DEAL])
-    write_results_placeholder(sheets["Results"])
+    sba = results_tab.write_sba_values(sheets[DEAL], facts)
+    cells = results_tab.write_results(sheets["Results"], sba)
     write_inputs(wb, inputs)
     wb.save(path)
-    return {}
+    return cells
