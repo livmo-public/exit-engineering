@@ -18,6 +18,10 @@ HEAVY_SCORE = 3
 OPERATOR_LOW_SHARE = 0.5
 TIGHT_BAND = 0.15
 SBA_SUFFIX = "for an SBA 7(a) loan."
+MAX_RATE = 1.0
+MAX_COVERAGE_TARGET = 5
+MAX_TERM_YEARS = 40
+ZERO_RATE = 1e-12
 
 STATUS_NO = "Not financeable at these terms"
 STATUS_TIGHT = "Tight"
@@ -34,8 +38,9 @@ MESSAGES: dict[str, str] = {
     ),
     "bad_terms": (
         "Check the deal terms. The down payment and seller note must add up to 100% or less. "
-        "Enter percents as percents (10%, not 10). Terms and the coverage target must be above zero, "
-        "and rates cannot be negative."
+        "Enter percents as percents (10%, not 10). Enter terms in years. "
+        "Terms and the coverage target must be above zero, and rates cannot be negative. "
+        "A rate above 100%, a coverage target above 5, or a term above 40 years is probably a typing slip."
     ),
     "no_cash": "No cash is available for debt at these numbers.",
     # Warnings
@@ -47,7 +52,7 @@ MESSAGES: dict[str, str] = {
         "Check that it covers all of the owners' work."
     ),
     "heavy": "Heavy owner dependence. Buyers and lenders usually ask for a transition period with the seller.",
-    "proof": "{n} add-backs have no proof on file. A lender asks for proof of each add-back.",
+    "proof": "{n} {noun} no proof on file. A lender asks for proof of each add-back.",
     "sba_down": "The down payment is below the {down} minimum equity injection " + SBA_SUFFIX,
     "sba_term": "The bank loan term is longer than the {term}-year maximum term " + SBA_SUFFIX,
     "sba_coverage": "The coverage target is below the {coverage} minimum debt service coverage " + SBA_SUFFIX,
@@ -145,7 +150,7 @@ def load_facts(path: Path | None = None) -> dict:
 
 def annuity_factor(rate: float, years: float) -> float:
     """Annual payment per $1 of a monthly-payment loan."""
-    if rate == 0:
+    if abs(rate) < ZERO_RATE:
         return 1 / years
     monthly = rate / 12
     return 12 * monthly / (1 - (1 + monthly) ** (-12 * years))
@@ -233,9 +238,13 @@ def _bad_terms(i: Inputs) -> bool:
         or i.bank_years <= 0
         or i.coverage_target <= 0
         or i.bank_rate < 0
+        or i.bank_rate > MAX_RATE
+        or i.coverage_target > MAX_COVERAGE_TARGET
+        or i.bank_years > MAX_TERM_YEARS
     )
     if i.seller_pct > 0 and i.seller_rate is not None and i.seller_years is not None:
-        bad = bad or i.seller_rate < 0 or i.seller_years <= 0
+        bad = (bad or i.seller_rate < 0 or i.seller_rate > MAX_RATE
+               or i.seller_years <= 0 or i.seller_years > MAX_TERM_YEARS)
     return bad
 
 
@@ -380,9 +389,7 @@ def message_text(code: str, inputs: Inputs, result: Result, facts: dict) -> str:
     template = MESSAGES[code]
     if code == "proof":
         n = result.proof_missing
-        if n == 1:
-            return "1 add-back has no proof on file. A lender asks for proof of each add-back."
-        return template.format(n=n)
+        return template.format(n=n, noun="add-back has" if n == 1 else "add-backs have")
     if code == "qoe":
         return template.format(flag_text=facts["qoe"]["flag_text"])
     if code.startswith("sba_"):

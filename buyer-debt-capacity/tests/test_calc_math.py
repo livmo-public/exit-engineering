@@ -9,6 +9,7 @@ from calc_math import (
     Addback,
     Deduction,
     annuity_factor,
+    xl_round,
     default_inputs,
     evaluate,
     load_facts,
@@ -121,7 +122,7 @@ def test_each_required_blank_blocks(field):
     r = run(**{field: None})
     assert "missing_inputs" in r.blocks
     assert r.status is None
-    for name in NUMBER_FIELDS + ("max_debt_service",):
+    for name in ("ebitda", "total_addbacks", "total_deductions", "cash_available") + NUMBER_FIELDS:
         assert getattr(r, name) is None
 
 
@@ -209,10 +210,44 @@ def test_percent_typed_as_whole_number_blocks():
         {"down_pct": 0.8, "seller_pct": 0.3},
         {"seller_pct": 0.05, "seller_years": 0.0},
         {"seller_pct": 0.05, "seller_rate": -0.01},
+        {"bank_rate": 10.5},
+        {"bank_rate": 1.01},
+        {"seller_pct": 0.05, "seller_rate": 6.0},
+        {"coverage_target": 5.01},
+        {"coverage_target": 125.0},
+        {"bank_years": 41.0},
+        {"seller_pct": 0.05, "seller_years": 41.0},
     ],
 )
 def test_bad_terms(overrides):
     assert "bad_terms" in run(**overrides).blocks
+
+
+def test_upper_limits_do_not_block():
+    r = run(bank_rate=0.25, coverage_target=5.0, bank_years=40.0,
+            seller_pct=0.05, seller_rate=1.0, seller_years=40.0)
+    assert "bad_terms" not in r.blocks
+
+
+def test_seller_limits_ignored_without_note():
+    assert "bad_terms" not in run(seller_pct=0.0, seller_rate=6.0, seller_years=99.0).blocks
+
+
+def test_tiny_rate_is_zero_rate():
+    assert annuity_factor(1e-20, 10) == pytest.approx(0.1)
+    assert annuity_factor(1e-13, 10) == pytest.approx(0.1)
+
+
+def test_status_rounds_half_up():
+    assert xl_round(1.245, 2) == 1.25
+    assert xl_round(-1.245, 2) == -1.25
+    cash_only = dict(net_profit=1245.0, interest=0.0, income_taxes=0.0, depreciation=0.0,
+                     amortization=0.0, owner_pay=0.0, addbacks=(), operator_salary=0.0,
+                     capex=0.0, down_pct=0.0, seller_pct=0.0, bank_rate=0.0, bank_years=1.0)
+    r = run(asking_price=1000.0, **cash_only)
+    assert r.blocks == ()
+    assert r.coverage_at_ask == 1.245
+    assert r.status == "Tight"
 
 
 def test_no_cash_blocks():
