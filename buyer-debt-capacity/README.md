@@ -22,7 +22,7 @@ The folder `examples/` holds `sample-buyer-debt-capacity.xlsx`. It uses a made-u
 - Asking price: $3.4M.
 - Coverage at the asking price: 1.07.
 - Status: "Not financeable at these terms".
-- Flag: a lender requires a Quality of Earnings report when a new owner buys at this price.
+- Flag: an SBA lender requires a Quality of Earnings report when a new owner buys at this price.
 
 If a required input is blank, Results shows a message and no loan or price. Each blank required cell shows "Required".
 
@@ -32,7 +32,7 @@ Results shows these steps from top to bottom. A lender takes each step for a rea
 
 1. **Net profit.** The profit on your P&L.
 2. **Plus interest, income taxes, depreciation, and amortization.** The sum is EBITDA. The lender judges the business before its own debt, taxes, and non-cash charges. The buyer's loan replaces your interest.
-3. **Plus add-backs, including owner pay.** An add-back is a cost that a new owner would not pay. Examples are personal expenses and one-time costs. A lender usually asks for proof of each add-back. Results warns when a row has no proof on file.
+3. **Plus add-backs, including owner pay.** Enter only owner pay that the P&L records as a cost. Do not include owner draws or distributions. An add-back is a cost that a new owner would not pay. Examples are personal expenses and one-time costs. A lender usually asks for proof of each add-back. Results warns when a row has no proof on file.
 4. **Minus deductions.** A deduction is profit that a new owner would not get. Examples are one-time income and below-market costs, such as rent to a related party below market rent.
 5. **Minus the operator salary.** A buyer must pay someone to run the business. The lender counts that cost.
 6. **Minus maintenance capital spending.** The business must replace equipment and systems to keep running.
@@ -77,11 +77,12 @@ These facts come from the SBA's Standard Operating Procedure text. The calculato
 
 The facts for a 7(a) loan that finances a change of ownership:
 
-- The minimum equity injection is 10% of the price.
-- The debt service coverage ratio must be at least 1.25.
-- A loan that does not finance real estate must have a payoff period of 10 years or less.
+- The minimum equity injection is 10% of the total project cost: the price plus the other costs to take over the business. For an owner buyout, the SBA uses the price. The calculator compares the down payment to the price only.
+- When a new owner buys the business, the debt service coverage ratio must be at least 1.25.
+- SBA lenders test coverage on the last fiscal year-end or on the average of the last two fiscal year-ends. The Profit tab also allows the last 12 months.
+- A loan that does not finance real estate must be paid off over 10 years or less.
 - The maximum loan is $5,000,000.
-- A seller note on full standby may count as equity. It may supply up to 50% of the required equity injection.
+- A seller note on full standby may count as equity. It may supply up to 50% of the required equity injection. The rest must come from other sources of equity.
 - When a new owner buys the business at a purchase price of $3M or more, the lender must get a Quality of Earnings report. The SBA measures the $3M before the buyer's equity, seller debt, or other financing. An independent professional does the report for the lender. The seller cannot prepare it or have it prepared. An owner buyout does not need one.
 
 The SBA can change these rules. Check the current SOP before you rely on them.
@@ -114,4 +115,4 @@ Book a 30-minute exit assessment: https://calendly.com/khaledazar/exit-builder
 
 ## License
 
-The spreadsheet files (.xlsx) and the tools in `tools/` use the MIT License. See `tools/LICENSE` and the root `LICENSE`.
+The spreadsheet files (.xlsx), the tools in `tools/`, and the tests in `tests/` use the MIT License. See `tools/LICENSE` and the root `LICENSE`.

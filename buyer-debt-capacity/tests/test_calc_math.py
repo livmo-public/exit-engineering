@@ -190,10 +190,19 @@ def test_dependence_score_and_heavy():
 
 
 def test_proof_missing_counted():
+    """A row counts when its amount is above 0 and its proof is not "yes": blank, "no", or other text."""
     r = run(addbacks=(Addback("other", 1.0, "no"), Addback("other", 2.0, "NO"),
-                      Addback("other", 3.0, "yes"), Addback("other", 4.0, None)))
-    assert r.proof_missing == 2
+                      Addback("other", 3.0, "yes"), Addback("other", 4.0, None),
+                      Addback("other", 5.0, "YES"), Addback("other", 6.0, "maybe")))
+    assert r.proof_missing == 4
     assert "proof" in r.warnings
+
+
+def test_proof_ignores_rows_without_an_amount():
+    r = run(addbacks=(Addback("other", 0.0, None), Addback("other", None, "no"),
+                      Addback("other", 0.0, "no"), Addback("other", 10.0, "yes")))
+    assert r.proof_missing == 0
+    assert "proof" not in r.warnings
 
 
 def test_percent_typed_as_whole_number_blocks():
@@ -294,10 +303,35 @@ def test_sba_warnings():
     cov = f["coverage_change_of_ownership"]["value"]
     assert "sba_coverage" in run(coverage_target=cov - 0.05).warnings
     assert "sba_coverage" not in run(coverage_target=cov).warnings
-    limit = f["standby_note_max_share_of_injection"]["value"] * down
-    assert "sba_standby" in run(seller_pct=limit + 0.01).warnings
-    assert "sba_standby" not in run(seller_pct=limit).warnings
-    assert "sba_standby" not in run(seller_pct=limit + 0.01, seller_standby="no").warnings
+
+
+SBA_EQUITY = ("sba_down", "sba_standby")
+
+
+@pytest.mark.parametrize(
+    "down, seller, standby, expected",
+    [
+        # The standby rule limits how much of the note counts as equity, not the note size.
+        (0.10, 0.10, "yes", set()),
+        (0.90, 0.10, "yes", set()),
+        (0.05, 0.05, "yes", set()),
+        (0.10, 0.30, "yes", set()),
+        # The note is needed for the 10%, but the down payment is below the required half (5%).
+        (0.04, 0.10, "yes", {"sba_down", "sba_standby"}),
+        (0.01, 0.30, "Yes", {"sba_down", "sba_standby"}),
+        (0.03, 0.07, "yes", {"sba_down", "sba_standby"}),
+        # The note is too small to reach the 10%, so only the equity warning shows.
+        (0.03, 0.03, "yes", {"sba_down"}),
+        # A paid seller note does not count as equity.
+        (0.05, 0.10, "no", {"sba_down"}),
+        (0.05, 0.0, "yes", {"sba_down"}),
+        (0.10, 0.0, "yes", set()),
+    ],
+)
+def test_sba_equity_warnings(down, seller, standby, expected):
+    r = run(down_pct=down, seller_pct=seller, seller_standby=standby)
+    assert r.blocks == ()
+    assert {c for c in r.warnings if c in SBA_EQUITY} == expected
 
 
 @pytest.mark.parametrize(
@@ -306,7 +340,8 @@ def test_sba_warnings():
         ("min_equity_injection", {"down_pct": 0.01}, "sba_down"),
         ("max_term_years_no_real_estate", {"bank_years": 30.0}, "sba_term"),
         ("coverage_change_of_ownership", {"coverage_target": 0.5}, "sba_coverage"),
-        ("standby_note_max_share_of_injection", {"seller_pct": 0.3}, "sba_standby"),
+        ("standby_note_max_share_of_injection", {"down_pct": 0.02, "seller_pct": 0.3}, "sba_standby"),
+        ("min_equity_injection", {"down_pct": 0.02, "seller_pct": 0.3}, "sba_standby"),
     ],
 )
 def test_null_fact_gives_no_sba_warning(key, overrides, code):
@@ -331,6 +366,9 @@ def test_message_order_is_fixed():
     blocked = run(net_profit=None, answers=(None,) * 6, operator_salary=None,
                   down_pct=10.0)
     assert blocked.blocks == ("missing_inputs", "missing_answers", "operator_blank", "bad_terms")
+    blocked = run(net_profit=None, capex=-1.0, answers=(None,) * 6, down_pct=10.0)
+    assert blocked.blocks == ("missing_inputs", "negative_inputs", "missing_answers", "bad_terms")
+    assert MESSAGE_ORDER[:2] == ("missing_inputs", "negative_inputs")
     assert set(MESSAGE_ORDER) == set(MESSAGES)
 
 
@@ -369,16 +407,33 @@ def test_message_text_carries_values():
     two = replace(i, addbacks=(Addback("other", 1.0, "no"),) * 2)
     assert message_text("proof", two, evaluate(two, FACTS), FACTS).startswith("2 add-backs have no proof")
     down = message_text("sba_down", i, r, FACTS)
-    assert "10%" in down and down.endswith("for an SBA 7(a) loan.")
+    assert down.startswith("The buyer's equity is below the 10% minimum equity injection for an SBA 7(a) loan.")
+    assert "up to 50% of the required injection" in down
+    assert "total project cost" in down and down.endswith("This check uses the price only.")
     assert message_text("qoe", i, r, FACTS).endswith(
         "See the QoE Readiness skill in this repo to prepare.")
-    for code in ("sba_coverage", "sba_standby"):
-        assert message_text(code, i, r, FACTS).endswith("for an SBA 7(a) loan.")
+    coverage = message_text("sba_coverage", i, r, FACTS)
+    assert coverage.endswith("When a new owner buys the business, the minimum debt service coverage is "
+                             "1.25 for an SBA 7(a) loan.")
+    standby = message_text("sba_standby", i, r, FACTS)
+    assert standby.startswith("The down payment is below 5% of the price.")
+    assert "at most 50% of the required equity injection for an SBA 7(a) loan." in standby
     term = message_text("sba_term", i, r, FACTS)
-    assert term.endswith("for an SBA 7(a) loan that does not finance real estate.")
-    assert "10-year maximum payoff period" in term
+    assert term == ("The bank loan term is longer than 10 years. An SBA 7(a) loan that does not "
+                    "finance real estate must be paid off over 10 years or less.")
     qoe = message_text("qoe", i, r, FACTS)
     assert qoe.startswith("When a new owner buys the business at this price")
+    assert "must be done" not in qoe and "An independent professional does the report" in qoe
+
+
+def test_standby_message_uses_the_cash_floor():
+    """The down payment floor is min x (1 - share). It equals share x min only when share is 50%."""
+    facts = {**FACTS, "standby_note_max_share_of_injection": {
+        **FACTS["standby_note_max_share_of_injection"], "value": 0.25}}
+    i = base(down_pct=0.05, seller_pct=0.10)
+    r = evaluate(i, facts)
+    assert "sba_standby" in r.warnings
+    assert message_text("sba_standby", i, r, facts).startswith("The down payment is below 7.5% of the price.")
 
 
 SHARES_100 = [(0.7, 0.3), (0.18, 0.82), (0.41, 0.59), (0.57, 0.43), (0.69, 0.31), (0.5, 0.5)]
@@ -403,7 +458,39 @@ def test_surrounding_spaces_are_not_removed():
     """The sheet cannot TRIM, so " yes" and " no" count as blank text, the same as in the sheet."""
     r = run(answers=(" no", "no", "no", "no", "yes", "no"))
     assert "missing_answers" in r.blocks and r.dependence_score is None
-    r = run(addbacks=(Addback("other", 20_000.0, " no"),))
-    assert r.proof_missing == 0 and "proof" not in r.warnings
+    r = run(addbacks=(Addback("other", 20_000.0, " no"), Addback("other", 20_000.0, " yes")))
+    assert r.proof_missing == 2 and "proof" in r.warnings
     r = run(seller_pct=0.1, seller_standby="no ")
     assert "missing_inputs" in r.blocks
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"owner_pay": -10_000.0},
+        {"operator_salary": -50_000.0},
+        {"capex": -25_000.0},
+        {"addbacks": (Addback("other", 20_000.0, "yes"), Addback("other", -1.0, "yes"))},
+        {"deductions": (Deduction("one-time income", -12_000.0),)},
+    ],
+)
+def test_negative_amounts_block(overrides):
+    r = run(**overrides)
+    assert r.blocks == ("negative_inputs",)
+    assert r.status is None and r.supported_price is None and r.cash_available is None
+    assert r.warnings == () and r.flags == ()
+
+
+def test_negative_operator_salary_does_not_give_a_price():
+    """Without the block, a salary of -50,000 adds cash and gives Financeable."""
+    r = run(operator_salary=-50_000.0, asking_price=2_000_000.0)
+    assert r.blocks == ("negative_inputs",)
+    assert r.status is None
+
+
+def test_zero_and_blank_amounts_are_not_negative():
+    r = run(owner_pay=0.0, capex=0.0, addbacks=(Addback("other", None, None), Addback("other", 0.0, "yes")),
+            deductions=(Deduction("other", None),))
+    assert "negative_inputs" not in r.blocks
+    r = run(net_profit=-10_000.0, income_taxes=-1_000.0)
+    assert "negative_inputs" not in r.blocks

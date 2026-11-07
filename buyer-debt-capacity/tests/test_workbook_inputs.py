@@ -66,6 +66,31 @@ def test_start_here_lists_exclusions(wb):
         assert phrase in text
 
 
+def test_start_here_wording(wb):
+    rows = [str(c.value) for row in wb["Start here"].iter_rows() for c in row if c.value]
+    text = " ".join(rows)
+    assert "maintenance capital spending" in text and "maintenance equipment" not in text
+    legend = [r for r in rows if r.startswith("A cell with no color")]
+    assert legend == ["A cell with no color holds a formula or an SBA value. Leave formulas as they are. "
+                      "Change an SBA value only when the SOP changes."]
+
+
+def test_owner_pay_note_excludes_draws(wb):
+    sheet, cell = bc.INPUT_CELLS["owner_pay"]
+    note = wb[sheet][f"D{cell[1:]}"].value
+    assert note == bc.OWNER_PAY_NOTE
+    assert "records as a cost" in note and "owner draws or distributions" in note
+
+
+def test_proof_count_formula_checks_amount_and_proof(wb):
+    sheet, cell = bc.PROOF_MISSING_CELL
+    formula = wb[sheet][cell].value
+    first, last = bc.ADDBACK_ROWS
+    assert formula.count("IF(AND(") == last - first + 1
+    amount, proof = bc.ADDBACK_COLS["amount"], bc.ADDBACK_COLS["proof"]
+    assert f'SUM({amount}{first})>0,{proof}{first}<>"yes"' in formula
+
+
 def test_no_em_dash(wb):
     for ws in wb:
         for row in ws.iter_rows():
@@ -207,6 +232,8 @@ def test_formulas_use_only_allowed_functions(wb):
 
 def test_denylist_terms_absent(wb, denylist):
     """No denylist term in a built workbook, the committed .xlsx files, or any repo text file."""
+    if not denylist:
+        pytest.skip("Denylist file absent or empty (set QOE_DENYLIST).")
     texts = [("built workbook", str(c.value)) for ws in wb for row in ws.iter_rows()
              for c in row if c.value]
     texts += list(committed_strings())

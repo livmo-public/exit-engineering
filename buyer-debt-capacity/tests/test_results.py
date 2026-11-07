@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 
 import build_calculator as bc
 from calc_math import (
-    MESSAGE_ORDER, STATUS_NO, STATUS_TIGHT, STATUS_YES,
+    BLOCK_CODES, MESSAGE_ORDER, STATUS_NO, STATUS_TIGHT, STATUS_YES, WARNING_CODES,
 )
 from helpers import (
     blank, cell_value, compare, error_cells, recalculate,
@@ -81,7 +81,19 @@ EXPECTED_BLOCKS = {
     "term_in_months": {"bad_terms"}, "seller_term_in_months": {"bad_terms"},
     "no_cash": {"no_cash"}, "missing_and_bad_terms": {"missing_inputs", "bad_terms"},
     "heavy_and_blocked": {"missing_inputs"},
+    "negative_owner_pay": {"negative_inputs"}, "negative_operator_salary": {"negative_inputs"},
+    "negative_capex": {"negative_inputs"}, "negative_addback": {"negative_inputs"},
+    "negative_deduction": {"negative_inputs"}, "negative_and_missing": {"missing_inputs", "negative_inputs"},
 }
+SBA_CODES = ("sba_down", "sba_term", "sba_coverage", "sba_standby")
+EXPECTED_SBA = {
+    "base": set(), "sba_down": {"sba_down"}, "sba_term": {"sba_term"}, "sba_coverage": {"sba_coverage"},
+    "sba_standby": {"sba_down", "sba_standby"}, "sba_all": set(SBA_CODES),
+    "standby_10_10": set(), "standby_90_10": set(), "standby_5_5": set(), "seller_standby": set(),
+    "standby_too_small": {"sba_down"}, "paid_note_low_down": {"sba_down"},
+}
+# Add-backs with an amount above 0 and proof not "yes".
+EXPECTED_PROOF = {"base": 0, "proof_missing": 2, "proof_one": 1, "proof_blank": 1, "padded_text": 1}
 
 
 def shown_codes(values, path, cells, codes) -> set[str]:
@@ -89,7 +101,7 @@ def shown_codes(values, path, cells, codes) -> set[str]:
 
 
 @pytest.mark.parametrize("name", sorted(set(EXPECTED_STATUS) | set(EXPECTED_FLAGS) | set(EXPECTED_BLOCKS)
-                                        | {"shares_100_float"}))
+                                        | set(EXPECTED_SBA) | set(EXPECTED_PROOF) | {"shares_100_float"}))
 def test_scenario_intent(name, solved):
     path, cells, values = solved(name)
 
@@ -100,8 +112,13 @@ def test_scenario_intent(name, solved):
         assert got("status") == EXPECTED_STATUS[name]
     if name in EXPECTED_FLAGS:
         assert shown_codes(values, path, cells, ("qoe", "loan_limit")) == EXPECTED_FLAGS[name]
-    blocks = shown_codes(values, path, cells, MESSAGE_ORDER[:6])
+    blocks = shown_codes(values, path, cells, BLOCK_CODES)
     assert blocks == EXPECTED_BLOCKS.get(name, set())
+    if name in EXPECTED_SBA:
+        assert shown_codes(values, path, cells, SBA_CODES) == EXPECTED_SBA[name]
+    if name in EXPECTED_PROOF:
+        assert cell_value(values, path, *bc.PROOF_MISSING_CELL) == EXPECTED_PROOF[name]
+        assert (not blank(got("msg.proof"))) == (EXPECTED_PROOF[name] > 0)
     if name == "shares_100_float":
         assert blank(got("supported_price")) and blank(got("max_bank_loan"))
         assert got("bank_loan_at_price") == 0 and got("status") == STATUS_YES
@@ -175,10 +192,10 @@ def test_results_layout_order(base_wb):
     def row(key: str) -> int:
         return int(cells[key][1][1:])
 
-    blocks = max(row(f"msg.{c}") for c in MESSAGE_ORDER[:6])
+    blocks = max(row(f"msg.{c}") for c in BLOCK_CODES)
     assert blocks < row("net_profit") < row("cash_available") < row("max_debt_service")
     assert row("supported_price") < row("coverage_at_ask") < row("msg.operator_in_place")
-    assert max(row(f"msg.{c}") for c in MESSAGE_ORDER[6:14]) < row("msg.qoe") < row("msg.loan_limit")
+    assert max(row(f"msg.{c}") for c in WARNING_CODES) < row("msg.qoe") < row("msg.loan_limit")
 
 
 def test_sba_values_block_on_deal_terms(base_wb):

@@ -54,6 +54,14 @@ def test_root_license_mit_for_spreadsheets():
     text = (REPO_ROOT / "LICENSE").read_text(encoding="utf-8")
     assert "Spreadsheet files (.xlsx)" in text
     assert "buyer-debt-capacity/tools/LICENSE" in text
+    joined = " ".join(text.split())
+    assert ("Spreadsheet files (.xlsx) and the folders buyer-debt-capacity/tools/ and "
+            "buyer-debt-capacity/tests/ are licensed under the MIT License instead.") in joined
+    assert "also licensed" not in joined
+
+
+def test_readme_license_covers_tests():
+    assert "the tests in `tests/` use the MIT License" in readme_text()
 
 
 def test_qoe_readme_license_line_covers_sample_workbook():
@@ -90,3 +98,21 @@ def test_readme_sba_scope_qualifiers():
     assert "loan limit" in text
     assert "has everything you need" not in text
     assert "only with proof" not in text
+
+
+def test_readme_sba_wording():
+    text = readme_text()
+    assert "10% of the total project cost" in text and "10% of the price." not in text
+    assert "compares the down payment to the price only" in text
+    assert "When a new owner buys the business, the debt service coverage ratio must be at least 1.25." in text
+    assert "last fiscal year-end or on the average of the last two fiscal year-ends" in text
+    assert "Flag: an SBA lender requires a Quality of Earnings report" in text
+    assert "payoff period" not in text and "must be paid off over 10 years or less" in text
+    assert "Do not include owner draws or distributions." in text
+
+
+def test_equity_quote_carries_the_basis():
+    quote = FACTS["min_equity_injection"]["quote"]
+    assert quote.startswith("SBA requires equity injections (Applicant contribution) for change of ownership "
+                            "transactions to be based on the total project cost")
+    assert quote.endswith("Initial Acquisition: 10%.")

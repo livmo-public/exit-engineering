@@ -5,7 +5,7 @@
   "checked": "2026-11-07",
   "min_equity_injection": {
     "value": 0.1,
-    "quote": "The following are the minimum equity injection requirements for change of ownership transactions based on their type: Initial Acquisition: 10%.",
+    "quote": "SBA requires equity injections (Applicant contribution) for change of ownership transactions to be based on the total project cost (all costs required to become operational, regardless of the source of funds, except for lines of credit and 504 loans). For Owner Buyout transactions, the equity requirement is based upon the purchase price of the business, as reflected in the purchase and sale agreement. The following are the minimum equity injection requirements for change of ownership transactions based on their type: Initial Acquisition: 10%.",
     "section": "Appendix 15, Para. C.2.a (Equity Requirements)"
   },
   "coverage_change_of_ownership": {
@@ -35,6 +35,6 @@
     },
     "quote": "For Business Expansion and Initial Acquisition transactions where the Purchase Price as defined in Paragraph A.1 is equal to or greater than $3 million, the Lender must also obtain a Quality of Earnings (QoE) in addition to the required Business Valuation. The $3 million threshold is determined before the application of buyer equity, seller debt, or other financing sources. Owner Buyout and ESOP & Cooperative transactions are not subject to the QoE requirement because the existing owner(s) retain operational knowledge of the business and the transaction does not result in a change to the management or operating structure. The QoE must be performed by an independent, experienced financial professional and must be conducted for the benefit of the Lender. As the QoE report is part of the financial due diligence of the transaction, the report must not be prepared by or for the seller.",
     "section": "Appendix 15, Para. C.1.b (Quality of Earnings)",
-    "flag_text": "When a new owner buys the business at this price, an SBA lender requires an independent Quality of Earnings report. The report must be done for the lender. The seller cannot prepare it or have it prepared."
+    "flag_text": "When a new owner buys the business at this price, an SBA lender requires a Quality of Earnings report. An independent professional does the report for the lender. The seller cannot prepare it or have it prepared."
   }
 }

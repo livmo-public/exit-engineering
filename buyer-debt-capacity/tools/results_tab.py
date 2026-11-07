@@ -23,7 +23,8 @@ BOLD = Font(bold=True)
 WRAP = Alignment(wrap_text=True, vertical="top")
 
 BLOCK_LABELS = {
-    "missing_inputs": "Required inputs", "missing_answers": "Owner role answers",
+    "missing_inputs": "Required inputs", "negative_inputs": "Amounts not negative",
+    "missing_answers": "Owner role answers",
     "operator_blank": "Operator salary entered", "operator_zero": "Operator salary above zero",
     "bad_terms": "Deal terms in range", "no_cash": "Cash available for debt",
 }
@@ -37,8 +38,9 @@ FLAG_LABELS = {"qoe": "Quality of Earnings report", "loan_limit": "Loan limit"}
 
 # SBA values block on Deal terms: key -> (label, number format).
 SBA_ROWS = {
-    "min_equity_injection": ("Minimum equity injection (buyer down payment)", bc.PERCENT),
-    "coverage_change_of_ownership": ("Minimum debt service coverage, change of ownership", RATIO),
+    "min_equity_injection": ("Minimum equity injection, share of total project cost (Results compares it "
+                             "to the price)", bc.PERCENT),
+    "coverage_change_of_ownership": ("Minimum debt service coverage when a new owner buys the business", RATIO),
     "max_term_years_no_real_estate": ("Maximum 7(a) loan term with no real estate, years", bc.YEARS),
     "max_loan": ("Maximum 7(a) loan amount", bc.MONEY),
     "standby_note_max_share_of_injection": ("Most of the equity injection a standby seller note can cover",
@@ -104,7 +106,13 @@ class Refs:
         self.deductions = ref(bc.DEDUCTION_TOTAL_CELL)
         self.proof = ref(bc.PROOF_MISSING_CELL)
         self.share = ref(bc.BANK_SHARE_CELL)
+        self.amount_ranges = [amount_range(bc.ADDBACK_COLS["amount"], bc.ADDBACK_ROWS),
+                              amount_range(bc.DEDUCTION_COLS["amount"], bc.DEDUCTION_ROWS)]
         self.sba = sba
+
+
+def amount_range(col: str, rows: tuple[int, int]) -> str:
+    return f"'{bc.ADDBACKS}'!{col}{rows[0]}:{col}{rows[1]}"
 
 
 def write_sba_values(ws, facts: dict) -> dict[str, str]:
@@ -161,8 +169,11 @@ def block_formulas(r: Refs) -> dict[str, str]:
                                   "owner_pay", "operator_salary", "capex")]
     raw_cash = f"{r.ebitda}+{r.addbacks}-{r.deductions}-{i['operator_salary']}-{i['capex']}"
     op, q5 = i["operator_salary"], r.answers[4]
+    negative = ",".join([f"{i[f]}<0" for f in ("owner_pay", "operator_salary", "capex")]
+                        + [f'COUNTIF({rng},"<0")>0' for rng in r.amount_ranges])
     conditions = {
         "missing_inputs": f"OR({','.join(f'ISBLANK({c})' for c in required)},{seller_gap})",
+        "negative_inputs": f"OR({negative})",
         "missing_answers": f'COUNTIF({r.answer_range},"yes")+COUNTIF({r.answer_range},"no")<{len(r.answers)}',
         "operator_blank": f"ISBLANK({op})",
         "operator_zero": f'IF(ISBLANK({op}),FALSE,AND({op}=0,{q5}="no"))',
@@ -294,20 +305,24 @@ def write_warnings(ws, row: int, r: Refs, blocked: str, cells: dict) -> int:
     op, down, share = i["operator_salary"], sba["min_equity_injection"], sba["standby_note_max_share_of_injection"]
     term, cover = sba["max_term_years_no_real_estate"], sba["coverage_change_of_ownership"]
     sba_text = {"down": percent_text(down), "term": term, "coverage": cover, "share": percent_text(share),
-                "limit": percent_text(f"{share}*{down}")}
+                "cash_min": percent_text(f"{down}*(1-{share})")}
     def unblocked(condition: str, code: str) -> str:
         return hide_if(blocked)(f'IF({condition},{fill_template(code, sba_text)},"")')
 
     n = r.proof
     proof = fill_template("proof", {"n": n, "noun": f'IF({n}=1,"add-back has","add-backs have")'})
-    standby = (f'IF(OR(ISBLANK({share}),ISBLANK({down})),FALSE,AND({i["seller_standby"]}="yes",'
-               f'{i["seller_pct"]}>{share}*{down}))')
+    # Same rule as calc_math._sba_warnings: a standby note counts as equity up to share x min.
+    d, s, on_standby = i["down_pct"], i["seller_pct"], f'{i["seller_standby"]}="yes"'
+    counted = f"IF(AND({on_standby},{not_blank(share)}),MIN({s},{share}*{down}),0)"
+    below_min = f"IF(ISBLANK({down}),FALSE,{d}+{counted}<{down})"
+    standby = (f'IF(OR(ISBLANK({share}),ISBLANK({down})),FALSE,AND({on_standby},'
+               f'{d}<{down}*(1-{share}),{d}+{s}>={down}))')
     formulas = {
         "operator_in_place": unblocked(f"{op}=0", "operator_in_place"),
         "operator_low": unblocked(f"IF({op}=0,FALSE,{op}<{OPERATOR_LOW_SHARE:g}*{i['owner_pay']})", "operator_low"),
         "heavy": f'=IF({score_cell}="","",IF({score_cell}>={HEAVY_SCORE},{lit(MESSAGES["heavy"])},""))',
         "proof": message(f"{n}>0", proof),
-        "sba_down": unblocked(f"IF(ISBLANK({down}),FALSE,{i['down_pct']}<{down})", "sba_down"),
+        "sba_down": unblocked(below_min, "sba_down"),
         "sba_term": unblocked(f"IF(ISBLANK({term}),FALSE,{i['bank_years']}>{term})", "sba_term"),
         "sba_coverage": unblocked(f"IF(ISBLANK({cover}),FALSE,{i['coverage_target']}<{cover})", "sba_coverage"),
         "sba_standby": unblocked(standby, "sba_standby"),

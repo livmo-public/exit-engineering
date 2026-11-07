@@ -61,6 +61,8 @@ ADDBACK_CATEGORIES = (
 DEDUCTION_CATEGORIES = ("one-time income", "below-market cost", "other")
 PERIOD_BASES = ("Last 12 months", "Last fiscal year")
 YES_NO = ("yes", "no")
+OWNER_PAY_NOTE = ("Required. Enter only owner pay that the P&L records as a cost. "
+                  "Do not include owner draws or distributions. Enter 0 if the P&L has no owner pay.")
 QUESTIONS = (
     "Does the owner close most sales?",
     "Does the owner hold the main customer relationships?",
@@ -132,7 +134,7 @@ def write_start_here(ws) -> None:
         ("", False),
         ("What this calculator does", True),
         ("It adds back the costs a buyer does not carry and removes the profit a lender will not count. "
-         "It subtracts the pay of a replacement operator and the cost of maintenance equipment. "
+         "It subtracts the pay of a replacement operator and the maintenance capital spending. "
          "It then shows the bank loan and price that the cash left over could support.", False),
         ("", False),
         ("Steps", True),
@@ -144,7 +146,8 @@ def write_start_here(ws) -> None:
         ("", False),
         ("Colors", True),
         ("A yellow cell is an input. You type in it.", False),
-        ("A cell with no color is a formula. Leave it as it is.", False),
+        ("A cell with no color holds a formula or an SBA value. Leave formulas as they are. "
+         "Change an SBA value only when the SOP changes.", False),
         ("", False),
         ("What this calculator leaves out", True),
         ("A lender looks at these items too. The calculator does not include them:", False),
@@ -180,7 +183,8 @@ def write_profit(ws) -> None:
     ws[f"A{EBITDA_CELL[1][1:]}"].font = BOLD
     ws[EBITDA_CELL[1]] = "=SUM(B6:B10)"
     ws[EBITDA_CELL[1]].number_format = MONEY
-    ws["D12"] = "Required. Enter 0 if no owner draws pay."
+    ws["D12"] = OWNER_PAY_NOTE
+    ws["D12"].alignment = WRAP
     for field in INPUT_CELLS:
         sheet, cell = INPUT_CELLS[field]
         if sheet != PROFIT:
@@ -192,6 +196,16 @@ def write_profit(ws) -> None:
     _decimal(ws, "B5 B7 B9 B10 B12")
     _decimal(ws, "B6 B8", minimum=None)
     _widths(ws, {"A": 62, "B": 18, "C": 12, "D": 44})
+
+
+def proof_missing_formula() -> str:
+    """Count add-back rows with an amount above 0 and proof not "yes". No COUNTIFS, so one IF per row.
+
+    SUM(cell) treats text as 0, the same as the total, so a pasted text amount does not count.
+    """
+    amount, proof = ADDBACK_COLS["amount"], ADDBACK_COLS["proof"]
+    first, last = ADDBACK_ROWS
+    return "+".join(f'IF(AND(SUM({amount}{row})>0,{proof}{row}<>"yes"),1,0)' for row in range(first, last + 1))
 
 
 def write_addbacks(ws) -> None:
@@ -210,8 +224,8 @@ def write_addbacks(ws) -> None:
     total, proof = ADDBACK_TOTAL_CELL[1], PROOF_MISSING_CELL[1]
     ws[f"A{total[1:]}"] = "Total add-backs, including owner pay"
     ws[total] = f"=SUM(C{OWNER_PAY_ROW}:C{last})"
-    ws[f"A{proof[1:]}"] = "Add-backs with no proof on file"
-    ws[proof] = f'=COUNTIF(D{first}:D{last},"no")'
+    ws[f"A{proof[1:]}"] = "Add-backs with no proof on file (an amount above 0 and proof not yes)"
+    ws[proof] = "=" + proof_missing_formula()
     for cell in (total, proof):
         ws[f"A{cell[1:]}"].font = BOLD
     ws[total].number_format = MONEY

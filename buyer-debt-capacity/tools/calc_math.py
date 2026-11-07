@@ -31,6 +31,10 @@ STATUS_YES = "Financeable"
 MESSAGES: dict[str, str] = {
     # Blocks
     "missing_inputs": 'Fill in every required input. Each blank required cell shows "Required" next to it.',
+    "negative_inputs": (
+        "Amounts cannot be negative. Check owner pay, the operator salary, "
+        "maintenance capital spending, add-backs, and deductions."
+    ),
     "missing_answers": "Answer all six questions on the Owner role tab.",
     "operator_blank": "Enter an operator salary on the Owner role tab.",
     "operator_zero": (
@@ -54,21 +58,31 @@ MESSAGES: dict[str, str] = {
     ),
     "heavy": "Heavy owner dependence. Buyers and lenders usually ask for a transition period with the seller.",
     "proof": "{n} {noun} no proof on file. A lender asks for proof of each add-back.",
-    "sba_down": "The down payment is below the {down} minimum equity injection " + SBA_SUFFIX,
-    "sba_term": (
-        "The bank loan term is longer than the {term}-year maximum payoff period "
-        "for an SBA 7(a) loan that does not finance real estate."
+    "sba_down": (
+        "The buyer's equity is below the {down} minimum equity injection " + SBA_SUFFIX + " "
+        "Equity here is the down payment plus any seller note on full standby, "
+        "up to {share} of the required injection. "
+        "The SBA bases the injection on the total project cost: the price plus the other costs "
+        "to take over the business. This check uses the price only."
     ),
-    "sba_coverage": "The coverage target is below the {coverage} minimum debt service coverage " + SBA_SUFFIX,
+    "sba_term": (
+        "The bank loan term is longer than {term} years. An SBA 7(a) loan that does not "
+        "finance real estate must be paid off over {term} years or less."
+    ),
+    "sba_coverage": (
+        "The coverage target is below {coverage}. When a new owner buys the business, "
+        "the minimum debt service coverage is {coverage} " + SBA_SUFFIX
+    ),
     "sba_standby": (
-        "The standby seller note is above {limit} of the price. "
-        "A standby note can cover at most {share} of the required equity injection " + SBA_SUFFIX
+        "The down payment is below {cash_min} of the price. A standby seller note can supply "
+        "at most {share} of the required equity injection " + SBA_SUFFIX + " "
+        "The rest must come from other equity, such as the down payment."
     ),
     # Flags
     "qoe": "{flag_text} See the QoE Readiness skill in this repo to prepare.",
     "loan_limit": "The bank loan at this price is above the loan limit on the Deal terms tab.",
 }
-BLOCK_CODES = ("missing_inputs", "missing_answers", "operator_blank", "operator_zero", "bad_terms", "no_cash")
+BLOCK_CODES = ("missing_inputs", "negative_inputs", "missing_answers", "operator_blank", "operator_zero", "bad_terms", "no_cash")
 WARNING_CODES = (
     "operator_in_place", "operator_low", "heavy", "proof",
     "sba_down", "sba_term", "sba_coverage", "sba_standby",
@@ -235,6 +249,19 @@ def _missing_inputs(i: Inputs) -> bool:
     return False
 
 
+def _negative_inputs(i: Inputs) -> bool:
+    """True when an amount that must be 0 or more is negative. A blank amount is not negative."""
+    scalars = (i.owner_pay, i.operator_salary, i.capex)
+    rows = i.addbacks + i.deductions
+    return (any(v is not None and v < 0 for v in scalars)
+            or any((row.amount or 0) < 0 for row in rows))
+
+
+def _proof_missing(i: Inputs) -> int:
+    """Count add-backs with an amount above 0 whose proof is not "yes" (blank, "no", or other text)."""
+    return sum(1 for row in i.addbacks if (row.amount or 0) > 0 and _word(row.proof) != "yes")
+
+
 def _bad_terms(i: Inputs) -> bool:
     if None in (i.down_pct, i.seller_pct, i.bank_rate, i.bank_years, i.coverage_target):
         return False
@@ -260,20 +287,30 @@ def _ordered(codes: set[str]) -> tuple[str, ...]:
 
 
 def _sba_warnings(i: Inputs, facts: dict) -> set[str]:
+    """SBA warnings. All shares are of the price.
+
+    A seller note on full standby counts as equity, up to share x the minimum injection.
+    sba_down: the down payment plus the counted note is below the minimum injection.
+    sba_standby: the note is needed to reach the minimum, but the down payment is below the
+    part that must come from other equity, min x (1 - share).
+    """
     codes: set[str] = set()
     min_down = fact_value(facts, "min_equity_injection")
     max_term = fact_value(facts, "max_term_years_no_real_estate")
     coverage = fact_value(facts, "coverage_change_of_ownership")
     share = fact_value(facts, "standby_note_max_share_of_injection")
-    if min_down is not None and i.down_pct < min_down:
-        codes.add("sba_down")
+    standby = _word(i.seller_standby) == "yes"
+    if min_down is not None:
+        counted = min(i.seller_pct, share * min_down) if standby and share is not None else 0
+        if i.down_pct + counted < min_down:
+            codes.add("sba_down")
+        if (standby and share is not None and i.down_pct < min_down * (1 - share)
+                and i.down_pct + i.seller_pct >= min_down):
+            codes.add("sba_standby")
     if max_term is not None and i.bank_years > max_term:
         codes.add("sba_term")
     if coverage is not None and i.coverage_target < coverage:
         codes.add("sba_coverage")
-    if (share is not None and min_down is not None and _word(i.seller_standby) == "yes"
-            and i.seller_pct > share * min_down):
-        codes.add("sba_standby")
     return codes
 
 
@@ -298,11 +335,13 @@ def evaluate(inputs: Inputs, facts: dict) -> Result:
         score = sum(1 for n, a in enumerate(answers, start=1)
                     if (a == "no" if n == 5 else a == "yes"))
         heavy = score >= HEAVY_SCORE
-    proof_missing = sum(1 for row in i.addbacks if _word(row.proof) == "no")
+    proof_missing = _proof_missing(i)
 
     blocks: set[str] = set()
     if _missing_inputs(i):
         blocks.add("missing_inputs")
+    if _negative_inputs(i):
+        blocks.add("negative_inputs")
     if not answers_complete:
         blocks.add("missing_answers")
     if i.operator_salary is None:
@@ -414,6 +453,6 @@ def message_text(code: str, inputs: Inputs, result: Result, facts: dict) -> str:
             term="" if term is None else f"{term:g}",
             coverage="" if coverage is None else f"{coverage:g}",
             share="" if share is None else _percent(share),
-            limit="" if None in (share, down) else _percent(share * down),
+            cash_min="" if None in (share, down) else _percent(down * (1 - share)),
         )
     return template
