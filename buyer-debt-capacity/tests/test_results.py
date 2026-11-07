@@ -8,20 +8,18 @@ from openpyxl import load_workbook
 
 import build_calculator as bc
 from calc_math import (
-    MESSAGE_ORDER, STATUS_NO, STATUS_TIGHT, STATUS_YES, annuity_factor, evaluate, message_text,
+    MESSAGE_ORDER, STATUS_NO, STATUS_TIGHT, STATUS_YES,
 )
-from helpers import cell_value, error_cells, recalculate
+from helpers import (
+    blank, cell_value, compare, error_cells, recalculate,
+)
 from scenarios import FACTS, NULL_FACTS, SCENARIOS
 
 ALLOWED = {"SUM", "IF", "AND", "OR", "COUNTIF", "COUNTA", "COUNTBLANK", "ISBLANK", "IFERROR",
            "MIN", "MAX", "ROUND", "ABS"}
-NUMBER_KEYS = ("ebitda", "total_addbacks", "total_deductions", "cash_available", "max_debt_service",
-               "supported_price", "max_bank_loan", "coverage_at_ask", "price_gap", "price_used",
-               "bank_loan_at_price", "dependence_score")
 BRIEF_KEYS = ("ebitda", "total_addbacks", "total_deductions", "cash_available", "max_debt_service",
               "supported_price", "max_bank_loan", "coverage_at_ask", "status", "price_gap",
               "dependence_score")
-CASH_STEP_INPUTS = ("net_profit", "operator_salary", "capex")
 EXCEL_STRING_LIMIT = 255
 
 
@@ -56,54 +54,10 @@ def formulas_of(wb):
                     yield ws.title, c.coordinate, c.value
 
 
-def blank(value) -> bool:
-    return value is None or value == ""
-
-
-def assert_number(got, expected, where: str) -> None:
-    if expected is None:
-        assert blank(got), f"{where}: expected blank, got {got!r}"
-    else:
-        assert not blank(got) and got == pytest.approx(expected, abs=0.01), f"{where}: {got!r} != {expected!r}"
-
-
-def compare(name: str, path, cells: dict, values: dict, facts: dict) -> None:
-    inputs = SCENARIOS[name]
-    result = evaluate(inputs, facts)
-
-    def got(key: str):
-        return cell_value(values, path, *cells[key])
-
-    for key in NUMBER_KEYS:
-        assert_number(got(key), getattr(result, key), f"{name}.{key}")
-    assert got("status") == (result.status or ""), f"{name}.status"
-    for key in CASH_STEP_INPUTS:
-        expected = None if result.ebitda is None else getattr(inputs, key)
-        assert_number(got(key), expected, f"{name}.{key}")
-    if result.blocks:
-        expected_factors = dict.fromkeys(("bank_factor", "seller_factor", "service_per_dollar"))
-    else:
-        bank = annuity_factor(inputs.bank_rate, inputs.bank_years)
-        paid = inputs.seller_pct > 0 and inputs.seller_standby.lower() == "no"
-        seller = annuity_factor(inputs.seller_rate, inputs.seller_years) if paid else 0.0
-        share = 1 - inputs.down_pct - inputs.seller_pct
-        expected_factors = dict(bank_factor=bank, seller_factor=seller,
-                                service_per_dollar=share * bank + inputs.seller_pct * seller)
-    for key, expected in expected_factors.items():
-        if expected is None:
-            assert blank(got(key)), f"{name}.{key}"
-        else:
-            assert got(key) == pytest.approx(expected, rel=1e-9), f"{name}.{key}"
-    shown = set(result.blocks) | set(result.warnings) | set(result.flags)
-    for code in MESSAGE_ORDER:
-        expected = message_text(code, inputs, result, facts) if code in shown else ""
-        assert (got(f"msg.{code}") or "") == expected, f"{name}.msg.{code}"
-
-
 @pytest.mark.parametrize("name", list(SCENARIOS))
 def test_results_match_python(name, solved):
     path, cells, values = solved(name)
-    compare(name, path, cells, values, FACTS)
+    compare(SCENARIOS[name], name, path, cells, values, FACTS)
 
 
 # Scenario intent, written out by hand so that a change in calc_math cannot move it.
@@ -161,7 +115,7 @@ def test_no_error_values(name, solved):
 
 def test_null_facts_never_fire(solved):
     path, cells, values = solved("sba_all", NULL_FACTS, label="sba_all_null_facts")
-    compare("sba_all", path, cells, values, NULL_FACTS)
+    compare(SCENARIOS["sba_all"], "sba_all", path, cells, values, NULL_FACTS)
     for code in ("sba_down", "sba_term", "sba_coverage", "sba_standby", "qoe"):
         assert blank(cell_value(values, path, *cells[f"msg.{code}"])), code
     assert error_cells(values, ["Results", "Deal terms"]) == []

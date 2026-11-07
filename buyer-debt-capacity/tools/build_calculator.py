@@ -6,6 +6,9 @@ and the SBA values block on Deal terms.
 """
 from __future__ import annotations
 
+import re
+import zipfile
+from datetime import datetime
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -316,8 +319,44 @@ def write_inputs(wb, inputs: Inputs) -> None:
         ws[f"{DEDUCTION_COLS['amount']}{row}"] = item.amount
 
 
-def build(path: Path, inputs: Inputs, facts: dict) -> dict[str, tuple[str, str]]:
-    """Write the workbook. Return the Results cell map: key -> (sheet, cell)."""
+FIXED_DATE = datetime(2026, 1, 1)
+CREATOR = "LIVMO"
+
+
+ZIP_TIME = (2026, 1, 1, 0, 0, 0)
+CORE_PROPS = "docProps/core.xml"
+
+
+def fix_save_time(path: Path) -> None:
+    """Rewrite the saved file with fixed times, so that a rebuild gives the same bytes.
+
+    openpyxl sets the modified date to the current time when it saves, and it stamps each
+    zip entry with the current time. This step resets both after the save.
+    """
+    with zipfile.ZipFile(path) as source:
+        entries = [(info.filename, source.read(info.filename)) for info in source.infolist()]
+    stamp = FIXED_DATE.strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as target:
+        for name, data in entries:
+            if name == CORE_PROPS:
+                data = re.sub(rb"(<dcterms:modified[^>]*>)[^<]*", rb"\g<1>" + stamp, data)
+            info = zipfile.ZipInfo(name, date_time=ZIP_TIME)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            target.writestr(info, data)
+
+
+def write_descriptions(ws, descriptions: tuple[str, ...]) -> None:
+    """Write one description per add-back row, in row order."""
+    for offset, text in enumerate(descriptions):
+        ws[f"{ADDBACK_COLS['description']}{ADDBACK_ROWS[0] + offset}"] = text
+
+
+def build(path: Path, inputs: Inputs, facts: dict,
+          descriptions: tuple[str, ...] = (), start_note: str | None = None) -> dict[str, tuple[str, str]]:
+    """Write the workbook. Return the Results cell map: key -> (sheet, cell).
+
+    Workbook properties are fixed, so the same inputs give the same file.
+    """
     import results_tab  # Imported here: results_tab reads the constants of this module.
 
     wb = Workbook()
@@ -331,5 +370,39 @@ def build(path: Path, inputs: Inputs, facts: dict) -> dict[str, tuple[str, str]]
     sba = results_tab.write_sba_values(sheets[DEAL], facts)
     cells = results_tab.write_results(sheets["Results"], sba)
     write_inputs(wb, inputs)
+    write_descriptions(wb[ADDBACKS], descriptions)
+    if start_note:
+        wb["Start here"]["A2"] = start_note  # Row 2 is the blank row under the liability text.
+    wb.properties.creator = CREATOR
+    wb.properties.lastModifiedBy = CREATOR
+    wb.properties.created = FIXED_DATE
+    wb.properties.modified = FIXED_DATE
     wb.save(path)
+    fix_save_time(path)
     return cells
+
+
+ROOT = Path(__file__).resolve().parent.parent
+BLANK_FILE = ROOT / "buyer-debt-capacity-calculator.xlsx"
+SAMPLE_FILE = ROOT / "examples" / "sample-buyer-debt-capacity.xlsx"
+
+
+def build_both(blank_path: Path, sample_path: Path) -> None:
+    """Write the blank calculator and the sample workbook to the given paths."""
+    from calc_math import default_inputs, load_facts
+    from sample_data import SAMPLE, SAMPLE_DESCRIPTIONS, SAMPLE_NOTE
+
+    facts = load_facts()
+    sample_path.parent.mkdir(parents=True, exist_ok=True)
+    build(blank_path, default_inputs(facts), facts)
+    build(sample_path, SAMPLE, facts, SAMPLE_DESCRIPTIONS, SAMPLE_NOTE)
+
+
+def main() -> None:
+    build_both(BLANK_FILE, SAMPLE_FILE)
+    print(f"Wrote {BLANK_FILE}")
+    print(f"Wrote {SAMPLE_FILE}")
+
+
+if __name__ == "__main__":
+    main()
