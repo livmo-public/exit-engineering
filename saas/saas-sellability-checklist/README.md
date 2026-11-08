@@ -1,6 +1,10 @@
 # SaaS Sellability Checklist
 
+A free checklist for SaaS founders who plan to sell their company. It shows what a buyer checks at each ARR stage, from under $500K to over $20M.
+
 Read your SaaS the way a buyer reads it. Pick the edition for your ARR, tick what is true today, add your points, and see what the next stage asks for.
+
+Last updated: November 8, 2026.
 
 ## Pick your edition
 
