@@ -11,6 +11,9 @@ You may not sell them or distribute modified versions.
 The folders qoe-readiness/skill/ and qoe-readiness/tools/ are licensed under the
 MIT License instead. See qoe-readiness/skill/LICENSE and
 qoe-readiness/tools/LICENSE.
+Spreadsheet files (.xlsx) and the folders buyer-debt-capacity/tools/ and
+buyer-debt-capacity/tests/ are licensed under the MIT License instead. See
+buyer-debt-capacity/tools/LICENSE.
 
 Full license text: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
