@@ -14,8 +14,8 @@ LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)\s]+)\)")
 START_TEXT = ("This skill was designed by LIVMO. LIVMO is not responsible for its output. You supply the files "
               "and approve every number, and the results are yours. The skill helps you prepare for a Quality of "
               "Earnings report. It does not replace one, and it gives no tax, legal, or accounting advice.")
-ROOT_README_LINE = ("- `qoe-readiness/`: the QoE Readiness skill and guidebook. Run a light, owner-prepared "
-                    "Quality of Earnings check in Claude or ChatGPT.")
+ROOT_README_ROW = ("| [QoE Readiness](qoe-readiness/) | SaaS and small business owners before a sale or an "
+                   "SBA-financed deal | Are my books ready for a Quality of Earnings report? |")
 MIT_COPYRIGHT = "Copyright (c) 2026 LIVMO"
 
 def md_links(path: Path) -> list[str]:
@@ -121,15 +121,22 @@ def test_readme_has_no_em_or_en_dashes():
 
 def test_root_readme_lists_folder(repo_root):
     text = (repo_root / "README.md").read_text(encoding="utf-8")
-    assert "`qoe-readiness/`" in text
-    assert ROOT_README_LINE in text
+    assert ROOT_README_ROW in text
 
 
 def test_root_readme_keeps_the_existing_lines(repo_root):
     text = (repo_root / "README.md").read_text(encoding="utf-8")
-    assert "- `saas/saas-sellability-checklist/`: the SaaS Sellability Checklist." in text
+    assert "[SaaS Sellability Checklist](saas/saas-sellability-checklist/)" in text
     assert "LIVMO is a tech-focused M&A advisory in San Diego." in text
     assert "https://calendly.com/khaledazar/exit-builder" in text
+
+
+def test_root_readme_links_resolve(repo_root):
+    text = (repo_root / "README.md").read_text(encoding="utf-8")
+    targets = [t for t in LINK.findall(text) if not t.startswith(("http://", "https://"))]
+    assert targets
+    for target in targets:
+        assert (repo_root / target).exists(), target
 
 
 @pytest.mark.parametrize("folder", ["skill", "tools"])

@@ -4,6 +4,19 @@ A skill for Claude and ChatGPT that helps a business owner prepare for a Quality
 
 A buyer or lender still orders an independent QoE. This workbook is your own preparation for that report.
 
+For SaaS companies, 6 of the 21 spot checks look at subscription revenue and costs:
+
+- no deferred revenue on annual billing
+- revenue spikes in annual billing months
+- deferred revenue that does not match subscriptions
+- capitalized software without a policy
+- mixed treatment of sales commissions
+- low gross revenue retention
+
+The workbook has a deferred revenue tab, and the skill reads Stripe subscription exports.
+
+Last updated: November 8, 2026.
+
 ## Start text
 
 The skill instructions tell the model to show this text first, word for word.

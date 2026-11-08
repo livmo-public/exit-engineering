@@ -47,7 +47,7 @@ def test_readme_booking_link_only():
 
 
 def test_root_readme_lists_tool():
-    assert "`buyer-debt-capacity/`" in (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    assert "[Buyer Debt Capacity Calculator](buyer-debt-capacity/)" in (REPO_ROOT / "README.md").read_text(encoding="utf-8")
 
 
 def test_root_license_mit_for_spreadsheets():

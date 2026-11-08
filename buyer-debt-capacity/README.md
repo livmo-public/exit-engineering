@@ -4,6 +4,8 @@ Designed by LIVMO. LIVMO is not responsible for this output. You supply every nu
 
 The calculator finds the cash that a buyer's lender sees in your business after the costs of running it. It then turns that cash into the largest loan a lender could support and the price that loan supports.
 
+Last updated: November 8, 2026.
+
 ## How to use
 
 1. Download `buyer-debt-capacity-calculator.xlsx`.
@@ -25,6 +27,10 @@ The folder `examples/` holds `sample-buyer-debt-capacity.xlsx`. It uses a made-u
 - Flag: an SBA lender requires a Quality of Earnings report when a new owner buys at this price.
 
 If a required input is blank, Results shows a message and no loan or price. Each blank required cell shows "Required".
+
+## SaaS companies
+
+A lender sizes the loan on cash flow, not on ARR or revenue multiples. A SaaS company that spends its profit on growth can show high ARR and little cash for debt. Then the supported price can sit far below a price from an ARR multiple. The gap shows how much of the price must come from buyer equity or a seller note.
 
 ## Cash flow steps
 
